@@ -24,15 +24,15 @@ static int callback(void *data, int argc, char **argv, char **azColName){
 
 /**
  * @brief 
- * selects required fields based on 
- * sender and message_type 
- * @param sender 
+ * selects all fields from routes table
+ * based on matching parameters
+ * @param sender
  * @param message_type 
  */
 void select_all_routes(char *sender, char *message_type) {
-    sqlite3 *db; //database handle
-    char *err_msg = 0; //to store errormessage
-    sqlite3_stmt *stmnt;//single sql statement
+    sqlite3 *db; /*database handle*/
+    char *err_msg = 0; /* stores errormessage */
+    sqlite3_stmt *stmnt;/* single sql statement */
     
     int rc = sqlite3_open("test.db", &db);
 
@@ -41,7 +41,7 @@ void select_all_routes(char *sender, char *message_type) {
         fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db));
         sqlite3_close(db);
         
-        return 1;
+        return ;
     }
     
     char *sql = "SELECT * FROM routes WHERE sender = ?                   \
@@ -51,8 +51,8 @@ void select_all_routes(char *sender, char *message_type) {
 
     if (rc == SQLITE_OK) {
         //binds the values to their respective place holders
-        sqlite3_bind_text(res, 1, sender);
-        sqlite3_bind_text(res, 2, message_type);
+        sqlite3_bind_text(stmnt, 1, sender, -1, NULL);
+        sqlite3_bind_text(stmnt, 2, message_type, -1, NULL);
     } else {
         
         fprintf(stderr, "Failed to execute statement: %s\n",\
@@ -60,7 +60,10 @@ void select_all_routes(char *sender, char *message_type) {
     }
 
     int step = sqlite3_step(stmnt);
-    
+    /**
+     * @brief Consta new while objectruct 
+     * 
+     */
     while(step == SQLITE_ROW) {
         printf("%s: ",sqlite3_column_text(stmnt,0));
         printf("%s: ",sqlite3_column_text(stmnt,1));
