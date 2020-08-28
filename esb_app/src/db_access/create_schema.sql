@@ -1,8 +1,8 @@
 .open test.db
 CREATE TABLE routes (
     route_id INT PRIMARY KEY,
-    sender VARCHAR(45) NOT NULL UNIQUE,
-    destination VARCHAR(45) NOT NULL UNIQUE,
+    sender VARCHAR(45) NOT NULL,
+    destination VARCHAR(45) NOT NULL,
     message_type VARCHAR(45) NOT NULL,
     is_active BIT(1) NOT NULL
 );
