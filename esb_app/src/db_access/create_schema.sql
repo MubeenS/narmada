@@ -1,3 +1,4 @@
+.open test.db
 CREATE TABLE routes (
     route_id INT PRIMARY KEY,
     sender VARCHAR(45) NOT NULL UNIQUE,
@@ -13,7 +14,10 @@ CREATE TABLE transform_config (
     route_id INT NOT NULL,
     config_key VARCHAR(45) NOT NULL,
     config_value TEXT,
-    FOREIGN KEY (route_id) REFERENCES routes
+    CONSTRAINT fk_route
+      FOREIGN KEY (route_id) 
+      REFERENCES routes(route_id)
+      ON DELETE CASCADE
 );
 CREATE INDEX route_idx 
 ON transform_config(route_id);
@@ -26,7 +30,10 @@ CREATE TABLE transport_config (
     route_id INT,
     config_key VARCHAR(45),
     config_value TEXT,
-    FOREIGN KEY (route_id) REFERENCES routes
+    CONSTRAINT fk_route
+      FOREIGN KEY (route_id) 
+      REFERENCES routes(route_id)
+      ON DELETE CASCADE
 );
 CREATE INDEX route_idx_tp 
 ON transport_config(route_id);
