@@ -93,11 +93,20 @@ int main(int argc, char **argv) {
   int num_fields = mysql_num_fields(result);
   /*mysql structure that holds a row*/
   MYSQL_ROW row;
+  /*mysql structure that holds field values*/
+  MYSQL_FIELD *field;
 
   /*prints all the rows from the result*/
   while ((row = mysql_fetch_row(result))) { 
       for(int i = 0; i < num_fields; i++) { 
-          printf("%s ", row[i] ? row[i] : "NULL"); 
+          if(i==0) {
+              while(field = mysql_fetch_field(result)) {
+                  printf(" %s |", field->name);
+              } 
+              printf("\n");
+            }
+
+          printf(" %s |", row[i] ? (char *)row[i] : "nu)lling"); 
       } 
           printf("\n"); 
   }
