@@ -106,7 +106,7 @@ int main(int argc, char **argv) {
               printf("\n");
             }
 
-          printf(" %s |", row[i] ? (char *)row[i] : "nu)lling"); 
+          printf(" %s |", row[i] ? row[i] : "NULL"); 
       } 
           printf("\n"); 
   }
