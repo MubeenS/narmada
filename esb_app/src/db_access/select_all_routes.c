@@ -79,7 +79,7 @@ void select_all_routes(char *sender, char *message_type) {
    }
    char sql_str[STRING_SIZE];
 
-   strcpy(sql_str,"SELECT * FROM routes WHERE sender = ? AND message_type = 'xml' AND is_active = 1");
+   strcpy(sql_str,"SELECT * FROM routes WHERE sender = ? AND message_type = ? AND is_active = 1");
 
    if(mysql_stmt_prepare(statement,sql_str,strlen(sql_str))) {
            finish_with_error(con);
