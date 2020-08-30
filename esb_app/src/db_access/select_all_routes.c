@@ -11,13 +11,14 @@
  */
 
 #include <stdio.h>
+#include <string.h>
+#include <stdbool.h>
 /* Contains necessary C functions of mysql */
-#include <mysql.h>
-
+#include <mysql/mysql.h>
+#define STRING_SIZE 300
 /**
- * @brief Parameters requiered for 
- * mysql_real_connect() function are declared as
- * global variables.
+ * @brief Declare parameters required for 
+ * mysql_real_connect() as global variables.
  * 
  */
 static char *g_host = "localhost";/*hostname*/
@@ -44,18 +45,16 @@ void finish_with_error(MYSQL *con) {
   exit(1);        
 }
 
-int main(int argc, char **argv) {      
+void select_all_routes(char *sender, char *message_type) {      
 
-  MYSQL *con ;  /*database connection handle*/
   /**
-   * @brief Allocates or initialises a MYSQL object 
+   * @brief Allocate and initialise a MYSQL object 
    * suitable for mysql_real_connect() function
    * 
    */
-  con = mysql_init(NULL);
+  MYSQL *con = mysql_init(NULL);
 
-  /**
-   * @brief Prints error message incase
+  /* Print an error message incase
    * initialisation of con fails.
    */
   if (con == NULL) {
@@ -64,28 +63,63 @@ int main(int argc, char **argv) {
       exit(1);
   }  
   
-  /**
-   * @brief Checks if connection is 
+  /* Check if connection is 
    * properly established.
-   * 
    */
   if (mysql_real_connect(con, g_host, g_user, g_password,       
           g_db_name, g_port, g_unix_socket, g_flag) == NULL) {
       finish_with_error(con);
   }    
   
-  /*checks execution of SQL statement*/
-  if (mysql_query(con, "SELECT * FROM routes")) {
-      finish_with_error(con);
-  }
+  MYSQL_STMT *statement = NULL;
+  statement = mysql_stmt_init(con);
+   
+  if(statement == NULL) {
+     finish_with_error(con);
+   }
+   char sql_str[STRING_SIZE];
 
-  MYSQL_RES *result;/*structure that holds result set*/
+   strcpy(sql_str,"SELECT * FROM routes WHERE sender = ? AND message_type = 'xml' AND is_active = 1");
 
-  /* Gets the result set and stores in result */
-  result = mysql_store_result(con); 
+   if(mysql_stmt_prepare(statement,sql_str,strlen(sql_str))) {
+           finish_with_error(con);
+   }
+    
+  MYSQL_BIND input_bind[1];
+  memset(input_bind,0,sizeof(input_bind));
+  unsigned long sender_len = sizeof(sender);
+  unsigned long message_type_len = sizeof(message_type);
+
+  /*Bind parameters to the statement*/
+  input_bind[0].buffer_type = MYSQL_TYPE_STRING;
+  input_bind[0].buffer = &sender;
+  input_bind[0].buffer_length = sizeof(sender);
+  input_bind[0].length = &sender_len;
+  input_bind[0].is_null = (bool*)0;
+
+  input_bind[1].buffer_type = MYSQL_TYPE_STRING;
+  input_bind[1].buffer = &message_type;
+  input_bind[1].buffer_length = sizeof(message_type);
+  input_bind[1].length = &message_type_len;
+  input_bind[1].is_null = (bool*)0;
+
+  if (mysql_stmt_bind_param(statement, input_bind)) {
+        fprintf(stderr, "ERROR:mysql_stmt_bind_param failed\n");
+        exit(1);
+    }
+
+  if (mysql_stmt_execute(statement)) {
+        fprintf(stderr, "mysql_stmt_execute(), failed.\nError:%s\n", mysql_stmt_error(statement));
+        exit(1);
+    }
   
+  /* Fetch reuslt set meta information*/
+  MYSQL_RES *result;
+  result = mysql_stmt_result_metadata(statement);
+
   /* if there is no result error will be returned*/
   if (result == NULL) {
+      printf("Result is NULL");
       finish_with_error(con);
   }
 
@@ -98,7 +132,9 @@ int main(int argc, char **argv) {
 
   /*prints all the rows from the result*/
   while ((row = mysql_fetch_row(result))) { 
+      printf("Enters While");
       for(int i = 0; i < num_fields; i++) { 
+          printf("Enters For");
           if(i==0) {
               while(field = mysql_fetch_field(result)) {
                   printf(" %s |", field->name);
@@ -117,4 +153,15 @@ int main(int argc, char **argv) {
   mysql_close(con);
   
   exit(0);
+}
+
+int main () {
+    char sender[4],message_type[4];
+    printf("Enter sender:");
+    scanf("%s",sender);
+    printf("Enter message_type:");
+    scanf("%s",message_type);
+
+    select_all_routes(sender,message_type);
+    return 0;
 }
