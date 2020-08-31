@@ -79,7 +79,7 @@ void select_all_routes(char *sender, char *message_type) {
    }
    char sql_str[STRING_SIZE];
 
-   strcpy(sql_str,"SELECT * FROM routes WHERE sender = ? AND message_type = ? AND is_active = 1");
+   strcpy(sql_str,"SELECT * FROM routes WHERE sender = ? AND message_type = ? ");
 
    if(mysql_stmt_prepare(statement,sql_str,strlen(sql_str))) {
            finish_with_error(con);
@@ -109,7 +109,7 @@ void select_all_routes(char *sender, char *message_type) {
     }
 
   if (mysql_stmt_execute(statement)) {
-        fprintf(stderr, "mysql_stmt_execute(), failed.\nError:%s\n", mysql_stmt_error(statement));
+        fprintf(stderr, "mysql_stmt_execute(), failed.\nError %d:%s\n",mysql_stmt_errno(statement),mysql_stmt_error(statement));
         exit(1);
     }
   

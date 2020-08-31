@@ -10,7 +10,7 @@ DROP SCHEMA IF EXISTS `esb_db` ;
 -- -----------------------------------------------------
 -- Schema esb_db
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `esb_db` DEFAULT CHARACTER SET utf8 ;
+CREATE SCHEMA IF NOT EXISTS `esb_db` DEFAULT CHARACTER SET utf8mb4 ;
 USE `esb_db` ;
 
 -- -----------------------------------------------------
@@ -46,7 +46,8 @@ CREATE TABLE IF NOT EXISTS `esb_db`.`routes` (
   `message_type` VARCHAR(45) NOT NULL,
   `is_active` BIT(1) NOT NULL,
   PRIMARY KEY (`route_id`),
-  UNIQUE INDEX `UK_sender_dest_msg_type` (`message_type` ASC, `destination` ASC, `sender` ASC))
+  UNIQUE INDEX `UK_sender_dest_msg_type` 
+  (`message_type` ASC, `destination` ASC, `sender` ASC))
 ENGINE = InnoDB;
 
 
