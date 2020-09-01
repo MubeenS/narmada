@@ -2,7 +2,7 @@
  * @file select_all_routes.c
  * @author MubeenS 
  * @brief  The program is a C API for the SQL query 
- * SELECT * FROM routes WHERE sender=? AND message_type=? and is_active=1;
+ * SELECT * FROM transport_config WHERE route_id=? ;
  * @version 0.1
  * @date 2020-08-29
  * 
@@ -19,7 +19,8 @@
  * databse connection handle 
  */
 #include "connector.h"
-void select_all_routes(char **sender,char **message_type) {      
+
+void select_all_transport_config(int route_id) {      
 
   MYSQL *con ;  /*database connection handle*/
   /**
@@ -52,8 +53,8 @@ void select_all_routes(char **sender,char **message_type) {
 
   /*Fill in the query with parameters*/
   sprintf(query,
-  "SELECT * FROM routes WHERE sender = '%s' AND message_type ='%s' ",
-  *sender,*message_type);
+  "SELECT * FROM transport_config WHERE route_id = %d ",
+  route_id);
   printf("For query :%s\n",query);
   /*checks execution of SQL statement*/
   if (mysql_query(con, query)) {
@@ -101,9 +102,7 @@ void select_all_routes(char **sender,char **message_type) {
 }
 
 int main () {
-    char *sender,*message_type;
-    sender = "A";
-    message_type = "xml";
-    select_all_routes(&sender,&message_type);
+    int route_id = 1;
+    select_all_transport_config(route_id);
     return 0;
 }
