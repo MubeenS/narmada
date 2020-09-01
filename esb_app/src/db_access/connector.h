@@ -1,4 +1,4 @@
-#define STRING_SIZE 100
+#define STRING_SIZE 300
 
 /**
  * @brief Parameters requiered for 
