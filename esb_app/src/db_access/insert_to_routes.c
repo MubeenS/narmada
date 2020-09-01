@@ -23,13 +23,11 @@
  * databse connection handle 
  */
 #include "connector.h"
+#define STRING_SIZE 100
 
-#define INSERT_SAMPLE "INSERT INTO                            \
+#define INSERT_QUERY "INSERT INTO                            \
 routes(route_id,sender,destination,message_type,is_active)    \
 VALUES(?,?,?,?,1)"
-
-
-
 
 void insert_to_routes(char **sender,
 char **destination,char **message_type,char **is_active) {
@@ -78,7 +76,7 @@ if (!stmt) {
   exit(0);
 }
 
-if (mysql_stmt_prepare(stmt, INSERT_SAMPLE, strlen(INSERT_SAMPLE))) {
+if (mysql_stmt_prepare(stmt, INSERT_QUERY, strlen(INSERT_QUERY))) {
   fprintf(stderr, " mysql_stmt_prepare(), INSERT failed\n");
   fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
   exit(0);

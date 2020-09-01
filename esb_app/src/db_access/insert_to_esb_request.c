@@ -1,10 +1,13 @@
 /**
- * @file select_all_routes.c
+ * @file insert_to_esb_request.c
  * @author MubeenS 
  * @brief  The program is a C API for the SQL query 
- * SELECT * FROM routes WHERE sender=? AND message_type=? and is_active=1;
+ * "INSERT INTO                            
+ * esb_request(sender_id,dest_id,message_type,reference_id,      
+ * message_id,data_location,status,status_details)               
+ * VALUES(?,?,?,?,?,?,?,?)"
  * @version 0.1
- * @date 2020-08-29
+ * @date 2020-09-1
  * 
  * @copyright Copyright (c) 2020
  * 
@@ -25,9 +28,9 @@
 #include "connector.h"
 #define STRING_SIZE 1000
 
-#define INSERT_SAMPLE "INSERT INTO                            \
-esb_request(sender_id,dest_id,message_type,reference_id,      \
-message_id,data_location,status,status_details)               \
+#define INSERT "INSERT INTO                                  \
+esb_request(sender_id,dest_id,message_type,reference_id,     \
+message_id,data_location,status,status_details)              \
 VALUES(?,?,?,?,?,?,?,?)"
 
 void insert_to_esb_request(char **sender_id,char **dest_id,
@@ -84,7 +87,7 @@ if (!stmt) {
   exit(0);
 }
 
-if (mysql_stmt_prepare(stmt, INSERT_SAMPLE, strlen(INSERT_SAMPLE))) {
+if (mysql_stmt_prepare(stmt, INSERT, strlen(INSERT))) {
   fprintf(stderr, " mysql_stmt_prepare(), INSERT failed\n");
   fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
   exit(0);

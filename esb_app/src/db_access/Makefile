@@ -1,2 +1,2 @@
-select: insert_to_esb_request.c
-	gcc insert_to_esb_request.c -o select -std=c99 -g `mysql_config --cflags --libs`
+select: update_esb_request.c
+	gcc update_esb_request.c -o update -std=c99 -g `mysql_config --cflags --libs`

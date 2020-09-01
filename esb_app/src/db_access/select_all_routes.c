@@ -19,6 +19,7 @@
  * databse connection handle 
  */
 #include "connector.h"
+#define STRING_SIZE 100
 void select_all_routes(char **sender,char **message_type) {      
 
   MYSQL *con ;  /*database connection handle*/

@@ -1,7 +1,5 @@
-#define STRING_SIZE 300
-
 /**
- * @brief Parameters requiered for 
+ * @brief Parameters required for 
  * mysql_real_connect() function are declared as
  * global variables.
  * 
