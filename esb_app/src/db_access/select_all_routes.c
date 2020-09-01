@@ -74,8 +74,12 @@ void select_all_routes(char **sender,char **message_type) {
           g_db_name, g_port, g_unix_socket, g_flag) == NULL) {
       finish_with_error(con);
   }    
-  char query[STRING_SIZE];
-  sprintf(query,"SELECT * FROM routes WHERE sender = '%s' AND message_type ='%s' ",*sender,*message_type);
+  char query[STRING_SIZE]; /*to store query*/
+  
+  /*Fill in the query with parameters*/
+  sprintf(query,
+  "SELECT * FROM routes WHERE sender = '%s' AND message_type ='%s' ",
+  *sender,*message_type);
   printf("For query :%s\n",query);
   /*checks execution of SQL statement*/
   if (mysql_query(con, query)) {
