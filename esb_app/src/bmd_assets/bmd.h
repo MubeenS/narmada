@@ -1,22 +1,21 @@
 /**
- * @brief contains envelope details.
+ * @brief contains envelope and payload
+ * details. Has complete bmd structure.
  * 
  */
 
-typedef struct bmd_envelop {
-  const unsigned char *MessageID;
-  const unsigned char *MessageType;
-  const unsigned char *Sender;
-  const unsigned char *Destination;
-  const unsigned char *CreationDateTime;
-  const unsigned char *Signature;
-  const unsigned char *ReferenceID;
-  const unsigned char *User_properties;
-
+typedef struct bmdMessage_ {
+   char *MessageID;
+   char *MessageType;
+   char *Sender;
+   char *Destination;
+   char *CreationDateTime;
+   char *Signature;
+   char *ReferenceID;
+   char *User_properties;
 }envelop;
 
-
 typedef struct bmd_ {
-  envelop envolop_data;
+  envelop *envelop_data;
   char * payload;
 }bmd;
