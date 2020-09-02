@@ -11,6 +11,8 @@ typedef struct bmd_envelope {
   const unsigned char *CreationDateTime;
   const unsigned char *Signature;
   const unsigned char *ReferenceID;
+  const unsigned char *User_properties;
+
 }envelope;
 
 /**

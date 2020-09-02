@@ -16,15 +16,13 @@
 /* Contains envelope and payload structs*/
 #include "bmd.h"
 
-envelope *envelope_data;
-payload *payload_data;
 
-envelope_data extract_envelop(char* bmd_xml) {
+envelope* extract_envelop(char* bmd_xml) {
     /** TODO: code to extract data from xml and store in structuers*/
     /** TODO: see Real example and former xml_parser.c */
 }
 
-payload_data extract_payload(char* bmd_xml) {
+payload* extract_payload(char* bmd_xml) {
     /**extract payload details*/
 }
 
