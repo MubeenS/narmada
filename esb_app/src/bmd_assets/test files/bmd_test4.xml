@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF"?>
+<!-- Fourth test case,suffix 4 -->
+<?xml-stylesheet type="text/css"?>
+<BMD>
+    <Envelop>
+    <MessageID>A9ECAEF2-107A-4452-9553-043B6D25386E4</MessageID>
+    <MessageType>CreditReport4</MessageType>
+    <Sender>756E2EAA-1D5B-4BC0-ACC4-4CEB669408DA4</Sender>
+    <Destination>6393F82F-4687-433D-AA23-1966330381FE4</Destination>
+    <CreationDateTime>2020-08-12T05:18:00+00004</CreationDateTime>
+    <Signature>63f5f61f7a79301f715433f8f3689390d1f5da4f855169023300491c00b8113c4</Signature>
+    <ReferenceID>INV-PROFILE-8897124</ReferenceID>
+    <UserProperties>
+    <key1>Value14</key1>
+    <key2>Value24</key2>
+    </UserProperties>
+    </Envelop>
+    <Payload>001-01-12344</Payload>
+ </BMD>
