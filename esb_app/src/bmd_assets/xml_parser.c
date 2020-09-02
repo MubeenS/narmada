@@ -19,16 +19,64 @@
 envelope *envelope_data;
 payload *payload_data;
 
-envelope_data extract_envelop(char* bmd_xml) {
+envelope_data extract_envelop(xmlDocPtr doc, xmlNsPtr ns, xmlNodePtr cur) {
     /** TODO: code to extract data from xml and store in structuers*/
     /** TODO: see Real example and former xml_parser.c */
+    envelope_data ret;
+    ret = (envelope_data) malloc(sizeof(envelope));
+    if (ret == NULL) {
+        fprintf(stderr,"out of memory\n");
+        return(NULL);
+    }
+    memset(ret, 0, sizeof(envelope));
+
+ cur = cur->xmlChildrenNode;
+    while (cur != NULL) {
+        
+        if ((!strcmp(cur->name, "MessageID")) && (cur->ns == ns))
+            ret->MessageID = xmlNodeListGetString(doc, cur->xmlChildrenNode, 1);
+        if ((!strcmp(cur->, "MessageType")) && (cur->ns == ns))
+            ret->MessageType = xmlNodeListGetString(doc, cur->xmlChildrenNode, 1);
+        if ((!strcmp(cur->name, "Sender")) && (cur->ns == ns))
+            ret->Sender = xmlNodeListGetString(doc, cur->xmlChildrenNode, 1);
+         if ((!strcmp(cur->name, "Destination")) && (cur->ns == ns))
+            ret->Destination = xmlNodeListGetString(doc, cur->xmlChildrenNode, 1);
+        if ((!strcmp(cur->name, "CreationDateTime")) && (cur->ns == ns))
+            ret->CreationDateTime = xmlNodeListGetString(doc, cur->xmlChildrenNode, 1);
+        if ((!strcmp(cur->name, "Signature")) && (cur->ns == ns))
+            ret->Signature = xmlNodeListGetString(doc, cur->xmlChildrenNode, 1);
+        if ((!strcmp(cur->name, "Reference")) && (cur->ns == ns))
+            ret->Reference = xmlNodeListGetString(doc, cur->xmlChildrenNode, 1);
+        cur = cur->next;
+    }
+
+    return(ret);
+
 }
 
-payload_data extract_payload(char* bmd_xml) {
+payload_data extract_payload(xmlDocPtr doc, xmlNsPtr ns, xmlNodePtr cur) {
     /**extract payload details*/
+
+     payload_data ret;
+    ret = (payload_data) malloc(sizeof(payload));
+    if (ret == NULL) {
+        fprintf(stderr,"out of memory\n");
+        return(NULL);
+    }
+    memset(ret, 0, sizeof(payload));
+
+ cur = cur->xmlChildrenNode;
+    while (cur != NULL) {
+    if ((!strcmp(cur->name, "data")) && (cur->ns == ns))
+            ret->data = xmlNodeListGetString(doc, cur->xmlChildrenNode, 1);
+        cur = cur->next;
 }
 
-int main () {
-    /** TODO: Call functions from here*/
+}
+
+int main()
+{    /** TODO: Call functions from here*/
     /** TODO: write test cases*/
+
+
 }
