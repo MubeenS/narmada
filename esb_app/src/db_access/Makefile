@@ -1,2 +1,2 @@
-select: update_esb_request.c
-	gcc update_esb_request.c -o update -std=c99 -g `mysql_config --cflags --libs`
+select: select_active_routes.c
+	gcc select_active_routes.c -o update -std=c99 -g `mysql_config --cflags --libs`
