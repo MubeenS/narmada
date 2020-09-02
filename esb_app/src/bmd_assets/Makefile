@@ -1,2 +1,2 @@
 parse:
-	gcc -o example `xml2-config --cflags` example.c `xml2-config --libs`
+	gcc -o parse `xml2-config --cflags` xml_parser.c `xml2-config --libs`
