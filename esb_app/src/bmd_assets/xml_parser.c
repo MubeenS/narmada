@@ -17,12 +17,12 @@
 #include "bmd.h"
 
 
-envelope* extract_envelop(char* bmd_xml) {
+envelop extract_envelop(char* bmd_xml) {
     /** TODO: code to extract data from xml and store in structuers*/
     /** TODO: see Real example and former xml_parser.c */
 }
 
-payload* extract_payload(char* bmd_xml) {
+char * extract_payload(char* bmd_xml) {
     /**extract payload details*/
 }
 
