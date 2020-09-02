@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Second test case,suffix 2-->
+<?xml-stylesheet type="text/css"?>
+<BMD>
+    <Envelop>
+    <MessageID>A9ECAEF2-107A-4452-9553-043B6D25386E2</MessageID>
+    <MessageType>CreditReport2</MessageType>
+    <Sender>756E2EAA-1D5B-4BC0-ACC4-4CEB669408DA2</Sender>
+    <Destination>6393F82F-4687-433D-AA23-1966330381FE2</Destination>
+    <CreationDateTime>2020-08-12T05:18:00+00002</CreationDateTime>
+    <Signature>63f5f61f7a79301f715433f8f3689390d1f5da4f855169023300491c00b8113c2</Signature>
+    <ReferenceID>INV-PROFILE-8897122</ReferenceID>
+    <UserProperties>
+    <key1>Value12</key1>
+    <key2>Value22</key2>
+    </UserProperties>
+    </Envelop>
+    <Payload>001-01-12342</Payload>
+ </BMD>
