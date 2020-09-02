@@ -3,7 +3,7 @@
  * 
  */
 
-typedef struct bmd_envelope {
+typedef struct bmd_envelop {
   const unsigned char *MessageID;
   const unsigned char *MessageType;
   const unsigned char *Sender;
@@ -11,13 +11,12 @@ typedef struct bmd_envelope {
   const unsigned char *CreationDateTime;
   const unsigned char *Signature;
   const unsigned char *ReferenceID;
-}envelope;
+  const unsigned char *User_properties;
 
-/**
- * @brief Payload details
- * 
- */
+}envelop;
 
-typedef struct bmd_payload {
-  const unsigned char *data;
-} payload;
+
+typedef struct bmd_ {
+  envelop envolop_data;
+  char * payload;
+}bmd;

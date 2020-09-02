@@ -16,10 +16,12 @@
 /* Contains envelope and payload structs*/
 #include "bmd.h"
 
-envelope *envelope_data;
-payload *payload_data;
 
+<<<<<<< HEAD
 envelope_data extract_envelop(xmlDocPtr doc, xmlNsPtr ns, xmlNodePtr cur) {
+=======
+envelop extract_envelop(char* bmd_xml) {
+>>>>>>> f57e02ca622c4304fd65e383cfb2cce63ee6a9e4
     /** TODO: code to extract data from xml and store in structuers*/
     /** TODO: see Real example and former xml_parser.c */
     envelope_data ret;
@@ -54,7 +56,11 @@ envelope_data extract_envelop(xmlDocPtr doc, xmlNsPtr ns, xmlNodePtr cur) {
 
 }
 
+<<<<<<< HEAD
 payload_data extract_payload(xmlDocPtr doc, xmlNsPtr ns, xmlNodePtr cur) {
+=======
+char * extract_payload(char* bmd_xml) {
+>>>>>>> f57e02ca622c4304fd65e383cfb2cce63ee6a9e4
     /**extract payload details*/
 
      payload_data ret;
@@ -77,6 +83,9 @@ payload_data extract_payload(xmlDocPtr doc, xmlNsPtr ns, xmlNodePtr cur) {
 int main()
 {    /** TODO: Call functions from here*/
     /** TODO: write test cases*/
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> f57e02ca622c4304fd65e383cfb2cce63ee6a9e4
 }
