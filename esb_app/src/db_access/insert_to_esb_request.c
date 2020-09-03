@@ -26,6 +26,7 @@
  * databse connection handle 
  */
 #include "connector.h"
+
 #define STRING_SIZE 1000
 
 #define INSERT "INSERT INTO                                  \
@@ -33,6 +34,14 @@ esb_request(sender_id,dest_id,message_type,reference_id,     \
 message_id,data_location,status,status_details)              \
 VALUES(?,?,?,?,?,?,?,?)"
 
+void finish_with_error(MYSQL *con) {
+
+  fprintf(stderr, "Error [%d]: %s \n",mysql_errno(con),mysql_error(con));
+  mysql_close(con);
+
+  exit(1);        
+}
+ 
 int insert_to_esb_request(char *sender_id,char *dest_id,
 char *message_type,char *reference_id,char *message_id, 
 char *data_location, char *status,char *status_details) {
@@ -55,7 +64,7 @@ bool          is_null;
 
   MYSQL *con ;  /*database connection handle*/
   /**
-   * @brief Allocates or initialises a MYSQL object 
+   * @brief Allocates and initialises a MYSQL object 
    * suitable for mysql_real_connect() function
    * 
    */
@@ -221,11 +230,11 @@ if (mysql_stmt_close(stmt)) {
 }
 
 /*testing with a sample input*/
-int main() {
+/*int main() {
   char *s,*d,*mt,*rid,*mid,*dl,*st,*std;
   s="sender2"; d = "dest2"; mt = "CreditReport"; mid = "2";
   dl = "dat_loc"; st ="Active"; std="process";
   rid = "ref_id1";
  insert_to_esb_request(s,d,mt,rid,mid,dl,st,std);
  return 0;
-}
+}*/

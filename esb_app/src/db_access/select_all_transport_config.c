@@ -20,6 +20,15 @@
  */
 #include "connector.h"
 #define STRING_SIZE 100
+
+void finish_with_error(MYSQL *con) {
+
+  fprintf(stderr, "Error [%d]: %s \n",mysql_errno(con),mysql_error(con));
+  mysql_close(con);
+
+  exit(1);        
+}
+ 
 void select_all_transport_config(int route_id) {      
 
   MYSQL *con ;  /*database connection handle*/

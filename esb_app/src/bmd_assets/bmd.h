@@ -4,11 +4,9 @@
  * 
  */
 
-
-/*envelop*  extract_envelop(char * filepath);
-bmd* parse_bmd_xml(char *bmd_xml_file);*/
-
-
+#include <stdio.h>
+#ifndef BMD_H
+#define BMD_H
 typedef struct bmdMessage_ {
    char *MessageID;
    char *MessageType;
@@ -24,3 +22,9 @@ typedef struct bmd_ {
   envelop *envelop_data;
   char * payload;
 }bmd;
+
+envelop*  extract_envelop(char * filepath);
+bmd* parse_bmd_xml(char *bmd_xml_file);
+char * extract_payload(char * filepath);
+int is_bmd_valid(bmd *bmd_file);
+#endif

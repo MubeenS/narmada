@@ -15,6 +15,15 @@
 #define STRING_SIZE 100
 #define SELECT_QUERY "SELECT sender,destination,message_type FROM routes WHERE sender = ? AND message_type = ? and is_active=1"
 
+void finish_with_error(MYSQL *con) {
+
+  fprintf(stderr, "Error [%d]: %s \n",mysql_errno(con),mysql_error(con));
+  mysql_close(con);
+
+  exit(1);        
+}
+ 
+ 
 void select_active_routes(char *sender, char *message_type)
 {
     printf("%s\t%s\n", sender, message_type);

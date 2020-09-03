@@ -1,9 +1,16 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "email.h"
+//#include "email.h"
 
-#include "bmd.h"
+/** Include Module that has bmd handling 
+ * functions and  bmd structure declaration 
+ * 
+ */ 
+#include "../bmd_assets/bmd.h"
 
+/** Module that has mysql C API functions */
+
+#include "../db_access/connector.h"
 int queue_the_request(bmd *b) {
     int success = 1; // 1 => OK, -1 => Error cases
 
@@ -43,7 +50,7 @@ int process_esb_request(char* bmd_file_path) {
 
     // Step 2:
     /** defined in bmd_assets module*/
-    if (!is_bmd_valid(b))
+    if (is_bmd_valid(b)!=1)
     {
         //TODO: Process the error case
         printf("BMD is invalid!\n");
@@ -60,7 +67,8 @@ int process_esb_request(char* bmd_file_path) {
 
 int main () {
     int status = process_esb_request("bmd.xml");
-    if(status ! = 1) {
+    
+    if(status != 1) {
         printf("Status[%d]: Request processing failed",status);
         return EXIT_FAILURE;
     }

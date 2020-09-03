@@ -25,6 +25,14 @@
 #include "connector.h"
 #define STRING_SIZE 100
 
+void finish_with_error(MYSQL *con) {
+
+  fprintf(stderr, "Error [%d]: %s \n",mysql_errno(con),mysql_error(con));
+  mysql_close(con);
+
+  exit(1);        
+}
+ 
 #define INSERT_QUERY "INSERT INTO                            \
 routes(route_id,sender,destination,message_type,is_active)    \
 VALUES(?,?,?,?,1)"

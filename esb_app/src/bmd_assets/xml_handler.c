@@ -1,5 +1,5 @@
 /**
- * @file xml_parser.c
+ * @file xml_handler.c
  * @author MubeenS
  * @brief 
  * @version 0.1
@@ -12,6 +12,7 @@
 
 /* xml handling library */
 #include <libxml/parser.h>
+
 #include<stdlib.h>
 #include<string.h>
 #include "bmd.h"
@@ -249,8 +250,9 @@ int is_bmd_valid(bmd *bmd_file) {
 }
 
 
-int main() { 
+/*int main() { 
   bmd *bmd_file = parse_bmd_xml("bmd.xml");
   int check = is_bmd_valid(bmd_file);
   //char *s = xml_to_json("bmd.xml");
 }
+*/

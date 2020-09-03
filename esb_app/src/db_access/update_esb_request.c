@@ -23,7 +23,17 @@
  * databse connection handle 
  */
 #include "connector.h"
+
 #define STRING_SIZE 100
+
+void finish_with_error(MYSQL *con) {
+
+  fprintf(stderr, "Error [%d]: %s \n",mysql_errno(con),mysql_error(con));
+  mysql_close(con);
+
+  exit(1);        
+}
+ 
 
 #define UPDATE_QUERY "UPDATE esb_request SET status = ? WHERE id = ? "
 
