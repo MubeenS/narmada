@@ -3,7 +3,7 @@
  * @author MubeenS 
  * @brief  The program is a C API for the SQL query 
  * "INSERT INTO                            
- * esb_request(sender_id,dest_id,message_type,reference_id,      
+ * esb_requestsender_id,dest_id,message_type,reference_id,      
  * message_id,data_location,status,status_details)               
  * VALUES(?,?,?,?,?,?,?,?)"
  * @version 0.1
@@ -33,9 +33,9 @@ esb_request(sender_id,dest_id,message_type,reference_id,     \
 message_id,data_location,status,status_details)              \
 VALUES(?,?,?,?,?,?,?,?)"
 
-void insert_to_esb_request(char **sender_id,char **dest_id,
-char **message_type,char **reference_id,char **message_id, 
-char **data_location, char **status,char **status_details) {
+void insert_to_esb_request(char *sender_id,char *dest_id,
+char *message_type,char *reference_id,char *message_id, 
+char *data_location, char *status,char *status_details) {
 
 MYSQL_STMT    *stmt;
 MYSQL_BIND    bind[8];
@@ -171,21 +171,21 @@ if (mysql_stmt_bind_param(stmt, bind)) {
   fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
   exit(0);
 }
-strncpy(sender_id_data,*sender_id, STRING_SIZE);
+strncpy(sender_id_data,sender_id, STRING_SIZE);
 str_length[0]= strlen(sender_id_data);
-strncpy(dest_id_data,*dest_id, STRING_SIZE);
+strncpy(dest_id_data,dest_id, STRING_SIZE);
 str_length[1]=strlen(dest_id_data);
-strncpy(message_type_data,*message_type,STRING_SIZE);        
+strncpy(message_type_data,message_type,STRING_SIZE);        
 str_length[2]=strlen(message_type_data);
-strncpy(reference_id_data,*reference_id,STRING_SIZE);        
+strncpy(reference_id_data,reference_id,STRING_SIZE);        
 str_length[3]=strlen(reference_id_data);
-strncpy(message_id_data,*message_id,STRING_SIZE);        
+strncpy(message_id_data,message_id,STRING_SIZE);        
 str_length[4]=strlen(message_id_data);
-strncpy(data_location_data,*data_location,STRING_SIZE);        
+strncpy(data_location_data,data_location,STRING_SIZE);        
 str_length[5]=strlen(data_location_data);
-strncpy(status_data,*status,STRING_SIZE);        
+strncpy(status_data,status,STRING_SIZE);        
 str_length[6]=strlen(status_data);
-strncpy(status_details_data,*status_details,STRING_SIZE);        
+strncpy(status_details_data,status_details,STRING_SIZE);        
 str_length[7]=strlen(status_details_data);
 
 /* Execute the INSERT statement*/
@@ -223,6 +223,6 @@ int main() {
   s="sender2"; d = "dest2"; mt = "CreditReport"; mid = "2";
   dl = "dat_loc"; st ="Active"; std="process";
   rid = "ref_id1";
- insert_to_esb_request(&s,&d,&mt,&rid,&mid,&dl,&st,&std);
+ insert_to_esb_request(s,d,mt,rid,mid,dl,st,std);
  return 0;
 }
