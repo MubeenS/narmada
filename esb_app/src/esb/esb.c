@@ -1,27 +1,69 @@
-#include<stdio.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include "email.h"
-#include "esb.h"
 
-/**
- * TODO: This is to be implemented separately.
- */
-bmd parse_bmd_xml(char* bmd_file_path) {
-    bmd b;
-    bmd_envelop envl;
-    envl.sender_id = "TEST-GUID-1";
-    envl.destination_id = "TEST-GUID-2";
-    envl.message_type = "TEST-GUID-3";
+#include "bmd.h"
 
-    b.envelop = envl;
-    b.payload = "Some data here";
-    return b;
+int queue_the_request(bmd *b) {
+    int success = 1; // 1 => OK, -1 => Error cases
+
+    /**
+     * @brief Implements the Query:
+     * INSERT INTO                            
+     * esb_request(sender_id,dest_id,message_type,reference_id,      
+     * message_id,data_location,status,status_details)               
+     * VALUES(?,?,?,?,?,?,?,?)
+     * function returns 1 on successful insertion. 
+     * function is defined in db_access module
+     */
+    int rc = insert_to_esb_request(b->envelop_data->Sender,
+    b->envelop_data->Destination,b->envelop_data->MessageType,
+    b->envelop_data->ReferenceID,b->envelop_data->MessageID,
+    "Routes","RECEIVED","received successfully");
+    if(rc ==1)
+    return success;
 }
 
-int is_bmd_valid(bmd b)
-{
-    int valid = 1; // 1 => vaild, -1 => invalid
-    // TODO: Implement the validation logic here
+/**
+ * This is the main entry point into the ESB. 
+ * It will start processing of a BMD received at the HTTP endpoint.
+ */
+int process_esb_request(char* bmd_file_path) {
+    int status = 1; // 1 => OK, -ve => Errors
+    printf("Handling the BMD %s\n", bmd_file_path);
+    /** TODO: 
+     * Perform the steps outlined in the Theory of Operation section of
+     * the ESB specs document. Each major step should be implemented in
+     * a separate module. Suitable unit tests should be created for all
+     * the modules, including this one.
+     */
+    // Step 1:
+    bmd *b = parse_bmd_xml(bmd_file_path);
+    /** defined in bmd_assets module*/
 
-    return valid;
+    // Step 2:
+    /** defined in bmd_assets module*/
+    if (!is_bmd_valid(b))
+    {
+        //TODO: Process the error case
+        printf("BMD is invalid!\n");
+        status = -2;
+    }
+    else
+    {
+        // Step 3:
+        status = queue_the_request(b);
+    }
+    
+    return status;
+}
+
+int main () {
+    int status = process_esb_request("bmd.xml");
+    if(status ! = 1) {
+        printf("Status[%d]: Request processing failed",status);
+        return EXIT_FAILURE;
+    }
+    return EXIT_SUCCESS;
 }
 
