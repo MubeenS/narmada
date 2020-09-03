@@ -4,6 +4,11 @@
  * 
  */
 
+
+/*envelop*  extract_envelop(char * filepath);
+bmd* parse_bmd_xml(char *bmd_xml_file);*/
+
+
 typedef struct bmdMessage_ {
    char *MessageID;
    char *MessageType;
