@@ -3,7 +3,7 @@
  * @author MubeenS 
  * @brief  The program is a C API for the SQL query 
  * "INSERT INTO                            
- * esb_requestsender_id,dest_id,message_type,reference_id,      
+ * esb_request(sender_id,dest_id,message_type,reference_id,      
  * message_id,data_location,status,status_details)               
  * VALUES(?,?,?,?,?,?,?,?)"
  * @version 0.1
@@ -33,7 +33,7 @@ esb_request(sender_id,dest_id,message_type,reference_id,     \
 message_id,data_location,status,status_details)              \
 VALUES(?,?,?,?,?,?,?,?)"
 
-void insert_to_esb_request(char *sender_id,char *dest_id,
+int insert_to_esb_request(char *sender_id,char *dest_id,
 char *message_type,char *reference_id,char *message_id, 
 char *data_location, char *status,char *status_details) {
 
@@ -92,11 +92,12 @@ if (mysql_stmt_prepare(stmt, INSERT, strlen(INSERT))) {
   fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
   exit(0);
 }
-fprintf(stdout, " prepare, INSERT successful\n");
+
+/*fprintf(stdout, " prepare, INSERT successful\n");*/
 
 /* Get the parameter count from the statement */
 param_count= mysql_stmt_param_count(stmt);
-fprintf(stdout, " total parameters in INSERT: %d\n", param_count);
+/*fprintf(stdout, " total parameters in INSERT: %d\n", param_count);*/
 
 /* validate parameter count */
 if (param_count != 8) {
@@ -198,7 +199,7 @@ if (mysql_stmt_execute(stmt)) {
 
 /* Get the total rows affected */
 affected_rows= mysql_stmt_affected_rows(stmt);
-fprintf(stdout, " total affected rows(insert 2): %lu\n",
+fprintf(stdout, "Total affected rows(insert 2): %lu\n",
                 (unsigned long) affected_rows);
 
 /* validate affected rows */ 
@@ -214,6 +215,8 @@ if (mysql_stmt_close(stmt)) {
   exit(0);
 } printf("connection id: %ld\n", mysql_thread_id(con));
 
+  /*No error occurred and insert is successful*/
+  return 1;
   mysql_close(con);
 }
 
