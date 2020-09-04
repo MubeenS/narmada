@@ -249,10 +249,26 @@ int is_bmd_valid(bmd *bmd_file) {
   return 1;
 }
 
+char * xml_to_json(char *f) {
+    char bmd_name[20];
+    char *payload_data=extract_payload(f);
+    strncpy(bmd_name,f,strlen(f)-4);
+    bmd_name[strlen(f)-4]='\0';
+    char file[50];
+    sprintf(file,"payload_%s.json",bmd_name);
+    FILE *fp;
+    fp = fopen(file,"w");
+    if(fp == NULL) {
+        printf("file opening filed");
+        exit(0);
+    }
+    fprintf(fp,"{\n \"Payload\":\"%s\"\n}",payload_data);
+    return strdup(file);
+}
 
 /*int main() { 
   bmd *bmd_file = parse_bmd_xml("bmd.xml");
   int check = is_bmd_valid(bmd_file);
-  //char *s = xml_to_json("bmd.xml");
+  char *s = xml_to_json("bmd.xml");
 }
 */
