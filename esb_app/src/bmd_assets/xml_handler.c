@@ -2,7 +2,7 @@
  * @file xml_handler.c
  * @author MubeenS
  * @brief 
- * @version 0.1
+ * @version 1.0
  * @date 2020-09-02
  * 
  * @copyright Copyright (c) 2020
@@ -111,6 +111,8 @@ void extract_envelop_details(xmlNode * node,envelop *envl)
      }
 }
 
+/* Extract envelop data */
+
 envelop*  extract_envelop(char * filepath) {
   xmlDoc *doc = NULL;
   xmlNode *root_element = NULL;
@@ -137,6 +139,7 @@ envelop*  extract_envelop(char * filepath) {
   return envl;
 }
 
+/* extract payload data */
 char * extract_payload(char * filepath) {
   int size;
   xmlDoc *doc = NULL;
@@ -249,11 +252,24 @@ int is_bmd_valid(bmd *bmd_file) {
   return 1;
 }
 
-char * xml_to_json(char *f) {
+/**
+ * @brief Extracts payload data from
+ * bmd file and stores it in an .json file
+ * 
+ * @param bmd_file path name
+ * @return name of json file containing payload data.
+ */
+
+char * xml_to_json(char *bmd_file) {
     char bmd_name[20];
-    char *payload_data=extract_payload(f);
-    strncpy(bmd_name,f,strlen(f)-4);
-    bmd_name[strlen(f)-4]='\0';
+    /* Extracts payload information */
+    char *payload_data=extract_payload(bmd_file);
+
+    /* Cuts .xml from name of bmd file */
+    strncpy(bmd_name,bmd_file,strlen(bmd_file)-4);
+    bmd_name[strlen(bmd_file)-4]='\0';
+
+    /*Creates file name of json as per bmd name*/
     char file[50];
     sprintf(file,"payload_%s.json",bmd_name);
     FILE *fp;
@@ -262,13 +278,16 @@ char * xml_to_json(char *f) {
         printf("file opening filed");
         exit(0);
     }
+    /* Writes into json file */
     fprintf(fp,"{\n \"Payload\":\"%s\"\n}",payload_data);
+    /* Closes file */
+    fclose(fp);
+    /* returns json filename */
     return strdup(file);
 }
 
-/*int main() { 
+int main() { 
   bmd *bmd_file = parse_bmd_xml("bmd.xml");
   int check = is_bmd_valid(bmd_file);
   char *s = xml_to_json("bmd.xml");
 }
-*/
