@@ -15,6 +15,7 @@
 
 #include<stdlib.h>
 #include<string.h>
+/* BMD structure */
 #include "bmd.h"
 
  
@@ -135,7 +136,7 @@ envelop*  extract_envelop(char * filepath) {
 
    /*Cleans the variables created by Parser*/
   xmlCleanupParser();
-
+  
   return envl;
 }
 
@@ -181,77 +182,6 @@ bmd* parse_bmd_xml(char *bmd_xml_file) {
   return bmd_file;
 }
 
-int is_bmd_valid(bmd *bmd_file) {
-  
-  /* MessageID */
-  if(bmd_file->envelop_data->MessageID  == NULL) {
-    fprintf(stderr,"Message ID doesnot exist in bmd");
-    return 0;
-  }
-  printf("MessageID :%s\n",bmd_file->envelop_data->MessageID);
-
-  /* MessageType */
-  if(bmd_file->envelop_data->MessageType == NULL) {
-    fprintf(stderr,"Message Type doesnot exist in bmd");
-    return 0;
-  }
-  printf("MessageType :%s\n",bmd_file->envelop_data->MessageType);
-
-  /* Sender */
-  if(bmd_file->envelop_data->Sender == NULL) {
-    fprintf(stderr,"Sender doesnot exist in bmd");
-    return 0;
-  }
-  printf("Sender :%s\n",bmd_file->envelop_data->Sender);
-
-
-  /* Destination */
-  if(bmd_file->envelop_data->Destination == NULL) {
-    fprintf(stderr,"Destination doesnot exist in bmd");
-    return 0;
-  }
-  printf("Destination :%s\n",bmd_file->envelop_data->Destination);
-
-
-  /* CreationDateTime */
-  if(bmd_file->envelop_data->CreationDateTime == NULL) {
-    fprintf(stderr,"CreationDateTime doesnot exist in bmd");
-    return 0;
-  }
-  printf("CreationDateTime :%s\n",bmd_file->envelop_data->CreationDateTime);
-
-
-  /* Signature */
-  if(bmd_file->envelop_data->Signature == NULL) {
-    fprintf(stderr,"Signature doesnot exist in bmd");
-    return 0;
-  }
-  printf("Signature :%s\n",bmd_file->envelop_data->Signature);
-
-  /* ReferenceID */
-  if(bmd_file->envelop_data->ReferenceID == NULL) {
-      fprintf(stderr,"ReferenceID doesnot exist in bmd");
-      return 0;
-  }
-  printf("ReferenceID :%s\n",bmd_file->envelop_data->ReferenceID);
-
-  /* payload */
-  if(bmd_file->payload == NULL) {
-    fprintf(stderr,"Payload doesnot exist in bmd");
-    return 0;
-  }
-  printf("Payload :%s\n",bmd_file->payload);
-
-  /** TODO: 
-   * 1.Check if there is active route with the given data.
-   * 2.Check if route has data in transport.config and 
-   * transform_config tables.
-   * 
-   */
-
-  return 1;
-}
-
 /**
  * @brief Extracts payload data from
  * bmd file and stores it in an .json file
@@ -286,8 +216,8 @@ char * xml_to_json(char *bmd_file) {
     return strdup(file);
 }
 
-int main() { 
+/*int main() { 
   bmd *bmd_file = parse_bmd_xml("bmd.xml");
   int check = is_bmd_valid(bmd_file);
   char *s = xml_to_json("bmd.xml");
-}
+}*/

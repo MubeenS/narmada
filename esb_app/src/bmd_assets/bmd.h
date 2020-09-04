@@ -1,6 +1,8 @@
 /**
- * @brief contains envelope and payload
- * details. Has complete bmd structure.
+ * @brief Contains:
+ * 1.Envelop structure
+ * 2.Complete BMD structure
+ * 3.Declarations of XML(BMD) handling functions
  * 
  */
 
@@ -26,5 +28,6 @@ typedef struct bmd_ {
 envelop*  extract_envelop(char * filepath);
 bmd* parse_bmd_xml(char *bmd_xml_file);
 char * extract_payload(char * filepath);
+char * xml_to_json(char *bmd_file);
 int is_bmd_valid(bmd *bmd_file);
 #endif
