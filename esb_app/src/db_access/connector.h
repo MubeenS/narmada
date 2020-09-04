@@ -4,12 +4,10 @@
  * global variables.
  * 
  */
-#include <stdio.h>
 #ifndef CONNECTOR_H
 #define CONNECTOR_H
-int insert_to_esb_request(char *sender_id,char *dest_id,
-char *message_type,char *reference_id,char *message_id, 
-char *data_location, char *status,char *status_details);
+
+#include <stdio.h>
 
 static char *g_host = "localhost";/*hostname*/
 static char *g_user = "root";     /*username*/
@@ -18,6 +16,10 @@ static char *g_db_name ="esb_db";/*name of the database*/
 #define g_port  3306 /*port number*/
 static char *g_unix_socket = NULL; /*unix socket*/
 #define g_flag 0 /*last parameter to mysql_real_connect*/
+
+int insert_to_esb_request(char *sender_id,char *dest_id,
+char *message_type,char *reference_id,char *message_id, 
+char *data_location, char *status,char *status_details,char *received_on);
 #endif
 /**
  * @brief Whenever there is an error opening a database
