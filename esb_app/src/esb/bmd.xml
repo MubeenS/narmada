@@ -3,9 +3,9 @@
 <?xml-stylesheet type='text/xsl'?> 
 <BMD>
 <Envelop>
-<MessageID>E1</MessageID>
-<MessageType>CreditReport1</MessageType>
-<Sender>A1</Sender>
+<MessageID>w1</MessageID>
+<MessageType>xml</MessageType>
+<Sender>A</Sender>
 <Destination>F1</Destination>
 <CreationDateTime>2020-09-12T05:18:00+00001</CreationDateTime>
 <Signature>0b8113c1</Signature>

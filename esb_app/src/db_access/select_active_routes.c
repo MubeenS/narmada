@@ -13,7 +13,8 @@
 #include "connector.h"
 
 #define STRING_SIZE 100
-#define SELECT_QUERY "SELECT sender,destination,message_type FROM routes WHERE sender = ? AND message_type = ? and is_active=1"
+#define SELECT_QUERY "SELECT sender,destination,message_type          \
+FROM routes WHERE sender = ? AND message_type = ? and is_active=1"
 
 void finish_with_error(MYSQL *con) {
 
@@ -24,9 +25,7 @@ void finish_with_error(MYSQL *con) {
 }
  
  
-void select_active_routes(char *sender, char *message_type)
-{
-    printf("%s\t%s\n", sender, message_type);
+int select_active_routes(char *sender, char *message_type) {
 
     MYSQL_STMT *stmt;
     MYSQL_BIND input_bind[2];
@@ -84,11 +83,9 @@ void select_active_routes(char *sender, char *message_type)
         fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
         exit(0);
     }
-    fprintf(stdout, " prepare, SELECT successful\n");
 
     /* Get the parameter count from the statement */
     param_count = mysql_stmt_param_count(stmt);
-    fprintf(stdout, " total parameters in SELECT: %d\n", param_count);
 
     /* validate parameter count */
     if (param_count != 2)
@@ -109,8 +106,6 @@ void select_active_routes(char *sender, char *message_type)
 
     /* Get total columns in the query */
     column_count = mysql_num_fields(prepare_meta_result);
-    fprintf(stdout, " total columns in SELECT statement: %d\n", column_count);
-
     /* validate column count */
     if (column_count != 3)
     {
@@ -194,7 +189,9 @@ void select_active_routes(char *sender, char *message_type)
         fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
         exit(0);
     }
-
+    int num_result_rows = mysql_stmt_num_rows(stmt);
+    /* The following code is left out in case of troubleshooting */
+    #if 0
     /* Fetch all rows */
     row_count = 0;
     fprintf(stdout, "Fetching results ...\n");
@@ -233,6 +230,7 @@ void select_active_routes(char *sender, char *message_type)
 
         fprintf(stdout, "\n");
     }
+    
 
     /* Validate rows fetched */
     fprintf(stdout, " total rows fetched: %d\n", row_count);
@@ -240,7 +238,8 @@ void select_active_routes(char *sender, char *message_type)
     {
         fprintf(stderr, " MySQL failed to return all rows\n");
         exit(0);
-    }
+    }*/
+    #endif
 
     /* Free the prepared result metadata */
     mysql_free_result(prepare_meta_result);
@@ -255,12 +254,13 @@ void select_active_routes(char *sender, char *message_type)
 
     /*closes the database connection*/
     mysql_close(con);
+    /* returns number of rows in result */
+    return num_result_rows;
 }
 
-int main(int argc, char **argv)
-{
+/*int main(int argc, char **argv) {
     char *sender = "A";
-    char *message_type = "CreditReport";
+    char *message_type = "xml";
     select_active_routes(sender, message_type);
     return 0;
-}
+}*/

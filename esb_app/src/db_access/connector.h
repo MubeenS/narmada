@@ -20,6 +20,8 @@ static char *g_unix_socket = NULL; /*unix socket*/
 int insert_to_esb_request(char *sender_id,char *dest_id,
 char *message_type,char *reference_id,char *message_id, 
 char *data_location, char *status,char *status_details,char *received_on);
+
+int select_active_routes(char *sender, char *message_type);
 #endif
 /**
  * @brief Whenever there is an error opening a database
