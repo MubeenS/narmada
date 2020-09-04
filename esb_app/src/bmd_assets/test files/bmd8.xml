@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF"?>
 <!-- Eighth test case,NO Payload -->
 <?xml-stylesheet type="text/css"?>
-<BMD>
-    <Envelop>
-    <MessageID>A9ECAEF2-107A-4452-9553-043B6D25386E3</MessageID>
-    <MessageType>CreditReport3</MessageType>
-    <Sender>756E2EAA-1D5B-4BC0-ACC4-4CEB669408DA3</Sender>
-    <Destination></Destination>
-    <CreationDateTime>2020-08-12T05:18:00+00003</CreationDateTime>
-    <Signature>63f5f61f7a79301f715433f8f3689390d1f5da4f855169023300491c00b8113c3</Signature>
-    <ReferenceID>INV-PROFILE-8897123</ReferenceID>
-    <UserProperties>
-    <key1>Value13</key1>
-    <key2>Value23</key2>
-    </UserProperties>
-    </Envelop>
-
- </BMD>
+  <BMD>
+<Envelop>
+<MessageID>M8</MessageID>
+<MessageType>CreditReport8</MessageType>
+<Sender>Send_H</Sender>
+<Destination></Destination>
+<CreationDateTime>2020-08-12T05:18:00+00001</CreationDateTime>
+<Signature>S8</Signature>
+<ReferenceID>R8</ReferenceID>
+<UserProperties>
+<key1>Value15</key1>
+<key2>Value25</key2>
+</UserProperties>
+</Envelop>
+</BMD>

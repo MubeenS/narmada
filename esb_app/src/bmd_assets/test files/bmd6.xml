@@ -2,18 +2,20 @@
 <!-- Sixth test case,Empty elements -->
 <?xml-stylesheet type="text/css"?>
 <BMD>
-    <Envelop>
-    <MessageID></MessageID>
-    <MessageType>CreditReport3</MessageType>
-    <Sender>756E2EAA-1D5B-4BC0-ACC4-4CEB669408DA3</Sender>
-    <Destination>6393F82F-4687-433D-AA23-1966330381FE3</Destination>
-    <CreationDateTime>2020-08-12T05:18:00+00003</CreationDateTime>
-    <Signature>63f5f61f7a79301f715433f8f3689390d1f5da4f855169023300491c00b8113c3</Signature>
-    <ReferenceID></ReferenceID>
-    <UserProperties>
-    <key1>Value13</key1>
-    <key2>Value23</key2>
-    </UserProperties>
-    </Envelop>
-    <Payload>001-01-12343</Payload>
- </BMD>
+<?xml-stylesheet type="text/css"?>
+<BMD>
+<Envelop>
+<MessageID></MessageID>
+<MessageType>CreditReport6</MessageType>
+<Sender>Send_F</Sender>
+<Destination>Dest_f</Destination>
+<CreationDateTime>2020-08-12T05:18:00+00001</CreationDateTime>
+<Signature>S6</Signature>
+<ReferenceID>R6</ReferenceID>
+<UserProperties>
+<key1>Value15</key1>
+<key2>Value25</key2>
+</UserProperties>
+</Envelop>
+<Payload>001-01-12346</Payload>
+</BMD>
