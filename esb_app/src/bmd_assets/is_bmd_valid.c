@@ -93,18 +93,25 @@ int is_bmd_valid(bmd *bmd_file) {
        printf("Incomplete data");
        return INVALID;
    }
+   int route_id;
+   route_id =get_active_route_id(bmd_file->envelop_data->Sender,
+   bmd_file->envelop_data->Destination,
+   bmd_file->envelop_data->MessageType);
     /* Check if active routes are present */
-   if(select_active_routes(bmd_file->envelop_data->Sender,
-   bmd_file->envelop_data->MessageType)<=0) {
+   if(route_id<=0) {
        printf("No active routes are present.");
        return INVALID;
    }
+   if(has_transform_config(route_id)<=0) {
+     return INVALID;
+   }
+
+   if(has_transport_config(route_id) <=0) {
+     return INVALID;
+   }
 
   /** TODO: 
-   * 1.Check if there is active route with the given data.
-   * 2.Check if route has data in transport.config and 
-   * transform_config tables.
-   * 
+   * 1. Check size of the payload is less than 5MB
    */
 
   return VALID;
@@ -113,5 +120,6 @@ int is_bmd_valid(bmd *bmd_file) {
 int main () {
   bmd *bmd_file = parse_bmd_xml("bmd.xml");
   int check = is_bmd_valid(bmd_file);
+  if(check == VALID) printf("valid");
   return 0;
 }
