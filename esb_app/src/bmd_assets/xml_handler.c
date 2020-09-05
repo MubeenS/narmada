@@ -186,22 +186,19 @@ bmd* parse_bmd_xml(char *bmd_xml_file) {
  * @brief Extracts payload data from
  * bmd file and stores it in an .json file
  * 
- * @param bmd_file path name
+ * @param bmd_file extacted bmd.
  * @return name of json file containing payload data.
  */
 
-char * xml_to_json(char *bmd_file) {
+char * xml_to_json(bmd *bmd_file) {
+   
     char bmd_name[20];
-    /* Extracts payload information */
-    char *payload_data=extract_payload(bmd_file);
-
-    /* Cuts .xml from name of bmd file */
-    strncpy(bmd_name,bmd_file,strlen(bmd_file)-4);
-    bmd_name[strlen(bmd_file)-4]='\0';
-
     /*Creates file name of json as per bmd name*/
     char file[50];
-    sprintf(file,"payload_%s.json",bmd_name);
+    /* Appends name of messageID */
+    sprintf(file,"payload_%s.json",bmd_file->envelop_data->MessageID);
+   
+    char *payload_data = bmd_file->payload;
     FILE *fp;
     fp = fopen(file,"w");
     if(fp == NULL) {

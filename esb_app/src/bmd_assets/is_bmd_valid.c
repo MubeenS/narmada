@@ -23,6 +23,8 @@
 #include "../db_access/connector.h"
 #define VALID 1
 #define INVALID 0
+#define MAX_SIZE 	5000000 
+
 /**
  * @brief Check if bmd has all
  * mandatory fields.
@@ -87,8 +89,34 @@ int is_bmd_complete(bmd *bmd_file) {
 
 }
 
-int is_bmd_valid(bmd *bmd_file) {
+// C program to find the size of file 
+#include <stdio.h> 
+  
+long int find_size(char file_name[]) 
+{ 
+    // opening the file in read mode 
+    FILE* fp = fopen(file_name, "r"); 
+  
+    // checking if the file exist or not 
+    if (fp == NULL) { 
+        printf("File Not Found!\n"); 
+        return -1; 
+    } 
+  
+    fseek(fp, 0L, SEEK_END); 
+  
+    // calculating the size of the file 
+    long int res = ftell(fp); 
+  
+    // closing the file 
+    fclose(fp); 
+  
+    return res; 
+} 
 
+int is_bmd_valid(bmd *bmd_file) {
+   
+   /* Checks if BMD has all fields */
    if(!is_bmd_complete(bmd_file)) {
        printf("Incomplete data");
        return INVALID;
@@ -102,18 +130,24 @@ int is_bmd_valid(bmd *bmd_file) {
        printf("No active routes are present.");
        return INVALID;
    }
+
+   /* Checks if route has transform_config info */
    if(has_transform_config(route_id)<=0) {
      return INVALID;
    }
-
+   
+   /* Checks if route has transport_config info */
    if(has_transport_config(route_id) <=0) {
      return INVALID;
    }
+    
+   /* Checks size of payload file created */
 
-  /** TODO: 
-   * 1. Check size of the payload is less than 5MB
-   */
-
+  char *payload = xml_to_json(bmd_file);
+  long int size = find_size(payload);
+  if(size > MAX_SIZE) {
+    return INVALID;
+  }
   return VALID;
 }
 
