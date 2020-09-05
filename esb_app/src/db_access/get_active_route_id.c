@@ -1,4 +1,18 @@
-#include <stdlib.h>
+/**
+ * @file get_active_route_id.c
+ * @author MubeenS
+ * @brief Function returns route_id of a route if exists by performing
+ * sql query:SELECT route_id                                 
+ * FROM routes WHERE sender = ?                                         
+ * AND message_type = ? AND destination = ? AND is_active=1
+ * 
+ * returns 0 if route does not exist.
+ * @version 0.1
+ * @date 2020-09-05
+ * 
+ * @copyright Copyright (c) 2020
+ * 
+ */
 #include <stdio.h>
 #include <string.h>
 #include <stdio.h>
@@ -13,34 +27,32 @@
 #include "connector.h"
 
 #define STRING_SIZE 100
-#define SELECT_QUERY "SELECT sender,destination,message_type          \
+#define SELECT_QUERY "SELECT route_id                                 \
 FROM routes WHERE sender = ?                                          \
 AND message_type = ? AND destination = ? AND is_active=1"
 
-/*void finish_with_error(MYSQL *con) {
+void finish_with_error(MYSQL *con) {
 
   fprintf(stderr, "Error [%d]: %s \n",mysql_errno(con),mysql_error(con));
   mysql_close(con);
 
   exit(1);        
-}*/
+}
  
  
-int select_active_routes(char *sender,char *destination, char *message_type) {
+int get_active_route_id(char *sender,char *destination, char *message_type) {
 
-    MYSQL_STMT *stmt;
-    MYSQL_BIND input_bind[3];
+    MYSQL_STMT *stmt; /* store statement */
+    MYSQL_BIND input_bind[3]; /* to bind input */
     char input_data[3][STRING_SIZE];
     unsigned long input_length[3];
-    MYSQL_BIND bind[3];
+    MYSQL_BIND bind[1];
     my_ulonglong affected_rows;
     MYSQL_RES *prepare_meta_result;
-    MYSQL_TIME ts;
     unsigned long length[4];
-    int param_count, column_count, row_count;
+    int param_count;
     char small_data[STRING_SIZE];
     int int_data;
-    char str_data[3][STRING_SIZE];
     bool is_null[3];
 
     MYSQL *con; /*database connection handle*/
@@ -66,20 +78,18 @@ int select_active_routes(char *sender,char *destination, char *message_type) {
    * properly established.
    * 
    */
-    if (mysql_real_connect(con, HOST, USER, PASS,
-                           DB_NAME, PORT, UNIX_SOCKET, FLAG) == NULL)
-    {
+    if (mysql_real_connect(con, HOST, USER, PASS,DB_NAME, 
+                            PORT, UNIX_SOCKET, FLAG) == NULL) {
         finish_with_error(con);
     }
 
     stmt = mysql_stmt_init(con);
-    if (!stmt)
-    {
+    if (!stmt) {
         fprintf(stderr, " mysql_stmt_init(), out of memory\n");
         exit(0);
     }
-    if (mysql_stmt_prepare(stmt, SELECT_QUERY, strlen(SELECT_QUERY)))
-    {
+
+    if (mysql_stmt_prepare(stmt, SELECT_QUERY, strlen(SELECT_QUERY))) {
         fprintf(stderr, " mysql_stmt_prepare(), SELECT failed\n");
         fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
         exit(0);
@@ -89,28 +99,17 @@ int select_active_routes(char *sender,char *destination, char *message_type) {
     param_count = mysql_stmt_param_count(stmt);
 
     /* validate parameter count */
-    if (param_count != 3)
-    {
+    if (param_count != 3) {
         fprintf(stderr, " invalid parameter count returned by MySQL\n");
         exit(0);
     }
 
     /* Fetch result set meta information */
     prepare_meta_result = mysql_stmt_result_metadata(stmt);
-    if (!prepare_meta_result)
-    {
+    if (!prepare_meta_result) {
         fprintf(stderr,"mysql_stmt_result_metadata(),           \
         returned no meta information\n");
         fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
-        exit(0);
-    }
-
-    /* Get total columns in the query */
-    column_count = mysql_num_fields(prepare_meta_result);
-    /* validate column count */
-    if (column_count != 3)
-    {
-        fprintf(stderr, " invalid column count returned by MySQL\n");
         exit(0);
     }
 
@@ -138,13 +137,13 @@ int select_active_routes(char *sender,char *destination, char *message_type) {
     input_bind[2].buffer_length = STRING_SIZE;
 
     /* Bind the buffers */
-    if (mysql_stmt_bind_param(stmt, input_bind))
-    {
+    if (mysql_stmt_bind_param(stmt, input_bind))  {
         fprintf(stderr, " mysql_stmt_bind_param() failed\n");
         fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
         exit(0);
     }
-
+    
+    /* Copy input data from function parameters */
     strncpy(input_data[0], sender, STRING_SIZE);
     input_length[0] = strlen(input_data[0]);
     strncpy(input_data[1], message_type, STRING_SIZE);
@@ -152,8 +151,7 @@ int select_active_routes(char *sender,char *destination, char *message_type) {
     strncpy(input_data[2], destination, STRING_SIZE);
     input_length[2] = strlen(input_data[2]);
 
-    if (mysql_stmt_execute(stmt))
-    {
+    if (mysql_stmt_execute(stmt)) {
         fprintf(stderr, " mysql_stmt_execute, 2 failed\n");
         fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
         exit(0);
@@ -164,118 +162,51 @@ int select_active_routes(char *sender,char *destination, char *message_type) {
     memset(bind, 0, sizeof(bind));
 
     /*  route_id */
-    bind[0].buffer_type = MYSQL_TYPE_STRING;
+    bind[0].buffer_type = MYSQL_TYPE_LONG;
     bind[0].buffer = &int_data;
     bind[0].buffer_length = STRING_SIZE;
     bind[0].is_null = 0;
-    bind[0].length = &length[0];
-
-    /* STRING COLUMN */
-    bind[1].buffer_type = MYSQL_TYPE_STRING;
-    bind[1].buffer = (char *)str_data[1];
-    bind[1].buffer_length = STRING_SIZE;
-    bind[1].is_null = 0;
-    bind[1].length = &length[1];
-
-    /* SMALLINT COLUMN */
-    bind[2].buffer_type = MYSQL_TYPE_STRING;
-    bind[2].buffer = (char *)&small_data;
-    bind[2].is_null = 0;
-    bind[2].length = &length[2];
-    bind[2].buffer_length = STRING_SIZE;
 
     /* Bind the result buffers */
-    if (mysql_stmt_bind_result(stmt, bind))
-    {
+    if (mysql_stmt_bind_result(stmt, bind)) {
         fprintf(stderr, " mysql_stmt_bind_result() failed\n");
         fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
         exit(0);
     }
 
     /* Now buffer all results to client */
-    if (mysql_stmt_store_result(stmt))
-    {
+    if (mysql_stmt_store_result(stmt))  {
         fprintf(stderr, " mysql_stmt_store_result() failed\n");
         fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
         exit(0);
     }
-    int num_result_rows = mysql_stmt_num_rows(stmt);
-    int route_id;
-    if(!mysql_stmt_fetch(stmt)) {
-            mysql_free_result(prepare_meta_result);
+    int route_id=0;
 
-    /* Close the statement */
-    if (mysql_stmt_close(stmt))
-    {
+    if(!mysql_stmt_fetch(stmt)) {
+        
+        route_id = int_data;
+        /* Free the result */
+        mysql_free_result(prepare_meta_result);
+        
+        /* Close the statement */
+         if (mysql_stmt_close(stmt)) {
         fprintf(stderr, " failed while closing the statement\n");
         fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
         exit(0);
-    }
-
-    /*closes the database connection*/
-    mysql_close(con);
-        route_id = int_data;
+        }
+        /*closes the database connection*/
+       mysql_close(con);
+        
         return route_id;
     }else{
         printf("No routes found.");
     }
-    /* The following code is left out in case of troubleshooting */
-    #if 0
-    /* Fetch all rows */
-    row_count = 0;
-    fprintf(stdout, "Fetching results ...\n");
-    while (!mysql_stmt_fetch(stmt))
-    {
-        row_count++;
-        fprintf(stdout, "  row %d\n", row_count);
-
-        /* column 1 */
-        fprintf(stdout, "   column1 (integer)  : ");
-        if (is_null[0])
-        {
-            fprintf(stdout, " NULL\n");
-        }
-        else
-        {
-            fprintf(stdout, " %s(%ld)\n", str_data[0], length[0]);
-        }
-
-        /* column 2 */
-        fprintf(stdout, "   column2 (string)   : ");
-        if (is_null[1])
-        {
-            fprintf(stdout, " NULL\n");
-        }
-        else
-        {
-            fprintf(stdout, " %s(%ld)\n", str_data[1], length[1]);
-        }
-        /* column 3 */
-        fprintf(stdout, "   column3 (smallint) : ");
-        if (is_null[2])
-            fprintf(stdout, " NULL\n");
-        else
-            fprintf(stdout, " %s(%ld)\n", small_data, length[2]);
-
-        fprintf(stdout, "\n");
-    }
-    
-
-    /* Validate rows fetched */
-    fprintf(stdout, " total rows fetched: %d\n", row_count);
-    if (row_count != 1)
-    {
-        fprintf(stderr, " MySQL failed to return all rows\n");
-        exit(0);
-    }*/
-    #endif
 
     /* Free the prepared result metadata */
     mysql_free_result(prepare_meta_result);
 
     /* Close the statement */
-    if (mysql_stmt_close(stmt))
-    {
+    if (mysql_stmt_close(stmt)) {
         fprintf(stderr, " failed while closing the statement\n");
         fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
         exit(0);
@@ -287,9 +218,10 @@ int select_active_routes(char *sender,char *destination, char *message_type) {
     return 0;
 }
 
-/*int main(int argc, char **argv) {
+int main(int argc, char **argv) {
     char *sender = "A";
     char *message_type = "xml";
-    select_active_routes(sender, message_type);
+    int id = get_active_route_id(sender,"Y",message_type);
+    printf("id = %d",id);
     return 0;
-}*/
+}

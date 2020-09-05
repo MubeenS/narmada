@@ -20,7 +20,8 @@
 #include <stdbool.h>
 /* Contains necessary C functions of mysql */
 #include <mysql.h>
-
+#ifndef INSERT_REQUEST
+#define INSERT_REQUEST
 /* C standard macro and library for handling datetime*/
 #define __USE_XOPEN /* Compiler Warns without this macro*/
 #include <time.h>
@@ -95,8 +96,8 @@ bool          is_null;
    * properly established.
    * 
    */
-  if (mysql_real_connect(con, g_host, g_user, g_password,       
-          g_db_name, g_port, g_unix_socket, g_flag) == NULL) {
+  if (mysql_real_connect(con, HOST, USER, PASS,       
+          DB_NAME, PORT, UNIX_SOCKET, FLAG) == NULL) {
       finish_with_error(con);
   } 
 /* Prepare an INSERT query with 9 parameters */
@@ -255,7 +256,7 @@ if (mysql_stmt_close(stmt)) {
   return 1;
   mysql_close(con);
 }
-
+#endif
 /*testing with a sample input*/
 /*int main() {
   char *s,*d,*mt,*rid,*mid,*dl,*st,*std;

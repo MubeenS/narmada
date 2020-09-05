@@ -54,8 +54,8 @@ void select_all_esb_request(char **status) {
    * properly established.
    * 
    */
-  if (mysql_real_connect(con, g_host, g_user, g_password,       
-          g_db_name, g_port, g_unix_socket, g_flag) == NULL) {
+  if (mysql_real_connect(con, HOST, USER, PASS,       
+          DB_NAME, PORT, UNIX_SOCKET, FLAG) == NULL) {
       finish_with_error(con);
   }    
   char query[STRING_SIZE]; /*to store query*/
