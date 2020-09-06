@@ -151,9 +151,9 @@ int is_bmd_valid(bmd *bmd_file) {
   return VALID;
 }
 
-int main () {
+/*int main () {
   bmd *bmd_file = parse_bmd_xml("bmd.xml");
   int check = is_bmd_valid(bmd_file);
   if(check == VALID) printf("valid");
   return 0;
-}
+} */
