@@ -18,7 +18,8 @@
 /* BMD structure */
 #include "bmd.h"
 
- 
+#ifndef XML_HANDLER
+#define XML_HANDLER
 /**
  * @brief Checks if a Node is a leaf
  * 
@@ -212,7 +213,7 @@ char * xml_to_json(bmd *bmd_file) {
     /* returns json filename */
     return strdup(file);
 }
-
+#endif
 /*int main() { 
   bmd *bmd_file = parse_bmd_xml("bmd.xml");
   int check = is_bmd_valid(bmd_file);

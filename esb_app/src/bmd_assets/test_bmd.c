@@ -8,7 +8,7 @@ test_xml_to_json(const MunitParameter params[], void *fixture)
 {
     bmd *b = parse_bmd_xml("bmd.xml");
 
-    char *file_created = xml_to_json(b)
+    char *file_created = xml_to_json(b);
     munit_assert_string_equal(file_created, "payload_test.json");
 
     return MUNIT_OK;
@@ -44,5 +44,5 @@ static const MunitSuite suite = {
 
 /* Run the the test suite */
 int main (int argc, const char* argv[]) {
-  return munit_suite_main(&suite, NULL, argc, argv);
+  return munit_suite_main(&suite, NULL, argc, NULL);
 }
