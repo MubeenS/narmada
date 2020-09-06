@@ -218,10 +218,10 @@ int get_active_route_id(char *sender,char *destination, char *message_type) {
     return 0;
 }
 
-int main(int argc, char **argv) {
+/*int main(int argc, char **argv) {
     char *sender = "A";
     char *message_type = "xml";
     int id = get_active_route_id(sender,"Y",message_type);
     printf("id = %d",id);
     return 0;
-}
+}*/

@@ -29,15 +29,6 @@
 #define SELECT_QUERY "SELECT id FROM transform_config          \
 WHERE route_id = ? "
 
-void finish_with_error(MYSQL *con)
-{
-
-    fprintf(stderr, "Error [%d]: %s \n", mysql_errno(con), mysql_error(con));
-    mysql_close(con);
-
-    exit(1);
-}
-
 int has_transform_config(int route_id)
 {
 

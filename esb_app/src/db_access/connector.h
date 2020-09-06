@@ -25,5 +25,8 @@ char *data_location, char *status,char *status_details,char *received_on);
 int select_active_routes(char *sender, char * ,char *);
 void finish_with_error(MYSQL *con) ;
 int get_active_route_id(char *sender,char* destination,char *message_type);
+int has_transform_config(int route_id);
+int has_transport_config(int route_id);
+
 #endif
 

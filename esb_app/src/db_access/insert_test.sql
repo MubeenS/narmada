@@ -2,24 +2,24 @@ source create_schema.sql;
 
 INSERT INTO routes (sender,destination,message_type,is_active)
 VALUES
-  ('A','X','xml',b'1'),
-  ('A','Y','xml',b'1'),
-  ('A','Z','xml',b'1'),
-  ('B','X','xml',b'1'),
-  ('B','Y','xml',b'1'),
-  ('B','Z','xml',b'1'),
-  ('C','X','xml',b'1'),
-  ('C','Y','xml',b'1'),
-  ('C','Z','xml',b'1'),
-  ('A','X','json',b'1'),
-  ('A','Y','json',b'1'),
-  ('A','Z','json',b'1'),
-  ('B','X','json',b'1'),
-  ('B','Y','json',b'1'),
-  ('B','Z','json',b'1'),
-  ('C','X','json',b'1'),
-  ('C','Y','json',b'1'),
-  ('C','Z','json',b'1');
+  ('A','X','CreditReport',b'1'),
+  ('A','Y','CreditReport',b'1'),
+  ('A','Z','CreditReport',b'1'),
+  ('B','X','CreditReport',b'1'),
+  ('B','Y','CreditReport',b'1'),
+  ('B','Z','CreditReport',b'1'),
+  ('C','X','CreditReport',b'1'),
+  ('C','Y','CreditReport',b'1'),
+  ('C','Z','CreditReport',b'1'),
+  ('A','X','AvlBal',b'1'),
+  ('A','Y','AvlBal',b'1'),
+  ('A','Z','AvlBal',b'1'),
+  ('B','X','AvlBal',b'1'),
+  ('B','Y','AvlBal',b'1'),
+  ('B','Z','AvlBal',b'1'),
+  ('C','X','AvlBal',b'1'),
+  ('C','Y','AvlBal',b'1'),
+  ('C','Z','AvlBal',b'1');
 
 INSERT INTO transform_config(route_id,config_key,config_value) 
 VALUES 

@@ -73,10 +73,11 @@ bool          is_null;
    * properly established.
    * 
    */
-  if (mysql_real_connect(con, g_host, g_user, g_password,       
-          g_db_name, g_port, g_unix_socket, g_flag) == NULL) {
-      finish_with_error(con);
-  } 
+    if (mysql_real_connect(con, HOST, USER, PASS,
+                           DB_NAME, PORT, UNIX_SOCKET, FLAG) == NULL)
+    {
+        finish_with_error(con);
+    }
 /* Prepare an INSERT query with 3 parameters */
 stmt = mysql_stmt_init(con);
 if (!stmt) {

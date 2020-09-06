@@ -29,15 +29,6 @@
 #define SELECT_QUERY "SELECT id FROM transport_config          \
 WHERE route_id = ? "
 
-void finish_with_error(MYSQL *con)
-{
-
-    fprintf(stderr, "Error [%d]: %s \n", mysql_errno(con), mysql_error(con));
-    mysql_close(con);
-
-    exit(1);
-}
-
 int has_transport_config(int route_id)
 {
 
@@ -211,9 +202,9 @@ int has_transport_config(int route_id)
     return 0;
 }
 
-int main(int argc, char **argv)
+/*int main(int argc, char **argv)
 {
     int id = has_transport_config(4);
     printf("id = %d", id);
     return 0;
-}
+}*/
