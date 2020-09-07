@@ -156,4 +156,4 @@ int is_bmd_valid(bmd *bmd_file) {
   int check = is_bmd_valid(bmd_file);
   if(check == VALID) printf("valid");
   return 0;
-} */
+}*/

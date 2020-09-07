@@ -1,10 +1,10 @@
-INSERT INTO `esb_db`.`routes`(sender,destination,message_type)
+INSERT INTO `esb_db`.`routes`(sender,destination,message_type,is_active)
 VALUES
-('Send_A','Dest_a','CreditReport1'),
-('Send_B','Dest_b','CreditReport2'),
-('Send_C','Dest_c','CreditReport3'),
-('Send_D','Dest_d','CreditReport4'),
-('Send_E','Dest_e','CreditReport5');
+('Send_A','Dest_a','CreditReport1',1),
+('Send_B','Dest_b','CreditReport2',1),
+('Send_C','Dest_c','CreditReport3',1),
+('Send_D','Dest_d','CreditReport4',1),
+('Send_E','Dest_e','CreditReport5',1);
 
 INSERT INTO esb_db.transform_config(route_id,config_key,config_value)
 VALUES

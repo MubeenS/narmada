@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF"?>
-<!-- NINTH test case-->
+<!-- 15TH test case-->
 <?xml-stylesheet type="text/css"?>
 <BMD>
 <Envelop>
 <MessageID>M7</MessageID>
-<MessageType>CreditReport</MessageType>
-<Sender>C</Sender>
+<MessageType>AvlBal</MessageType>
+<Sender>B</Sender>
 <Destination>Z</Destination>
 <CreationDateTime>2020-08-12T05:18:00+00001</CreationDateTime>
 <Signature>S7</Signature>

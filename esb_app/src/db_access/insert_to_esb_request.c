@@ -51,8 +51,7 @@ VALUES(?,?,?,?,?,?,?,?,?)"
   mysql_close(con);
 
   exit(1);        
-}
- */
+}*/
 int insert_to_esb_request(char *sender_id,char *dest_id,
 char *message_type,char *reference_id,char *message_id, 
 char *data_location, char *status,char *status_details,char *received_on) {
