@@ -11,6 +11,7 @@
 /** Module that has mysql C API functions */
 
 #include "../db_access/connector.h"
+
 int queue_the_request(bmd *b) {
     int success = 1; // 1 => OK, -1 => Error cases
 
@@ -66,7 +67,7 @@ int process_esb_request(char* bmd_file_path) {
     return status;
 }
 
-int main () {
+/*int main () {
     int status = process_esb_request("bmd.xml");
     
     if(status != 1) {
@@ -74,5 +75,4 @@ int main () {
         return EXIT_FAILURE;
     }
     return EXIT_SUCCESS;
-}
-
+}*/

@@ -1,36 +1,45 @@
-#include "munit.h"
+#include <stdio.h>
+
+#include "../test/munit.h"
 #include "esb.h"
+/** Include Module that has bmd handling 
+ * functions and  bmd structure declaration 
+ * 
+ */ 
+#include "../bmd_assets/bmd.h"
+
+/** Module that has mysql C API functions */
+
+#include "../db_access/connector.h"
 
 /**
  * If the name of a test function is "test_abc" then you should
  * define the setup and teardown functions by the names:
  * test_abc_setup and test_abc_tear_down respectively.
+ * 
  */
 static void *
-test1_setup(const MunitParameter params[], void *user_data)
-{
-    /**
-     * Return the data that will be used for test1. Here we
-     * are just return a string. It can be a struct or anything.
-     * The memory that you allocate here for the test data
-     * has to be cleaned up in corresponding tear down function,
-     * which in this case is test1_tear_down.
-     */
-    return strdup("/path/to/bmd.xml");
+queue_the_request_setup(const MunitParameter params[], void *user_data)
+{ /* Creates bmd and returns */
+   bmd *b = parse_bmd_xml("bmd.xml");
+   return b;
 }
 
 static void
-test1_tear_down(void *fixture)
+queue_the_request_tear_down(void *fixture)
 {
     /* Receives the pointer to the data if that that was created in
-    test1_setup function. */
-    free(fixture);
+    queue_the_request_setup function. */
+    bmd *b = (bmd *) fixture;
+    free(b->envelop_data);
+    free(b->payload);
+    free(b);
 }
 
 static MunitResult
-test1(const MunitParameter params[], void *fixture)
+test_queue_the_request(const MunitParameter params[], void *fixture)
 {
-    char *str = (char *)fixture;
+    bmd *b = (bmd *)fixture;
     /**
      * Perform the checking of logic here as needed.
      * Typically, you will invoke the function under testing
@@ -42,52 +51,17 @@ test1(const MunitParameter params[], void *fixture)
      * string. You will need to recompile and re-run the tests
      * to see the effect of any changes in data in this example.
      */
-    munit_assert_string_equal(str, "/path/to/bmd.xml");
-
-    // Invoke the ESB function (or any other function to test)
-    int status = process_esb_request(str);
-    
-    // Assert the expected results
-    munit_assert_true(status == 0);
-    return MUNIT_OK;
-}
-
-/* Define the setup and the test for test2 */
-static void *
-test2_setup(const MunitParameter params[], void *user_data)
-{
-    return strdup("TEST-2");
-}
-
-static void
-test2_tear_down(void *fixture)
-{
-    free(fixture);
-}
-
-static MunitResult
-test2(const MunitParameter params[], void *fixture)
-{
-    char *str = (char *)fixture;
-    munit_assert_string_equal(str, "TEST-2");
+    munit_assert(queue_the_request(b)==1);
     return MUNIT_OK;
 }
 
 /* Put all unit tests here. */
 MunitTest esb_tests[] = {
     {
-        "/my-test-1",   /* name */
-        test1,  /* test function */
-        test1_setup,    /* setup function for the test */
-        test1_tear_down,    /* tear_down */
-        MUNIT_TEST_OPTION_NONE, /* options */
-        NULL                    /* parameters */
-    },
-    {
-        "/my-test-2",   /* name */
-        test2,  /* test function */
-        test2_setup,    /* setup function for the test */
-        test2_tear_down,    /* tear_down */
+        "/queue_the_request",   /* name */
+        test_queue_the_request,  /* test function */
+        queue_the_request_setup,    /* setup function for the test */
+        queue_the_request_tear_down,    /* tear_down */
         MUNIT_TEST_OPTION_NONE, /* options */
         NULL                    /* parameters */
     },
@@ -97,7 +71,7 @@ MunitTest esb_tests[] = {
 
 /* Arrange the test cases into a test suite. */
 static const MunitSuite suite = {
-  "/my-tests", /* name */
+  "/esb_tests", /* name */
   esb_tests, /* tests */
   NULL, /* suites */
   1, /* iterations */
@@ -106,5 +80,5 @@ static const MunitSuite suite = {
 
 /* Run the the test suite */
 int main (int argc, const char* argv[]) {
-  return munit_suite_main(&suite, NULL, argc, argv);
+  return munit_suite_main(&suite, NULL, argc, NULL);
 }

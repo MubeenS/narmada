@@ -3,8 +3,8 @@
 <?xml-stylesheet type='text/xsl'?> 
 <BMD>
 <Envelop>
-<MessageID>wp11</MessageID>
-<MessageType>xml</MessageType>
+<MessageID>M2</MessageID>
+<MessageType>CreditReport</MessageType>
 <Sender>B</Sender>
 <Destination>Y</Destination>
 <CreationDateTime>2020-09-12T05:18:00+00001</CreationDateTime>
