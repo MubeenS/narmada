@@ -3,10 +3,10 @@
 <?xml-stylesheet type='text/xsl'?> 
 <BMD>
 <Envelop>
-<MessageID>w1</MessageID>
+<MessageID>wp11</MessageID>
 <MessageType>xml</MessageType>
 <Sender>B</Sender>
-<Destination>F1</Destination>
+<Destination>Y</Destination>
 <CreationDateTime>2020-09-12T05:18:00+00001</CreationDateTime>
 <Signature>0b8113c1</Signature>
 <ReferenceID>INV-PROFILE-8897121</ReferenceID>

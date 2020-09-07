@@ -307,6 +307,7 @@ void munit_errorf_ex(const char* filename, int line, const char* format, ...);
   MUNIT_POP_DISABLE_MSVC_C4127_
 
 #include <string.h>
+
 #define munit_assert_string_equal(a, b) \
   do { \
     const char* munit_tmp_a_ = a; \
