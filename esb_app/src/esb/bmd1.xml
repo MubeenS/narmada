@@ -3,7 +3,7 @@
 <?xml-stylesheet type='text/xsl'?> 
 <BMD>
 <Envelop>
-<MessageID>M9</MessageID>
+<MessageID>M6</MessageID>
 <MessageType>CreditReport</MessageType>
 <Sender>B</Sender>
 <Destination>Y</Destination>
