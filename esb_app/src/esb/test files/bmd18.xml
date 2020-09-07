@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF"?>
-<!-- NINTH test case-->
+<!-- 18TH test case-->
 <?xml-stylesheet type="text/css"?>
 <BMD>
 <Envelop>
 <MessageID>M7</MessageID>
-<MessageType>CreditReport</MessageType>
+<MessageType>AvlBal</MessageType>
 <Sender>C</Sender>
 <Destination>Z</Destination>
 <CreationDateTime>2020-08-12T05:18:00+00001</CreationDateTime>
