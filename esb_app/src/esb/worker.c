@@ -77,6 +77,8 @@ void *poll_database_for_new_requets(void *vargp)
 
 int main () {
     task_t *req = select_new_esb_request();
+    int t = update_esb_request("DONE",req->id);
+    printf("rc for upate = %d",t);
     printf("%d",req->id);
     printf("%s",req->data_location);
     printf("%s",req->destination);
