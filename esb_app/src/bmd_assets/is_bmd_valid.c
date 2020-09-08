@@ -2,10 +2,10 @@
  * @file is_bmd_valid.c
  * @author MubeenS
  * @brief 
- * @version INVALID.1
- * @date 2INVALID2INVALID-INVALID9-INVALID4
+ * @version 0.1
+ * @date 2020-09-08
  * 
- * @copyright Copyright (c) 2INVALID2INVALID
+ * @copyright Copyright (c) 2020
  * 
  */
 

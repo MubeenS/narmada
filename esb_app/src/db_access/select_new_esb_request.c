@@ -18,8 +18,9 @@
 
 #define STRING_SIZE 50
 
-#define SELECT_QUERY "SELECT id,sender_id, dest_id, message_type \
-                       FROM esb_request WHERE status = 'RECEIVED' "
+#define SELECT_QUERY "SELECT id,sender_id, dest_id, message_type,   \
+                       data_location FROM esb_request               \
+                       WHERE status = 'RECEIVED' "
 
 /*void finish_with_error(MYSQL *con) {
 
@@ -29,7 +30,7 @@
   exit(1);        
 }*/
 
-void select_new_esb_request(void)
+task_t *select_new_esb_request(void)
 {
 
     MYSQL *con; /*database connection handle*/
@@ -63,14 +64,18 @@ void select_new_esb_request(void)
     }
 
     MYSQL_STMT *stmt;
-    MYSQL_BIND bind[4];
+    MYSQL_BIND bind[5];
     MYSQL_RES *prepare_meta_result;
-    unsigned long length[4];
+    unsigned long length[5];
     int param_count, column_count, row_count;
-    int int_data; /* For id */
-    char str_data[3][STRING_SIZE];
-    bool is_null[4];
-    bool error[4];
+    int id_data; /* For id */
+    //char str_data[4][STRING_SIZE];
+    char sender_id[STRING_SIZE];
+    char dest_id[STRING_SIZE];
+    char message_type[STRING_SIZE];
+    char data_location[STRING_SIZE];
+    bool is_null[5];
+    bool error[5];
 
     /* Prepare a SELECT query to fetch data from esb_request */
     stmt = mysql_stmt_init(con);
@@ -122,7 +127,7 @@ void select_new_esb_request(void)
             " total columns in SELECT statement: %d\n",
             column_count);
 
-    if (column_count != 4) /* validate column count */
+    if (column_count != 5) /* validate column count */
     {
         fprintf(stderr, " invalid column count returned by MySQL\n");
         exit(0);
@@ -134,14 +139,14 @@ void select_new_esb_request(void)
 
     /* INTEGER COLUMN */
     bind[0].buffer_type = MYSQL_TYPE_LONG;
-    bind[0].buffer = (char *)&int_data;
+    bind[0].buffer = (char *)&id_data;
     bind[0].is_null = &is_null[0];
     bind[0].length = &length[0];
     bind[0].error = &error[0];
 
     /* Sender_id */
     bind[1].buffer_type = MYSQL_TYPE_STRING;
-    bind[1].buffer = (char *)str_data[0];
+    bind[1].buffer = (char *)sender_id;
     bind[1].buffer_length = STRING_SIZE;
     bind[1].is_null = &is_null[1];
     bind[1].length = &length[1];
@@ -149,7 +154,7 @@ void select_new_esb_request(void)
 
     /* dest_id */
     bind[2].buffer_type = MYSQL_TYPE_STRING;
-    bind[2].buffer = (char *)str_data[1];
+    bind[2].buffer = (char *)dest_id;
     bind[2].buffer_length = STRING_SIZE;
     bind[2].is_null = &is_null[2];
     bind[2].length = &length[2];
@@ -157,11 +162,19 @@ void select_new_esb_request(void)
 
     /* message_type */
     bind[3].buffer_type = MYSQL_TYPE_STRING;
-    bind[3].buffer = (char *)str_data[2];
+    bind[3].buffer = (char *)message_type;
     bind[3].buffer_length = STRING_SIZE;
     bind[3].is_null = &is_null[3];
     bind[3].length = &length[3];
     bind[3].error = &error[3];
+
+    /* Data Location */
+    bind[4].buffer_type = MYSQL_TYPE_STRING;
+    bind[4].buffer = (char *)data_location;
+    bind[4].buffer_length = STRING_SIZE;
+    bind[4].is_null = &is_null[4];
+    bind[4].length = &length[4];
+    bind[4].error = &error[4];
 
     /* Bind the result buffers */
     if (mysql_stmt_bind_result(stmt, bind))
@@ -178,7 +191,7 @@ void select_new_esb_request(void)
         fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
         exit(0);
     }
-
+    task_t *request = (task_t *)malloc(sizeof(task_t));
     /* Fetch all rows */
     row_count = 0;
     fprintf(stdout, "Fetching results ...\n");
@@ -190,31 +203,67 @@ void select_new_esb_request(void)
         /* column 1 */
         fprintf(stdout, "   column1 (integer)  : ");
         if (is_null[0])
+        {
             fprintf(stdout, " NULL\n");
+        }
         else
-            fprintf(stdout, " %d(%ld)\n", int_data, length[0]);
+        {
+            fprintf(stdout, " %d(%ld)\n", id_data, length[0]);
+            request->id = id_data;
+        }
 
         /* column 2 */
         fprintf(stdout, "   column2 (string)   : ");
         if (is_null[1])
+        {
             fprintf(stdout, " NULL\n");
+        }
+
         else
-            fprintf(stdout, " %s(%ld)\n", str_data[0], length[1]);
+        {
+            fprintf(stdout, " %s(%ld)\n", sender_id, length[1]);
+            request->sender = strdup(sender_id);
+        }
 
         /* column 3 */
-        fprintf(stdout, "   column3 (string) : ");
-        if (is_null[2])
+        fprintf(stdout, "   column3 (string)   : ");
+        if (is_null[1])
+        {
             fprintf(stdout, " NULL\n");
+        }
+
         else
-            fprintf(stdout, " %s(%ld)\n", str_data[1], length[2]);
+        {
+            fprintf(stdout, " %s(%ld)\n", dest_id, length[1]);
+            request->destination = strdup(dest_id);
+        }
 
         /* column 4 */
-        fprintf(stdout, "   column4 (string): ");
-        if (is_null[3])
+        fprintf(stdout, "   column4 (string)   : ");
+        if (is_null[1])
+        {
             fprintf(stdout, " NULL\n");
+        }
+
         else
-            fprintf(stdout, " %s(%ld)\n", str_data[2], length[3]);
-        fprintf(stdout, "\n");
+        {
+            fprintf(stdout, " %s(%ld)\n", message_type, length[1]);
+            request->message_type = strdup(message_type);
+        }
+
+        fprintf(stdout, "   column5 (string)   : ");
+        if (is_null[1])
+        {
+            fprintf(stdout, " NULL\n");
+        }
+
+        else
+        {
+            fprintf(stdout, " %s(%ld)\n", data_location, length[1]);
+            request->data_location = strdup(data_location);
+        }
+
+        return request;
     }
 
     /* Validate rows fetched */
@@ -241,11 +290,17 @@ void select_new_esb_request(void)
     /*closes the database connection*/
     mysql_close(con);
     /* returns number of rows in result */
-    return;
+    return NULL;
 }
 
-int main(int argc, char **argv) {
+/*int main(int argc, char **argv)
+{
+    task_t *request = select_new_esb_request();
+    printf("%d", request->id);
+    printf("%s", request->sender);
+    printf("%s", request->destination);
+    printf("%s", request->message_type);
+    printf("%s", request->data_location);
 
-    select_new_esb_request();
     return 0;
-}
+}*/

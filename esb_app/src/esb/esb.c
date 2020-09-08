@@ -12,7 +12,7 @@
 
 #include "../db_access/connector.h"
 
-int queue_the_request(bmd *b) {
+int queue_the_request(bmd *b,char *file_path) {
     int success = 1; // 1 => OK, -1 => Error cases
 
     /**
@@ -27,7 +27,7 @@ int queue_the_request(bmd *b) {
     int rc = insert_to_esb_request(b->envelop_data->Sender,
     b->envelop_data->Destination,b->envelop_data->MessageType,
     b->envelop_data->ReferenceID,b->envelop_data->MessageID,
-    "Routes","RECEIVED","received successfully",b->envelop_data->CreationDateTime);
+    file_path,"RECEIVED","received successfully",b->envelop_data->CreationDateTime);
     if(rc ==1)
     return success;
 }
@@ -60,7 +60,7 @@ int process_esb_request(char* bmd_file_path) {
     else
     {
         // Step 3:
-        status = queue_the_request(b);
+        status = queue_the_request(b,bmd_file_path);
         printf("Queued..!");
     }
     
@@ -68,7 +68,7 @@ int process_esb_request(char* bmd_file_path) {
 }
 
 /*int main () {
-    int status = process_esb_request("bmd.xml");
+    int status = process_esb_request("../bmd_files/bmd2.xml");
     
     if(status != 1) {
         printf("Status[%d]: Request processing failed",status);

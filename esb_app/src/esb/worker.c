@@ -1,15 +1,34 @@
-#include <stdio.h>
+/**
+ * @file worker.c
+ * @author MubeenS
+ * @brief A worker thread performs following operations:
+ * 1.Fetches new request from database whose status = 'RECEIVED'
+ * 2.Transforms if needed.
+ * 3.Transports the payload to destination.
+ * 4.Updates status of request in database.
+ * 
+ * @version 0.1
+ * @date 2020-09-08
+ * 
+ * @copyright Copyright (c) 2020
+ * 
+ */
 #include <unistd.h>
+
 #include "esb.h"
 
-int fetch_new_request_from_db(bmd *request)
+#include "../db_access/connector.h"
+int fetch_new_request_from_db(task_t *request)
 {
-    /** 
-     * TODO: query the DB for this, and populate the 
-     * request pointer with the requests.
-     */
     printf("Checking for new requests in esb_requests table.\n");
-    return 1; // 1 => OK, -1 => Errors
+    request = select_new_esb_request();
+    if(request!=NULL) {
+    return 1;
+    }
+    
+    /* Returns zero if the execution fails */
+    return 0;
+
 }
 
 /**
@@ -26,11 +45,11 @@ void *poll_database_for_new_requets(void *vargp)
          * Step 2: Query the esb_requests table to see if there
          * are any newly received BMD requets.
          */
-        bmd req;
+        task_t *req;
         /**
          * Step 3:
          */
-        if (fetch_new_request_from_db(&req))
+        if (fetch_new_request_from_db(req))
         {
             /**
               * Found a new request, so we will now process it.
@@ -54,4 +73,12 @@ void *poll_database_for_new_requets(void *vargp)
         printf("Sleeping for 5 seconds.\n");
         sleep(5);
     }
+}
+
+int main () {
+    task_t *req = select_new_esb_request();
+    printf("%d",req->id);
+    printf("%s",req->data_location);
+    printf("%s",req->destination);
+    return 0;
 }

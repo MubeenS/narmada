@@ -13,30 +13,13 @@
 #include "../db_access/connector.h"
 
 
-static void *
-queue_the_request_setup(const MunitParameter params[], void *user_data)
-{ /* Creates bmd and returns */
-   bmd *b = parse_bmd_xml("bmd.xml");
-   return b;
-}
-
-static void
-queue_the_request_tear_down(void *fixture)
-{
-    /* Receives the pointer to the data if that that was created in
-    queue_the_request_setup function. */
-    bmd *b = (bmd *) fixture;
-    free(b->envelop_data);
-    free(b->payload);
-    free(b);
-}
 
 static MunitResult
 test_queue_the_request(const MunitParameter params[], void *fixture)
 {
-    bmd *b = (bmd *)fixture;
+    bmd *b = parse_bmd_xml("../bmd_files/bmd2.xml");
 
-    munit_assert(queue_the_request(b)==1);
+    munit_assert(queue_the_request(b,"../bmd_files/bmd2.xml")==1);
     return MUNIT_OK;
 }
 
@@ -46,7 +29,7 @@ test_process_esb_request(const MunitParameter params[], void *fixture)
 {
     bmd *b = (bmd *)fixture;
 
-    munit_assert(process_esb_request("bmd1.xml")==1);
+    munit_assert(process_esb_request("../bmd_files/bmd2.xml")==1);
     return MUNIT_OK;
 }
 
@@ -64,8 +47,8 @@ MunitTest esb_tests[] = {
     {
         "/queue_the_request",   /* name */
         test_queue_the_request,  /* test function */
-        queue_the_request_setup,    /* setup function for the test */
-        queue_the_request_tear_down,    /* tear_down */
+        NULL,    /* setup function for the test */
+        NULL,    /* tear_down */
         MUNIT_TEST_OPTION_NONE, /* options */
         NULL                    /* parameters */
     },
