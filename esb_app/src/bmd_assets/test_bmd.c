@@ -23,19 +23,20 @@ char *get_str_data(char *file)
 static void *
 xml_to_json_setup(const MunitParameter params[], void *user_data)
 {
-  char *file = "bmd.xml";
+  char *file = "../bmd_files/bmd1.xml";
   bmd *b = parse_bmd_xml(file);
   char *file_created = xml_to_json(b);
   /* Copy file data into string */
   char *json_data = get_str_data(file_created);
-  return strdup(json_data);
+  return strdup(file_created);
 }
 
 /* Test function */
 static MunitResult
 test_xml_to_json(const MunitParameter params[], void *fixture)
-{
-  char *json_data = (char *)fixture;
+{ 
+  char *file_created = (char *)fixture;
+  char *json_data = get_str_data(file_created);
 
   char *test_data = get_str_data("payload_test.json");
 
@@ -46,16 +47,18 @@ test_xml_to_json(const MunitParameter params[], void *fixture)
 
 static void
 xml_to_json_tear_down(void *fixture)
-{
-
-  free(fixture);
+{ char *file_created = (char *) fixture;
+   int del = remove(file_created);
+   /* Checks if file is deleted */
+   munit_assert(!del);
+  free(file_created);
 }
 
 /* Test setup function creates bmd and returns it */
 static void *
 is_bmd_valid_setup(const MunitParameter params[], void *user_data)
 {
-  char *file = "bmd.xml";
+  char *file = "../bmd_files/bmd1.xml";
   bmd *b = parse_bmd_xml(file);
   return b;
 }
@@ -80,7 +83,7 @@ is_bmd_valid_tear_down(void *fixture)
 static void *
 parse_bmd_xml_setup(const MunitParameter params[], void *user_data)
 {
-  char *file = "bmd.xml";
+  char *file = "../bmd_files/bmd1.xml";
   bmd *b = parse_bmd_xml(file);
   return b;
 }

@@ -215,7 +215,7 @@ char * xml_to_json(bmd *bmd_file) {
 }
 #endif
 /*int main() { 
-  bmd *bmd_file = parse_bmd_xml("bmd.xml");
+  bmd *bmd_file = parse_bmd_xml("../bmd_files/bmd1.xml");
   int check = is_bmd_valid(bmd_file);
-  char *s = xml_to_json("bmd.xml");
+  char *s = xml_to_json(bmd_file);
 }*/
