@@ -1,2 +1,4 @@
-email: email.c
-	gcc email.c -lcurl -o email
+email: email_.c
+	gcc email_.c -lcurl -o email
+clean:
+	rm email

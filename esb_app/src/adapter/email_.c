@@ -10,9 +10,9 @@
  * Note that this example requires libcurl 7.20.0 or above.
  */ 
  
-#define FROM    "<testmail.tm100@gmail.com>"
-#define TO      "<testmail.tm100@gmail.com>"
-#define CC      "<testmail.tm100@gmail.com>"
+#define FROM    "testmail.tm100@gmail.com"
+#define TO      "testmail.tm100@gmail.com"
+#define CC      "testmail.tm100@gmail.com"
  
 static const char *payload_text[] = {
   "Date: Mon, 29 Nov 2010 21:54:29 +1100\r\n",
