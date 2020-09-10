@@ -33,7 +33,7 @@
 #define SELECT_QUERY "SELECT config_key,config_value   \
 FROM transport_config WHERE route_id = ? "
 
-transport_t* fetch_transform_config(int route_id)
+transport_t* fetch_transport_config(int route_id)
 {
 
     MYSQL_STMT *stmt;         /* store statement */
@@ -230,7 +230,7 @@ transport_t* fetch_transform_config(int route_id)
 
 /*int main(int argc, char **argv)
 {
-    transport_t* t = fetch_transform_config(1);
+    transport_t* t = fetch_transport_config(1);
     printf("%s  %s", t->key,t->value);
     return 0;
 }*/

@@ -21,6 +21,7 @@
 #include "bmd.h"
 /* DB access function declarations */
 #include "../db_access/connector.h"
+#include "../adapter/transform.h"
 #define VALID 1
 #define INVALID 0
 #define MAX_SIZE 	5000000 
@@ -143,7 +144,7 @@ int is_bmd_valid(bmd *bmd_file) {
     
    /* Checks size of payload file created */
 
-  char *payload = xml_to_json(bmd_file);
+  char *payload = payload_to_json(bmd_file);
   long int size = find_size(payload);
   if(size > MAX_SIZE) {
     return INVALID;
