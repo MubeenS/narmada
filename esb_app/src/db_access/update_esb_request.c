@@ -2,8 +2,10 @@
  * @file update_esb_request.c
  * @author MubeenS
  * @brief The program is a C API for the SQL query
- * UPDATE esb_request SET status = ? WHERE id = ? 
- * @version 0.1
+ * UPDATE esb_request SET status = ? WHERE id = ? .
+ * The function returns 1 if update is successful,
+ * else returns zero.
+ * @version 1.0
  * @date 2020-09-01
  * 
  * @copyright Copyright (c) 2020
@@ -26,18 +28,17 @@
 
 #define STRING_SIZE 100
 
-void finish_with_error(MYSQL *con) {
+/*void finish_with_error(MYSQL *con) {
 
   fprintf(stderr, "Error [%d]: %s \n",mysql_errno(con),mysql_error(con));
   mysql_close(con);
 
   exit(1);        
-}
- 
+}*/
 
 #define UPDATE_QUERY "UPDATE esb_request SET status = ? WHERE id = ? "
 
-void update_esb_request(char **status,int id) {
+int update_esb_request(char *status,int id) {
 MYSQL_STMT    *stmt;
 MYSQL_BIND    bind[2];
 my_ulonglong  affected_rows;
@@ -125,7 +126,7 @@ if (mysql_stmt_bind_param(stmt, bind)) {
 }
 
 id_data = id;
-strncpy(status_data,*status, STRING_SIZE);
+strncpy(status_data,status, STRING_SIZE);
 str_length= strlen(status_data);
 
 /* Execute the UPDATE statement*/
@@ -158,9 +159,9 @@ if (mysql_stmt_close(stmt)) {
 }
 
 /*testing with a sample input*/
-int main() {
+/*int main() {
   char *s;
   s = "done";
  update_esb_request(&s,1);
  return 0;
-}
+}*/

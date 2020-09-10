@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include <mysql.h>
 
-#include "../bmd_assets/bmd.h"
+#include "../bmd_handler/bmd.h"
 
 #include "../esb/esb.h"
 
@@ -33,6 +33,7 @@ int get_active_route_id(char *sender,char* destination,char *message_type);
 int has_transform_config(int route_id);
 int has_transport_config(int route_id);
 task_t *select_new_esb_request(void);
+int update_esb_request(char *status,int id);
 
 #endif
 

@@ -1,3 +1,15 @@
+/**
+ * @file select_new_esb_request.c
+ * @author MubeenS
+ * @brief Selects a new request from 
+ * database table.
+ * 
+ * @version 0.1
+ * @date 2020-09-10
+ * 
+ * @copyright Copyright (c) 2020
+ * 
+ */
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -23,10 +35,8 @@
                        WHERE status = 'RECEIVED' "
 
 /*void finish_with_error(MYSQL *con) {
-
   fprintf(stderr, "Error [%d]: %s \n",mysql_errno(con),mysql_error(con));
   mysql_close(con);
-
   exit(1);        
 }*/
 
@@ -301,6 +311,5 @@ task_t *select_new_esb_request(void)
     printf("%s", request->destination);
     printf("%s", request->message_type);
     printf("%s", request->data_location);
-
     return 0;
 }*/

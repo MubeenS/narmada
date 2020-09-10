@@ -11,36 +11,36 @@ VALUES
   ('C','X','CreditReport',b'1'),
   ('C','Y','CreditReport',b'1'),
   ('C','Z','CreditReport',b'1'),
-  ('A','X','AvlBal',b'1'),
-  ('A','Y','AvlBal',b'1'),
-  ('A','Z','AvlBal',b'1'),
-  ('B','X','AvlBal',b'1'),
-  ('B','Y','AvlBal',b'1'),
-  ('B','Z','AvlBal',b'1'),
-  ('C','X','AvlBal',b'1'),
-  ('C','Y','AvlBal',b'1'),
-  ('C','Z','AvlBal',b'1');
+  ('A','X','PO',b'1'),
+  ('A','Y','PO',b'1'),
+  ('A','Z','PO',b'1'),
+  ('B','X','PO',b'1'),
+  ('B','Y','PO',b'1'),
+  ('B','Z','PO',b'1'),
+  ('C','X','PO',b'1'),
+  ('C','Y','PO',b'1'),
+  ('C','Z','PO',b'1');
 
 INSERT INTO transform_config(route_id,config_key,config_value) 
 VALUES 
-   (1,"config-a","config-1"),
-   (2,"config-g","config-2"),
-   (3,"config-ag","config-3"),
-   (4,"config-b","config-1"),
-   (5,"config-ab","config-3"),
-   (6,"config-x","config-4"),
-   (7,"config-ab","config-5"),
-   (8,"config-ax","config-6"),
-   (9,"config-ai","config-7");
+   (1,"config-a","json"),
+   (2,"config-g","json"),
+   (3,"config-ag","json"),
+   (4,"config-b","json"),
+   (5,"config-ab","json"),
+   (6,"config-x","json"),
+   (7,"config-ab","json"),
+   (8,"config-ax","json"),
+   (9,"config-ai","json");
 
 INSERT INTO transport_config(route_id,config_key,config_value) 
 VALUES 
-   (1,"config-a","config-1"),
-   (2,"config-g","config-2"),
-   (3,"config-ag","config-3"),
-   (4,"config-b","config-1"),
-   (5,"config-ab","config-3"),
-   (6,"config-x","config-4"),
-   (7,"config-ab","config-5"),
-   (8,"config-ax","config-6"),
-   (9,"config-ai","config-7");
+   (1,"config-a","email"),
+   (2,"config-g","email"),
+   (3,"config-ag","email"),
+   (4,"config-b","email"),
+   (5,"config-ab","email"),
+   (6,"config-x","email"),
+   (7,"config-ab","email"),
+   (8,"config-ax","email"),
+   (9,"config-ai","email");
