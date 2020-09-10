@@ -19,11 +19,16 @@
 
 #include "transport.h"
 
-#define FROM "testmail.tm001@gmail.com"
-#define TO "testmail.tm001@gmail.com"
-#define CC "testmail.tm001@gmail.com"
+#define FROM "testmailtm02@gmail.com"
+//#define TO "testmailtm02@gmail.com"
+#define CC "testmailtm02@gmail.com"
 
-static const char *payload_text[] = {
+struct upload_status
+{
+    int lines_read;
+};
+#if 0
+static const char *payload_file_path[] = {
     "Date: Mon, 29 Nov 2010 21:54:29 +1100\r\n",
     "To: " TO "\r\n",
     "From: " FROM " (Example User)\r\n",
@@ -38,11 +43,6 @@ static const char *payload_text[] = {
     "Check RFC5322.\r\n",
     NULL};
 
-struct upload_status
-{
-    int lines_read;
-};
-
 static size_t payload_source(void *ptr, size_t size, size_t nmemb, void *userp)
 {
     struct upload_status *upload_ctx = (struct upload_status *)userp;
@@ -53,7 +53,7 @@ static size_t payload_source(void *ptr, size_t size, size_t nmemb, void *userp)
         return 0;
     }
 
-    data = payload_text[upload_ctx->lines_read];
+    data = payload_file_path[upload_ctx->lines_read];
 
     if (data)
     {
@@ -66,8 +66,9 @@ static size_t payload_source(void *ptr, size_t size, size_t nmemb, void *userp)
 
     return 0;
 }
+#endif
 
-int send_mail(char *to, char *text)
+int send_mail(char *to, char *file_path)
 {
     printf("Sending to %s\n", to);
 
@@ -82,8 +83,8 @@ int send_mail(char *to, char *text)
     if (curl)
     {
         /* Set username and password */
-        curl_easy_setopt(curl, CURLOPT_USERNAME, "testmail.tm001");
-        curl_easy_setopt(curl, CURLOPT_PASSWORD, "p@ssw0rd001p");
+        curl_easy_setopt(curl, CURLOPT_USERNAME, "testmailtm02");
+        curl_easy_setopt(curl, CURLOPT_PASSWORD, "great1.2");
 
         /* URL for mail server */
         curl_easy_setopt(curl, CURLOPT_URL, "smtp://smtp.gmail.com:587/");
@@ -100,7 +101,7 @@ int send_mail(char *to, char *text)
         curl_easy_setopt(curl, CURLOPT_MAIL_FROM, FROM);
 
         /* Recipients */
-        recipients = curl_slist_append(recipients, TO);
+        recipients = curl_slist_append(recipients, to);
         recipients = curl_slist_append(recipients, CC);
         curl_easy_setopt(curl, CURLOPT_MAIL_RCPT, recipients);
 
@@ -108,7 +109,7 @@ int send_mail(char *to, char *text)
      * body of the message). You could just use the CURLOPT_READDATA option to
      * specify a FILE pointer to read from. */
         //curl_easy_setopt(curl, CURLOPT_READFUNCTION, payload_source);
-        FILE *fp = fopen(text, "r");
+        FILE *fp = fopen(file_path, "r");
         curl_easy_setopt(curl, CURLOPT_READDATA, fp);
         curl_easy_setopt(curl, CURLOPT_UPLOAD, 1L);
 
@@ -133,9 +134,9 @@ int send_mail(char *to, char *text)
     return (int)res;
 }
 
-int main()
-{
-    int t = send_mail(NULL, "file.txt");
+/*int main()
+{   char *path = payload_to_xml()
+    int t = send_mail("testmailtm02@gmail.com", "file.txt");
     printf("%d", t);
     return 0;
-}
+}*/
