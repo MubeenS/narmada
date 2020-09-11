@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <curl/curl.h>
-
+#if 0
 struct string {
   char *ptr;
   size_t len;
@@ -65,3 +65,4 @@ int main(void)
     curl_global_cleanup();
   return 0;
 }
+#endif

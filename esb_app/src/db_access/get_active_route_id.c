@@ -31,13 +31,7 @@
 FROM routes WHERE sender = ?                                          \
 AND message_type = ? AND destination = ? AND is_active=1"
 
-void finish_with_error(MYSQL *con) {
 
-  fprintf(stderr, "Error [%d]: %s \n",mysql_errno(con),mysql_error(con));
-  mysql_close(con);
-
-  exit(1);        
-}
  
  
 int get_active_route_id(char *sender,char *destination, char *message_type) {

@@ -39,7 +39,7 @@
 
 #define PATH_MAX 500
 
-extern void poll_database_for_new_requets();
+extern void* poll_database_for_new_requets(void *);
 
 /**
  * Define a suitable struct for holding the endpoint request handling result.

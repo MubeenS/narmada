@@ -124,7 +124,7 @@ void *poll_database_for_new_requets(void *vargp)
 
 }
 
-int main () {
+/*int main () {
     
     pthread_t thread_id; 
     printf("Before Thread\n"); 
@@ -133,4 +133,4 @@ int main () {
     printf("After Thread\n"); 
 
     return 0;
-}
+}*/

@@ -21,13 +21,6 @@
 #include "connector.h"
 #define STRING_SIZE 100
 
-void finish_with_error(MYSQL *con) {
-
-  fprintf(stderr, "Error [%d]: %s \n",mysql_errno(con),mysql_error(con));
-  mysql_close(con);
-
-  exit(1);        
-}
  
 void select_all_transport_config(int route_id) {      
 
@@ -92,7 +85,7 @@ void select_all_transport_config(int route_id) {
   while ((row = mysql_fetch_row(result))) { 
       for(int i = 0; i < num_fields; i++) { 
           if(i==0) {
-              while(field = mysql_fetch_field(result)) {
+              while((field = mysql_fetch_field(result))) {
                   printf(" %s |", field->name);
               } 
               printf("\n");
@@ -111,8 +104,8 @@ void select_all_transport_config(int route_id) {
   exit(0);
 }
 
-int main () {
+/*int main () {
     int route_id = 1;
     select_all_transport_config(route_id);
     return 0;
-}
+}*/

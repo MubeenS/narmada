@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "../test/munit.h"
 #include "connector.h"
-#include "../bmd_assets/bmd.h"
+#include "../bmd_handler/bmd.h"
 
 /* Test setup function */
 static void *
@@ -138,7 +138,7 @@ static const MunitSuite suite = {
 };
 
 /* Run the the test suite */
-int main(int argc, const char *argv[])
+/*int main(int argc, const char *argv[])
 {
   return munit_suite_main(&suite, NULL, argc, NULL);
-}
+}*/

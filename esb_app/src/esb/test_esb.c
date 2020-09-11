@@ -6,7 +6,7 @@
  * functions and  bmd structure declaration 
  * 
  */ 
-#include "../bmd_assets/bmd.h"
+#include "../bmd_handler/bmd.h"
 
 /** Module that has mysql C API functions */
 
@@ -66,6 +66,6 @@ static const MunitSuite suite = {
 };
 
 /* Run the the test suite */
-int main (int argc, const char* argv[]) {
+/*int main (int argc, const char* argv[]) {
   return munit_suite_main(&suite, NULL, argc, NULL);
-}
+}*/
