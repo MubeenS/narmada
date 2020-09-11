@@ -21,7 +21,7 @@
 
 #define HOST "localhost"   /*hostname*/
 #define USER  "root"       /*username*/
-#define PASS    ""         /*blank password this user*/
+#define PASS    ""         /* Left blank for Code portability */
 #define DB_NAME "esb_db"   /*name of the database*/
 #define PORT  3306         /*port number*/
 #define UNIX_SOCKET NULL   /*unix socket*/
@@ -36,7 +36,7 @@ void finish_with_error(MYSQL *con) ;
 int get_active_route_id(char *sender,char* destination,char *message_type);
 int has_transform_config(int route_id);
 int has_transport_config(int route_id);
-task_t *select_new_esb_request(void);
+task_t *fetch_new_esb_request(void);
 int update_esb_request(char *status,int id);
 transform_t* fetch_transform_config(int route_id);
 transport_t* fetch_transport_config(int route_id);

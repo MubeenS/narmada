@@ -6,7 +6,7 @@
  * functions and  bmd structure declaration 
  * 
  */ 
-#include "../bmd_assets/bmd.h"
+#include "../bmd_handler/bmd.h"
 
 /** Module that has mysql C API functions */
 
@@ -68,11 +68,11 @@ int process_esb_request(char* bmd_file_path) {
 }
 
 /*int main () {
-    int status = process_esb_request("../bmd_files/bmd2.xml");
+    int status = process_esb_request("../bmd_files/bmd4.xml");
     
     if(status != 1) {
         printf("Status[%d]: Request processing failed",status);
         return EXIT_FAILURE;
     }
     return EXIT_SUCCESS;
-}*/
+}*

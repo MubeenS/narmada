@@ -45,7 +45,7 @@ int main(void)
     struct string s;
     init_string(&s);
 
-    curl_easy_setopt(curl, CURLOPT_URL, "https://ifsc.razorpay.com/IDIB000V086");
+    curl_easy_setopt(curl, CURLOPT_URL, "https://ifsc.razorpay.com/SBIN0000882");
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writefunc);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &s);
     curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);

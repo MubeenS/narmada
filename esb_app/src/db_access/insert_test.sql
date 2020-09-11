@@ -33,14 +33,14 @@ VALUES
    (8,"config-ax","json"),
    (9,"config-ai","json");
 
-INSERT INTO transport_config(route_id,config_key,config_value) 
+INSERT INTO transport_config(route_id,config_value,config_key) 
 VALUES 
-   (1,"config-a","email"),
-   (2,"config-g","email"),
-   (3,"config-ag","email"),
-   (4,"config-b","email"),
-   (5,"config-ab","email"),
-   (6,"config-x","email"),
-   (7,"config-ab","email"),
-   (8,"config-ax","email"),
-   (9,"config-ai","email");
+   (1,"testmailtm02@gmail.com","SMTP"),
+   (2,"testmailtm02@gmail.com","SMTP"),
+   (3,"testmailtm02@gmail.com","SMTP"),
+   (4,"testmailtm02@gmail.com","SMTP"),
+   (5,"testmailtm02@gmail.com","SMTP"),
+   (6,"testmailtm02@gmail.com","SMTP"),
+   (7,"testmailtm02@gmail.com","SMTP"),
+   (8,"testmailtm02@gmail.com","SMTP"),
+   (9,"testmailtm02@gmail.com","SMTP");

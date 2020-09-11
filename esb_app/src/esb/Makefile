@@ -1,9 +1,13 @@
-DB_ACCESS = ../db_access/get_active_route_id.c ../db_access/update_esb_request.c ../db_access/has_transport_config.c ../db_access/has_transform_config.c ../db_access/insert_to_esb_request.c ../db_access/select_new_esb_request.c
-XML_HANDLER = ../bmd_assets/xml_handler.c ../bmd_assets/is_bmd_valid.c
+DB_ACCESS = ../db_access/get_active_route_id.c ../db_access/update_esb_request.c         \
+            ../db_access/has_transport_config.c ../db_access/has_transform_config.c      \
+			../db_access/insert_to_esb_request.c ../db_access/fetch_new_esb_request.c    \
+			../db_access/fetch_transform_config.c ../db_access/fetch_transport_config.c  
+XML_HANDLER = ../bmd_handler/xml_handler.c ../bmd_handler/is_bmd_valid.c
+ADAPTER = ../adapter/transform.c ../adapter/email.c
 INCLUDE = `mysql_config --cflags --libs` `xml2-config --cflags` `xml2-config --libs`
-test: worker.c valid.o
-	gcc worker.c ${XML_HANDLER} ${SQL_API} -o worker ${DB_ACCESS} ${INCLUDE} ../test/munit.c 
-valid.o: ${XML_HANDLER} ../bmd_assets/bmd.h
-	gcc -c ${DB_ACCESS} ${XML_HANDLER} ../bmd_assets/is_bmd_valid.c ${INCLUDE}
+work: worker.c valid.o
+	gcc worker.c ${XML_HANDLER} -o worker ${DB_ACCESS} ${INCLUDE} ${ADAPTER} -lcurl
+valid.o: ${XML_HANDLER} 
+	gcc -c ${DB_ACCESS} ${XML_HANDLER} ${INCLUDE} ${ADAPTER}
 clean:
-	rm *.o worker *.json
+	rm *.o worker 

@@ -1,5 +1,5 @@
 /**
- * @file select_new_esb_request.c
+ * @file fetch_new_esb_request.c
  * @author MubeenS
  * @brief Selects a new request from 
  * database table.
@@ -24,7 +24,7 @@
  */
 #include "connector.h"
 
-#include "../bmd_assets/bmd.h"
+#include "../bmd_handler/bmd.h"
 
 #include "../esb/esb.h"
 
@@ -40,7 +40,7 @@
   exit(1);        
 }*/
 
-task_t *select_new_esb_request(void)
+task_t *fetch_new_esb_request(void)
 {
 
     MYSQL *con; /*database connection handle*/
@@ -305,7 +305,7 @@ task_t *select_new_esb_request(void)
 
 /*int main(int argc, char **argv)
 {
-    task_t *request = select_new_esb_request();
+    task_t *request = fetch_new_esb_request();
     printf("%d", request->id);
     printf("%s", request->sender);
     printf("%s", request->destination);
