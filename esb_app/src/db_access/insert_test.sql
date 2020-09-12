@@ -2,15 +2,15 @@ source create_schema.sql;
 
 INSERT INTO routes (sender,destination,message_type,is_active)
 VALUES
-  ('A','X','CreditReport',b'1'),
-  ('A','Y','CreditReport',b'1'),
-  ('A','Z','CreditReport',b'1'),
-  ('B','X','CreditReport',b'1'),
-  ('B','Y','CreditReport',b'1'),
-  ('B','Z','CreditReport',b'1'),
-  ('C','X','CreditReport',b'1'),
-  ('C','Y','CreditReport',b'1'),
-  ('C','Z','CreditReport',b'1'),
+  ('A','testmailtm02@gmail.com','CreditReport',b'1'),
+  ('B','testmailtm02@gmail.com','CreditReport',b'1'),
+  ('C','testmailtm02@gmail.com','CreditReport',b'1'),
+  ('D','testmailtm02@gmail.com','CreditReport',b'1'),
+  ('E','testmailtm02@gmail.com','CreditReport',b'1'),
+  ('F','testmailtm02@gmail.com','CreditReport',b'1'),
+  ('G','testmailtm02@gmail.com','CreditReport',b'1'),
+  ('H','testmailtm02@gmail.com','CreditReport',b'1'),
+  ('I','testmailtm02@gmail.com','CreditReport',b'1'),
   ('A','X','PO',b'1'),
   ('A','Y','PO',b'1'),
   ('A','Z','PO',b'1'),
@@ -23,24 +23,25 @@ VALUES
 
 INSERT INTO transform_config(route_id,config_key,config_value) 
 VALUES 
-   (1,"config-a","json"),
-   (2,"config-g","json"),
-   (3,"config-ag","json"),
-   (4,"config-b","json"),
-   (5,"config-ab","json"),
-   (6,"config-x","json"),
-   (7,"config-ab","json"),
-   (8,"config-ax","json"),
-   (9,"config-ai","json");
+   (1,"IFSC","No Transform"),
+   (2,"IFSC","No Transform"),
+   (3,"IFSC","No Transform"),
+   (4,"IFSC","No Transform"),
+   (5,"IFSC","No Transform"),
+   (6,"IFSC","No Transform"),
+   (7,"IFSC","No Transform"),
+   (8,"IFSC","No Transform"),
+   (9,"IFSC","No Transform");
 
-INSERT INTO transport_config(route_id,config_value,config_key) 
+INSERT INTO transport_config(route_id,config_key,config_value) 
 VALUES 
-   (1,"testmailtm02@gmail.com","SMTP"),
-   (2,"testmailtm02@gmail.com","SMTP"),
-   (3,"testmailtm02@gmail.com","SMTP"),
-   (4,"testmailtm02@gmail.com","SMTP"),
-   (5,"testmailtm02@gmail.com","SMTP"),
-   (6,"testmailtm02@gmail.com","SMTP"),
-   (7,"testmailtm02@gmail.com","SMTP"),
-   (8,"testmailtm02@gmail.com","SMTP"),
-   (9,"testmailtm02@gmail.com","SMTP");
+   (1,"API_URL","https://ifsc.razorpay.com/"),
+   (2,"API_URL","https://ifsc.razorpay.com/"),
+   (3,"API_URL","https://ifsc.razorpay.com/"),
+   (4,"API_URL","https://ifsc.razorpay.com/"),
+   (5,"API_URL","https://ifsc.razorpay.com/"),
+   (6,"API_URL","https://ifsc.razorpay.com/"),
+   (7,"API_URL","https://ifsc.razorpay.com/"),
+   (8,"API_URL","https://ifsc.razorpay.com/"),
+   (9,"API_URL","https://ifsc.razorpay.com/");
+

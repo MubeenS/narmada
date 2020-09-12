@@ -11,7 +11,7 @@
  * @copyright Copyright (c) 2020
  * 
  */
-
+#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -68,8 +68,10 @@ static size_t payload_source(void *ptr, size_t size, size_t nmemb, void *userp)
 }
 #endif
 
+
 int send_mail(char *to, char *file_path)
-{
+{    
+    
     printf("Sending to %s\n", to);
 
     CURL *curl;
@@ -109,11 +111,16 @@ int send_mail(char *to, char *file_path)
      * body of the message). You could just use the CURLOPT_READDATA option to
      * specify a FILE pointer to read from. */
         //curl_easy_setopt(curl, CURLOPT_READFUNCTION, payload_source);
-        FILE *fp = fopen(file_path, "r");
+        FILE *fp;
+        fp = fopen(file_path,"r");
+        if(fp==NULL){
+            printf("File opening failed");
+        }
+       
         curl_easy_setopt(curl, CURLOPT_READDATA, fp);
         curl_easy_setopt(curl, CURLOPT_UPLOAD, 1L);
 
-       /* Gives information about whats running inside libcurl */
+        /* Gives information about whats running inside libcurl */
         curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
 
         /* Send the message */

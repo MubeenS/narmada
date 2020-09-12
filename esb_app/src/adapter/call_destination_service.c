@@ -39,14 +39,12 @@ size_t write_callback(void *ptr, size_t size, size_t nmemb, struct string *s)
   return size * nmemb;
 }
 
-char* call_destination_service(char *ifsc)
+char* call_destination_service(char *url)
 {
   CURL *curl;
   CURLcode res;
 
   curl = curl_easy_init();
-  char URL[STRING_SIZE];
-  sprintf(URL, "https://ifsc.razorpay.com/%s", ifsc);
   struct string s;
   init_string(&s);
   /* Checks if curl is initialised properly and 
@@ -55,7 +53,7 @@ char* call_destination_service(char *ifsc)
   if (curl)
   {
     printf("Contacting destination service ifsc.razorpay\n");
-    curl_easy_setopt(curl, CURLOPT_URL, URL);
+    curl_easy_setopt(curl, CURLOPT_URL, url);
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &s);
     /* Verbose is to check what happens within curl */

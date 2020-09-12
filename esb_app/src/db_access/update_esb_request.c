@@ -39,6 +39,9 @@
 #define UPDATE_QUERY "UPDATE esb_request SET status = ? WHERE id = ? "
 
 int update_esb_request(char *status,int id) {
+
+  printf("Updating esb_request status...\n");
+
 MYSQL_STMT    *stmt;
 MYSQL_BIND    bind[2];
 my_ulonglong  affected_rows;
@@ -143,10 +146,10 @@ fprintf(stdout, " total affected rows(UPDATE 2): %lu\n",
                 (unsigned long) affected_rows);
 
 /* validate affected rows */ 
-if (affected_rows != 1) {
+/*if (affected_rows != 1) {
   fprintf(stderr, " invalid affected rows by MySQL\n");
   exit(0);
-}
+}*/
 
 /* Close the statement */
 if (mysql_stmt_close(stmt)) {
@@ -156,6 +159,7 @@ if (mysql_stmt_close(stmt)) {
 } printf("connection id: %ld\n", mysql_thread_id(con));
 
   mysql_close(con);
+  return 1;
 }
 
 /*testing with a sample input*/

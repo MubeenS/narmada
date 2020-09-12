@@ -63,16 +63,16 @@ int process_esb_request(char* bmd_file_path) {
         status = queue_the_request(b,bmd_file_path);
         printf("Queued..!");
     }
-    
+
     return status;
 }
 
-/*int main () {
-    int status = process_esb_request("../bmd_files/bmd4.xml");
+int main () {
+    int status = process_esb_request("../bmd_files/bmd3.xml");
     
     if(status != 1) {
         printf("Status[%d]: Request processing failed",status);
         return EXIT_FAILURE;
     }
     return EXIT_SUCCESS;
-}*/
+}
