@@ -2,67 +2,83 @@
 #include <stdlib.h>
 #include <string.h>
 #include <curl/curl.h>
-#if 0
-struct string {
+
+#define STRING_SIZE 100
+struct string
+{
   char *ptr;
   size_t len;
 };
 
-void init_string(struct string *s) {
+void init_string(struct string *s)
+{ 
+  printf("string initialisation\n");
   s->len = 0;
-  s->ptr = malloc(s->len+1);
-  if (s->ptr == NULL) {
+  s->ptr = malloc(s->len + 1);
+  if (s->ptr == NULL)
+  {
     fprintf(stderr, "malloc() failed\n");
     exit(EXIT_FAILURE);
   }
   s->ptr[0] = '\0';
 }
 
-size_t writefunc(void *ptr, size_t size, size_t nmemb, struct string *s)
-{
-  size_t new_len = s->len + size*nmemb;
-  s->ptr = realloc(s->ptr, new_len+1);
-  if (s->ptr == NULL) {
+size_t write_callback(void *ptr, size_t size, size_t nmemb, struct string *s)
+{ 
+  printf("Callback is called\n");
+  size_t new_len = s->len + size * nmemb;
+  s->ptr = realloc(s->ptr, new_len + 1);
+  if (s->ptr == NULL)
+  {
     fprintf(stderr, "realloc() failed\n");
     exit(EXIT_FAILURE);
   }
-  memcpy(s->ptr+s->len, ptr, size*nmemb);
+  memcpy(s->ptr + s->len, ptr, size * nmemb);
   s->ptr[new_len] = '\0';
   s->len = new_len;
-
-  return size*nmemb;
+  return size * nmemb;
 }
 
-int main(void)
+char* call_destination_service(char *ifsc)
 {
   CURL *curl;
   CURLcode res;
 
   curl = curl_easy_init();
+  char URL[STRING_SIZE];
+  sprintf(URL, "https://ifsc.razorpay.com/%s", ifsc);
+  struct string s;
+  init_string(&s);
   /* Checks if curl is initialised properly and 
    * performs required operations */
-  if(curl) {
-    struct string s;
-    init_string(&s);
 
-    curl_easy_setopt(curl, CURLOPT_URL, "https://ifsc.razorpay.com/SBIN0000882");
-    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writefunc);
+  if (curl)
+  {
+    printf("Contacting destination service ifsc.razorpay\n");
+    curl_easy_setopt(curl, CURLOPT_URL, URL);
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &s);
-    curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+    /* Verbose is to check what happens within curl */
+    //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
     res = curl_easy_perform(curl);
-    
-    if(res!=CURLE_OK){
-        fprintf(stderr,"Connection failed.");
-        exit(0);
-    }
 
-    printf("%s\n", s.ptr);
-    free(s.ptr);
+    if (res != CURLE_OK)
+    {
+      fprintf(stderr, "Connection failed.");
+      exit(0);
+    }
 
     /* always cleanup */
     curl_easy_cleanup(curl);
   }
-    curl_global_cleanup();
-  return 0;
+  curl_global_cleanup();
+
+  return s.ptr;
 }
-#endif
+
+/*int main()
+{
+  char *s = call_destination_service("IDIB000N068");
+  printf("%s", s);
+  return 0;
+}*/

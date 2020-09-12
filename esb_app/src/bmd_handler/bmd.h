@@ -28,7 +28,6 @@ typedef struct bmd_ {
 envelop*  extract_envelop(char * filepath);
 bmd* parse_bmd_xml(char *bmd_xml_file);
 char * extract_payload(char * filepath);
-char * xml_to_json(bmd *bmd_file);
 int is_bmd_valid(bmd *bmd_file);
 long int find_size(char *);
 #endif

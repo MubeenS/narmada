@@ -32,7 +32,7 @@ char * payload_to_json(bmd *bmd_file) {
     FILE *fp;
     fp = fopen(file,"w");
     if(fp == NULL) {
-        printf("file opening filed");
+        printf("file opening failed");
         exit(0);
     }
     /* Writes into json file */
@@ -61,7 +61,7 @@ char* payload_to_xml(bmd *bmd_file) {
     FILE *fp;
     fp = fopen(file,"w");
     if(fp == NULL) {
-        printf("file opening filed");
+        printf("file opening failed");
         exit(0);
     }
     /* Writes into xml file */

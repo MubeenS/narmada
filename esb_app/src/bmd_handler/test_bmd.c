@@ -21,11 +21,11 @@ char *get_str_data(char *file)
 
 /* Test setup function */
 static void *
-xml_to_json_setup(const MunitParameter params[], void *user_data)
+payload_to_json_setup(const MunitParameter params[], void *user_data)
 {
   char *file = "../bmd_files/bmd1.xml";
   bmd *b = parse_bmd_xml(file);
-  char *file_created = xml_to_json(b);
+  char *file_created = payload_to_json(b);
   /* Copy file data into string */
   char *json_data = get_str_data(file_created);
   return strdup(file_created);
@@ -33,7 +33,7 @@ xml_to_json_setup(const MunitParameter params[], void *user_data)
 
 /* Test function */
 static MunitResult
-test_xml_to_json(const MunitParameter params[], void *fixture)
+test_payload_to_json(const MunitParameter params[], void *fixture)
 { 
   char *file_created = (char *)fixture;
   char *json_data = get_str_data(file_created);
@@ -46,7 +46,7 @@ test_xml_to_json(const MunitParameter params[], void *fixture)
 }
 
 static void
-xml_to_json_tear_down(void *fixture)
+payload_to_json_tear_down(void *fixture)
 { char *file_created = (char *) fixture;
    int del = remove(file_created);
    /* Checks if file is deleted */
@@ -162,10 +162,10 @@ MunitTest bmd_tests[] = {
     },
 
     {
-        "/xml_to_json_test",    /* name */
-        test_xml_to_json,       /* test function */
-        xml_to_json_setup,      /* setup function for the test */
-        xml_to_json_tear_down,  /* tear_down */
+        "/payload_to_json_test",    /* name */
+        test_payload_to_json,       /* test function */
+        payload_to_json_setup,      /* setup function for the test */
+        payload_to_json_tear_down,  /* tear_down */
         MUNIT_TEST_OPTION_NONE, /* options */
         NULL                    /* parameters */
     },

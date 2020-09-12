@@ -13,6 +13,8 @@
  * @copyright Copyright (c) 2020
  * 
  */
+#include <string.h>
+
 #include <unistd.h>
 
 #include "esb.h"
@@ -23,9 +25,7 @@
 
 #include "../adapter/transport.h"
 
-#include <pthread.h> 
-
-
+#include <pthread.h>
 
 /**
  * TODO: Implement the proper logic as per ESB specs.
@@ -89,7 +89,7 @@ void *poll_database_for_new_requets(void *vargp)
     /* Parse xml file to get a bmd */
     bmd *bmd_file = parse_bmd_xml(request->data_location);
     /* String to store path of file to be sent */
-    
+
     /** TODO: 
      * 1.Contact destination sevice.
      * 2.Transform and transport accordingly.
@@ -99,29 +99,28 @@ void *poll_database_for_new_requets(void *vargp)
 
     char *to_be_sent;
 
-    if (transform->value = "json")
+    if (!strcmp(transform->value,"json"))
     {
         to_be_sent = payload_to_json(bmd_file);
     }
 
-    else if(transform->value = "xml") 
+    else if (!strcmp(transform->value,"xml"))
     {
-        to_be_sent = payload_to_json(bmd_file);
+        to_be_sent = payload_to_xml(bmd_file);
     }
 
-    if(transport->key = "SMTP") 
-    {
-        int rc = send_mail(transport->value,to_be_sent);
+    if (!strcmp(transport->key,"SMTP"))
+    {   printf("Sending an email.");
+        int rc = send_mail(transport->value, to_be_sent);
     }
 
-    else if(transport->key = "http")
+    else if (!strcmp(transport->key,"HTTP"))
     {
         /** TODO:
          * Create HTTP(S) to POST
          */
     }
-
-
+    sleep(5);
 }
 
 /*int main () {

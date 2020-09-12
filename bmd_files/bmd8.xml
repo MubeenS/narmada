@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- EIGHT test case-->H
+<?xml-stylesheet type="text/css"?>
+<BMD>
+<Envelop>
+<MessageID>M7</MessageID>
+<MessageType>CreditReport</MessageType>
+<Sender>C</Sender>
+<Destination>Y</Destination>
+<CreationDateTime>2020-08-12T05:18:00+00001</CreationDateTime>
+<Signature>S7</Signature>
+<ReferenceID>R7</ReferenceID>
+<UserProperties>
+<key1>Value15</key1>
+<key2>Value25</key2>
+</UserProperties>
+</Envelop>
+<Payload>001-01-12347</Payload>
+</BMD>

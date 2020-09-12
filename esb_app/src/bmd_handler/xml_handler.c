@@ -195,5 +195,5 @@ bmd* parse_bmd_xml(char *bmd_xml_file) {
 /*int main() { 
   bmd *bmd_file = parse_bmd_xml("../bmd_files/bmd1.xml");
   int check = is_bmd_valid(bmd_file);
-  char *s = xml_to_json(bmd_file);
+  char *s = payload_to_json(bmd_file);
 }*/
