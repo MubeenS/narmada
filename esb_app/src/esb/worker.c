@@ -33,7 +33,7 @@
 /**
  * TODO: Implement the proper logic as per ESB specs.
  */
-void *poll_database_for_new_requets(void *vargp)
+void *poll_database_for_new_requests(void *vargp)
 {
 #if 0
     // Step 1: Open a DB connection
@@ -77,9 +77,10 @@ void *poll_database_for_new_requets(void *vargp)
     task_t *request = fetch_new_esb_request();
     if (request == NULL)
     {
-        fprintf(stderr, "Request fetching failed.");
-        exit(0);
+       printf("No requests available.\n");
+       return NULL;
     }
+    update_esb_request("PROCESSING",request->id);
     /* Get the route_id to handle the request */
     int route_id = get_active_route_id(request->sender,
                                        request->destination,
@@ -92,36 +93,33 @@ void *poll_database_for_new_requets(void *vargp)
     /* Parse xml file to get a bmd */
     bmd *bmd_file = parse_bmd_xml(request->data_location);
     /* String to store path of file to be sent */
-
-    /** TODO: 
-     * 1.Contact destination sevice.
-     * 2.Transform and transport accordingly.
-     * 
-     */
-    /** Skeleton */
-
+    
     char *to_be_sent;
-        /* Generate HTTP url required to call
+    /* Generate HTTP url required to call
            destination service */
     char url[STRING_SIZE];
 
-    sprintf(url, "%s%s", "https://ifsc.razorpay.com/", bmd_file->payload);
-    to_be_sent = payload_to_json(bmd_file,url);
-   
+    sprintf(url, "%s%s", transport->value, bmd_file->payload);
+    to_be_sent = payload_to_json(bmd_file, url);
 
-       printf("Sending an email.");
-        int rc = send_mail("testmailtm02@gmail.com", to_be_sent);
-
-
+    int rc = send_mail(bmd_file->envelop_data->Destination,
+                         to_be_sent);
+    if(rc!=0) {
+        printf("Email sending failed..\n");
+        int status = update_esb_request("RECEIVED",request->id);
+    } printf("Mail sent.!\n");
+    update_esb_request("DONE",request->id);
+    printf("Worker's task finished.\n");
     sleep(5);
 }
 
-int main () {
-    
-    pthread_t thread_id; 
-    printf("Before Thread\n"); 
-    pthread_create(&thread_id, NULL, poll_database_for_new_requets, NULL); 
-    pthread_join(thread_id, NULL); 
-    printf("After Thread\n"); 
+/*int main()
+{
+
+    pthread_t thread_id;
+    printf("Before Thread\n");
+    pthread_create(&thread_id, NULL, poll_database_for_new_requests, NULL);
+    pthread_join(thread_id, NULL);
+    printf("After Thread\n");
     return 0;
-}
+}*/

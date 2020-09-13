@@ -28,7 +28,7 @@
 
 #include "../esb/esb.h"
 
-#define STRING_SIZE 50
+#define STRING_SIZE 100
 
 #define SELECT_QUERY "SELECT id,sender_id, dest_id, message_type,   \
                        data_location FROM esb_request               \
@@ -100,11 +100,11 @@ task_t *fetch_new_esb_request(void)
         fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
         exit(0);
     }
-    fprintf(stdout, " prepare, SELECT successful\n");
+    //fprintf(stdout, " prepare, SELECT successful\n");
 
     /* Get the parameter count from the statement */
     param_count = mysql_stmt_param_count(stmt);
-    fprintf(stdout, " total parameters in SELECT: %d\n", param_count);
+    //fprintf(stdout, " total parameters in SELECT: %d\n", param_count);
 
     if (param_count != 0) /* validate parameter count */
     {
@@ -133,9 +133,9 @@ task_t *fetch_new_esb_request(void)
 
     /* Get total columns in the query */
     column_count = mysql_num_fields(prepare_meta_result);
-    fprintf(stdout,
+    /*fprintf(stdout,
             " total columns in SELECT statement: %d\n",
-            column_count);
+            column_count);*/
 
     if (column_count != 5) /* validate column count */
     {
@@ -204,26 +204,26 @@ task_t *fetch_new_esb_request(void)
     task_t *request = (task_t *)malloc(sizeof(task_t));
     /* Fetch all rows */
     row_count = 0;
-    fprintf(stdout, "Fetching results ...\n");
+   
     while (!mysql_stmt_fetch(stmt))
     {
         row_count++;
-        fprintf(stdout, "  row %d\n", row_count);
+        //fprintf(stdout, "  row %d\n", row_count);
 
         /* column 1 */
-        fprintf(stdout, "   column1 (integer)  : ");
+    
         if (is_null[0])
         {
-            fprintf(stdout, " NULL\n");
+            fprintf(stdout, "Id is NULL (fetching request)\n");
         }
         else
         {
-            fprintf(stdout, " %d(%ld)\n", id_data, length[0]);
+            //fprintf(stdout, " %d(%ld)\n", id_data, length[0]);
             request->id = id_data;
         }
 
         /* column 2 */
-        fprintf(stdout, "   column2 (string)   : ");
+
         if (is_null[1])
         {
             fprintf(stdout, " NULL\n");
@@ -231,12 +231,11 @@ task_t *fetch_new_esb_request(void)
 
         else
         {
-            fprintf(stdout, " %s(%ld)\n", sender_id, length[1]);
             request->sender = strdup(sender_id);
         }
 
         /* column 3 */
-        fprintf(stdout, "   column3 (string)   : ");
+       
         if (is_null[1])
         {
             fprintf(stdout, " NULL\n");
@@ -244,12 +243,12 @@ task_t *fetch_new_esb_request(void)
 
         else
         {
-            fprintf(stdout, " %s(%ld)\n", dest_id, length[1]);
+
             request->destination = strdup(dest_id);
         }
 
         /* column 4 */
-        fprintf(stdout, "   column4 (string)   : ");
+    
         if (is_null[1])
         {
             fprintf(stdout, " NULL\n");
@@ -257,7 +256,7 @@ task_t *fetch_new_esb_request(void)
 
         else
         {
-            fprintf(stdout, " %s(%ld)\n", message_type, length[1]);
+            
             request->message_type = strdup(message_type);
         }
 
@@ -269,7 +268,7 @@ task_t *fetch_new_esb_request(void)
 
         else
         {
-            fprintf(stdout, " %s(%ld)\n", data_location, length[1]);
+        
             request->data_location = strdup(data_location);
         }
 

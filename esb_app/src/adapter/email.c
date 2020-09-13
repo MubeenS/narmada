@@ -70,7 +70,7 @@ static size_t payload_source(void *ptr, size_t size, size_t nmemb, void *userp)
 
 int send_mail(char *to, char *file_path)
 {
-    printf("Sending to %s\n", to);
+    printf("Sending mail to %s\n", to);
 
     CURL *curl;
     CURLcode res = CURLE_OK;
@@ -106,17 +106,18 @@ int send_mail(char *to, char *file_path)
         curl_easy_setopt(curl, CURLOPT_MAIL_RCPT, recipients);
 
         /* We're using a callback function to specify the payload (the headers and
-     * body of the message). You could just use the CURLOPT_READDATA option to
-     * specify a FILE pointer to read from. */
+         * body of the message). You could just use the CURLOPT_READDATA option to
+         * specify a FILE pointer to read from. */
         //curl_easy_setopt(curl, CURLOPT_READFUNCTION, payload_source);
         FILE *fp = fopen(file_path, "r");
         curl_easy_setopt(curl, CURLOPT_READDATA, fp);
         curl_easy_setopt(curl, CURLOPT_UPLOAD, 1L);
 
         /* Gives information about whats running inside libcurl */
-        curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+        //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
 
         /* Send the message */
+        /* res =0 means everything is ok */
         res = curl_easy_perform(curl);
 
         /* Check for errors */

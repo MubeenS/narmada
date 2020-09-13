@@ -15,6 +15,6 @@ typedef struct task {
 
 int queue_the_request(bmd *b,char *file_path);
 int process_esb_request(char* bmd_file_path);
-void *poll_database_for_new_requets(void *vargp);
+void *poll_database_for_new_requests(void *vargp);
 
 #endif

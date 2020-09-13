@@ -12,4 +12,7 @@ int send_mail(char *to, char *file_path);
 
 /* Destination Service ifsc */
 char* call_destination_service(char *url);
+
+/* Posts to destination */
+char* http_post(char *to, char *data);
 #endif

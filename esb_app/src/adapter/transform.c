@@ -42,7 +42,7 @@ char *payload_to_json(bmd *bmd_file,char *url)
         exit(0);
     }
     /* Writes into json file */
-    fprintf(fp, "{\n \"Payload\": \"%s\"\n}", payload_data);
+    fprintf(fp, "\n%s\n", payload_data);
     /* Closes file */
     fclose(fp);
     /* returns json filename */

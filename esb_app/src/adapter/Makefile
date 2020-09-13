@@ -1,2 +1,2 @@
-email: email.c
-	gcc email.c -lcurl -o email
+http_post: http_post.c
+	gcc http_post.c -lcurl -o post
