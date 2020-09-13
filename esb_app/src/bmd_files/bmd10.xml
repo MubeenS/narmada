@@ -5,8 +5,8 @@
 <Envelop>
 <MessageID>M7</MessageID>
 <MessageType>AvlBal</MessageType>
-<Sender>A</Sender>
-<Destination>X</Destination>
+<Sender>J</Sender>
+<Destination>testmailtm02@gmail.com</Destination>
 <CreationDateTime>2020-08-12T05:18:00+00001</CreationDateTime>
 <Signature>S7</Signature>
 <ReferenceID>R7</ReferenceID>
@@ -15,5 +15,5 @@
 <key2>Value25</key2>
 </UserProperties>
 </Envelop>
-<Payload>001-01-12347</Payload>
+<Payload>UTIB0003213</Payload>
 </BMD>
