@@ -15,4 +15,7 @@ char* call_destination_service(char *url);
 
 /* Posts to destination */
 char* http_post(char *to, char *data);
+
+/* Can be used to print HTTP response */
+int print_file(char *file_name);
 #endif

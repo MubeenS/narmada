@@ -102,12 +102,17 @@ void *poll_database_for_new_requests(void *vargp)
     sprintf(url, "%s%s", transport->value, bmd_file->payload);
     to_be_sent = payload_to_json(bmd_file, url);
 
-    int rc = send_mail(bmd_file->envelop_data->Destination,
+    /*int rc = send_mail(bmd_file->envelop_data->Destination,
                          to_be_sent);
     if(rc!=0) {
         printf("Email sending failed..\n");
         int status = update_esb_request("RECEIVED",request->id);
-    } printf("Mail sent.!\n");
+    } printf("Mail sent.!\n");*/
+    char *response = http_post(bmd_file->envelop_data->Destination,
+                              to_be_sent);
+    
+    printf("\n\nFile response from REQ.RES:\n");
+    int check = print_file(response);
     update_esb_request("DONE",request->id);
     printf("Worker's task finished.\n");
     sleep(5);
