@@ -2,16 +2,16 @@ source create_schema.sql;
 
 INSERT INTO routes (sender,destination,message_type,is_active)
 VALUES
-  ('A','testmailtm02@gmail.com','CreditReport',b'1'),
-  ('B','testmailtm02@gmail.com','CreditReport',b'1'),
-  ('C','testmailtm02@gmail.com','CreditReport',b'1'),
-  ('D','testmailtm02@gmail.com','CreditReport',b'1'),
-  ('E','testmailtm02@gmail.com','CreditReport',b'1'),
+  ('A','https://reqres.in/api/users','CreditReport',b'1'),
+  ('B','https://reqres.in/api/users','CreditReport',b'1'),
+  ('C','https://reqres.in/api/users','CreditReport',b'1'),
+  ('D','https://reqres.in/api/users','CreditReport',b'1'),
+  ('E','https://reqres.in/api/users','CreditReport',b'1'),
   ('F','testmailtm02@gmail.com','CreditReport',b'1'),
   ('G','testmailtm02@gmail.com','CreditReport',b'1'),
   ('H','testmailtm02@gmail.com','CreditReport',b'1'),
   ('I','testmailtm02@gmail.com','CreditReport',b'1'),
-  ('A','X','PO',b'1'),
+  ('J','testmailtm02@gmail.com','CreditReport',b'1'),
   ('A','Y','PO',b'1'),
   ('A','Z','PO',b'1'),
   ('B','X','PO',b'1'),

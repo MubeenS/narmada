@@ -5,8 +5,8 @@
 <Envelop>
 <MessageID>M4</MessageID>
 <MessageType>CreditReport</MessageType>
-<Sender>B</Sender>
-<Destination>testmailtm02@gmail.com</Destination>
+<Sender>D</Sender>
+<Destination>https://reqres.in/api/users</Destination>
 <CreationDateTime>2020-08-12T05:18:00+00001</CreationDateTime>
 <Signature>S4</Signature>
 <ReferenceID>R4</ReferenceID>
