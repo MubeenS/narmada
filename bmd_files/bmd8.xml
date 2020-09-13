@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- EIGHT test case-->H
+<!-- EIGHT test case-->
 <?xml-stylesheet type="text/css"?>
 <BMD>
 <Envelop>
@@ -15,5 +15,5 @@
 <key2>Value25</key2>
 </UserProperties>
 </Envelop>
-<Payload>001-01-12347</Payload>
+<Payload>001-01-12348</Payload>
 </BMD>
