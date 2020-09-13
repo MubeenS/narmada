@@ -4,14 +4,16 @@
 /* xml handling library */
 #include <libxml/parser.h>
 
-#include<stdlib.h>
-#include<string.h>
+#include <stdlib.h>
+#include <string.h>
 
 /* BMD structure */
 #include "../bmd_handler/bmd.h"
 
 #include "transform.h"
 #include "transport.h"
+
+#define STRING_SIZE 100
 /**
  * @brief Creates a json file containing
  * payload data and returns the path of the file.
@@ -20,23 +22,27 @@
  * @param bmd_file bmd_file to get payload
  * @return char* Path of the file.
  */
-char * payload_to_json(bmd *bmd_file) {
-   
+char *payload_to_json(bmd *bmd_file,char *url)
+{
+
     char bmd_name[20];
     /*Creates file name of json as per bmd name*/
     char file[50];
     /* Appends name of messageID */
-    sprintf(file,"../assets/payload_%s.json",bmd_file->envelop_data->MessageID);
-   
-    char *payload_data = bmd_file->payload;
+    sprintf(file, "../assets/payload_%s.json", bmd_file->envelop_data->MessageID);
+    /* Get data from destination service 
+        that should be sent */
+    char *payload_data = call_destination_service(url);
+
     FILE *fp;
-    fp = fopen(file,"w");
-    if(fp == NULL) {
+    fp = fopen(file, "w");
+    if (fp == NULL)
+    {
         printf("file opening failed");
         exit(0);
     }
     /* Writes into json file */
-    fprintf(fp,"{\n \"Payload\": \"%s\"\n}",payload_data);
+    fprintf(fp, "{\n \"Payload\": \"%s\"\n}", payload_data);
     /* Closes file */
     fclose(fp);
     /* returns json filename */
@@ -50,24 +56,26 @@ char * payload_to_json(bmd *bmd_file) {
  * @param bmd_file to get payload
  * @return char* file path
  */
-char* payload_to_xml(bmd *bmd_file) {
-        char bmd_name[20];
+char *payload_to_xml(bmd *bmd_file)
+{
+    char bmd_name[20];
     /*Creates file name of xml as per bmd name*/
     char file[50];
     /* Appends name of messageID */
-    sprintf(file,"../assets/payload_%s.xml",bmd_file->envelop_data->MessageID);
-   
+    sprintf(file, "../assets/payload_%s.xml", bmd_file->envelop_data->MessageID);
+
     char *payload_data = bmd_file->payload;
     FILE *fp;
-    fp = fopen(file,"w");
-    if(fp == NULL) {
+    fp = fopen(file, "w");
+    if (fp == NULL)
+    {
         printf("file opening failed");
         exit(0);
     }
     /* Writes into xml file */
-    char * version = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+    char *version = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
     char *style = "<?xml-stylesheet type='text/xsl'?>";
-    fprintf(fp,"%s\n%s\n<payload>%s</payload>",version,style,payload_data);
+    fprintf(fp, "%s\n%s\n<payload>%s</payload>", version, style, payload_data);
     /* Closes file */
     fclose(fp);
     /* returns xml filename */

@@ -1,3 +1,4 @@
+
 /**
  * @file worker.c
  * @author MubeenS
@@ -29,19 +30,9 @@
 
 #define STRING_SIZE 100
 
-char* create_file(char *data) {
-         FILE *fp;
-         char *file = "../assets/ToBeMailed.json";
-        fp = fopen(file, "w");
-        if (fp == NULL)
-        {
-            printf("file opening failed");
-            exit(0);
-        }
-        /* Writes into json file */
-        fprintf(fp, "%s", data);
-        return strdup(file);
-}
+/**
+ * TODO: Implement the proper logic as per ESB specs.
+ */
 void *poll_database_for_new_requets(void *vargp)
 {
 #if 0
@@ -89,20 +80,11 @@ void *poll_database_for_new_requets(void *vargp)
         fprintf(stderr, "Request fetching failed.");
         exit(0);
     }
-    printf("New request fetched from esb_request table.");
     /* Get the route_id to handle the request */
     int route_id = get_active_route_id(request->sender,
                                        request->destination,
                                        request->message_type);
-    
-    /* update status as processing */
-    int check = update_esb_request("PROCESSING",route_id);
-    
-    if(!check) {
-        printf("Request status update failed.");
-        exit(0);
-    }
-    
+
     /* Get transformation and transportation configuration */
     transform_t *transform = fetch_transform_config(route_id);
     transport_t *transport = fetch_transport_config(route_id);
@@ -119,27 +101,18 @@ void *poll_database_for_new_requets(void *vargp)
     /** Skeleton */
 
     char *to_be_sent;
-
-    if (!strcmp(transform->key,"IFSC"))
-    {
-        /* No transform Needed*/
-    }
-
         /* Generate HTTP url required to call
            destination service */
-        char url[STRING_SIZE];
+    char url[STRING_SIZE];
 
-        sprintf(url,"%s%s",transport->value,bmd_file->payload);
-        /* Get data from destination service 
-        that should be sent */
-        to_be_sent = call_destination_service(url);
-        if(!to_be_sent){
-            printf("Calling destination service failed");
-        }
-        char* file_path = create_file(to_be_sent);
-        int rc = send_mail(bmd_file->envelop_data->Destination, 
-                           file_path);
-     
+    sprintf(url, "%s%s", "https://ifsc.razorpay.com/", bmd_file->payload);
+    to_be_sent = payload_to_json(bmd_file,url);
+   
+
+       printf("Sending an email.");
+        int rc = send_mail("testmailtm02@gmail.com", to_be_sent);
+
+
     sleep(5);
 }
 
@@ -150,6 +123,5 @@ int main () {
     pthread_create(&thread_id, NULL, poll_database_for_new_requets, NULL); 
     pthread_join(thread_id, NULL); 
     printf("After Thread\n"); 
-
     return 0;
 }

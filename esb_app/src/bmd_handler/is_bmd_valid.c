@@ -161,7 +161,7 @@ int is_bmd_valid(bmd *bmd_file)
 
   /* Checks size of payload file created */
 
-  char *payload = payload_to_json(bmd_file);
+  char *payload = payload_to_json(bmd_file,"https://ifsc.razorpay.com/SBIN0000882");
   long int size = find_size(payload);
   if (size > MAX_SIZE)
   {

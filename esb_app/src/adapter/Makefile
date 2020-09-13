@@ -1,2 +1,2 @@
-http: http.c
-	gcc http.c -lcurl -o http
+email: email.c
+	gcc email.c -lcurl -o email
