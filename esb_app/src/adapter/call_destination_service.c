@@ -39,10 +39,14 @@ size_t write_callback(void *ptr, size_t size, size_t nmemb, struct string *s)
   return size * nmemb;
 }
 
-char* call_destination_service(char *url)
+void* call_destination_service(void *urlptr,void *apiptr)
 {
+  /* Converting URL to string */
+  char *url = (char*) urlptr;
+  char *api = (char*) apiptr;
   CURL *curl;
   CURLcode res;
+
 
   curl = curl_easy_init();
   struct string s;
@@ -52,7 +56,7 @@ char* call_destination_service(char *url)
 
   if (curl)
   {
-    printf("Contacting destination service ifsc.razorpay\n");
+    printf("Contacting destination service %s\n",api);
     curl_easy_setopt(curl, CURLOPT_URL, url);
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &s);
@@ -71,7 +75,7 @@ char* call_destination_service(char *url)
   }
   curl_global_cleanup();
 
-  return s.ptr;
+  return (void*)s.ptr;
 }
 
 /*int main()

@@ -8,13 +8,13 @@ typedef struct transport_config {
 
 
 /* Email */
-int send_mail(char *to, char *file_path);
+void* send_mail(void *toptr, void *file_path_ptr);
 
 /* Destination Service ifsc */
-char* call_destination_service(char *url);
+void* call_destination_service(void *urlptr,void *apiptr);
 
 /* Posts to destination */
-char* http_post(char *to, char *data);
+void* http_post(void *toptr, void *dataptr);
 
 /* Can be used to print HTTP response */
 int print_file(char *file_name);

@@ -32,7 +32,7 @@ char *payload_to_json(bmd *bmd_file,char *url)
     sprintf(file, "../assets/payload_%s.json", bmd_file->envelop_data->MessageID);
     /* Get data from destination service 
         that should be sent */
-    char *payload_data = call_destination_service(url);
+    char *payload_data = call_destination_service(url,"IFSC.RAZORPAY");
 
     FILE *fp;
     fp = fopen(file, "w");

@@ -5,6 +5,7 @@
  * to the destination specified. Reads
  * the content from a file specified.
  * 
+ * returns NULL on success.
  * @version 0.1
  * @date 2020-09-10
  * 
@@ -68,8 +69,10 @@ static size_t payload_source(void *ptr, size_t size, size_t nmemb, void *userp)
 }
 #endif
 
-int send_mail(char *to, char *file_path)
-{
+void* send_mail(void *toptr, void *file_path_ptr)
+{   
+    char *to = (char*)toptr;
+    char *file_path = (char*)file_path_ptr;
     printf("Sending mail to %s\n", to);
 
     CURL *curl;
@@ -132,7 +135,7 @@ int send_mail(char *to, char *file_path)
         curl_easy_cleanup(curl);
     }
 
-    return (int)res;
+    return NULL;
 }
 
 /*int main()

@@ -26,13 +26,12 @@
 
 #include "../adapter/transport.h"
 
+#include "../adapter/adapter.h"
+
 #include <pthread.h>
 
 #define STRING_SIZE 100
 
-/**
- * TODO: Implement the proper logic as per ESB specs.
- */
 void *poll_database_for_new_requests(void *vargp)
 {
 #if 0
@@ -77,10 +76,14 @@ void *poll_database_for_new_requests(void *vargp)
     task_t *request = fetch_new_esb_request();
     if (request == NULL)
     {
-       printf("No requests available.\n");
-       return NULL;
+        printf("No requests available.\n");
+        return NULL;
     }
-    update_esb_request("PROCESSING",request->id);
+    else
+    {
+        update_esb_request("PROCESSING", request->id);
+    }
+
     /* Get the route_id to handle the request */
     int route_id = get_active_route_id(request->sender,
                                        request->destination,
@@ -93,32 +96,48 @@ void *poll_database_for_new_requests(void *vargp)
     /* Parse xml file to get a bmd */
     bmd *bmd_file = parse_bmd_xml(request->data_location);
     /* String to store path of file to be sent */
-    
+
     char *to_be_sent;
     /* Generate HTTP url required to call
            destination service */
     char url[STRING_SIZE];
 
     sprintf(url, "%s%s", transport->value, bmd_file->payload);
+    //to_be_sent = (char *)call_function(transport->key, (void *)url,
+    //  (void *)transport->key);
     to_be_sent = payload_to_json(bmd_file, url);
 
-    /*int rc = send_mail(bmd_file->envelop_data->Destination,
-                         to_be_sent);
-    if(rc!=0) {
-        printf("Email sending failed..\n");
-        int status = update_esb_request("RECEIVED",request->id);
-    } printf("Mail sent.!\n");*/
-    char *response = http_post(bmd_file->envelop_data->Destination,
-                              to_be_sent);
-    
-    printf("\n\nFile response from REQ.RES:\n");
-    int check = print_file(response);
-    update_esb_request("DONE",request->id);
-    printf("Worker's task finished.\n");
+    int *rc = (int *)call_function("EMAIL", "testmailtm@gmail.com", to_be_sent);
+    if (rc != 0)
+    {
+        printf("Email sending failed.!\n");
+        int status = update_esb_request("RECEIVED", request->id);
+    }
+    else
+    {
+        printf("Mail sent.!\n");
+    }
+
+    char *response = (char *)call_function("HTTP_POST",
+                                           bmd_file->envelop_data->Destination, to_be_sent);
+    if (response == NULL)
+    {
+        printf("HTTP posting failed.!\n");
+        int status = update_esb_request("RECEIVED", request->id);
+    }
+    else
+    {
+        printf("\n\nFile response from REQ.RES:\n");
+        int check = print_file(response);
+        printf("\n");
+        update_esb_request("DONE", request->id);
+    }
+
+    printf("Exiting poll..\n");
     sleep(5);
 }
 
-/*int main()
+int main()
 {
 
     pthread_t thread_id;
@@ -127,4 +146,4 @@ void *poll_database_for_new_requests(void *vargp)
     pthread_join(thread_id, NULL);
     printf("After Thread\n");
     return 0;
-}*/
+}

@@ -15,30 +15,30 @@
 #include <curl/curl.h>
 #define STRING_SIZE 100
 
-int print_file(char *file_name) 
-{ 
-    FILE *fptr; 
-  
-    char c; 
-  
-    // Open file 
-    fptr = fopen(file_name, "r"); 
-    if (fptr == NULL) 
-    { 
-        printf("Cannot open file \n"); 
-        return 0; 
-    } 
-  
-    // Read contents from file 
-    c = fgetc(fptr); 
-    while (c != EOF) 
-    { 
-        printf ("%c", c); 
-        c = fgetc(fptr); 
-    } 
-  
-    fclose(fptr); 
-    return 1; 
+int print_file(char *file_name)
+{
+  FILE *fptr;
+
+  char c;
+
+  // Open file
+  fptr = fopen(file_name, "r");
+  if (fptr == NULL)
+  {
+    printf("Cannot open file \n");
+    return 0;
+  }
+
+  // Read contents from file
+  c = fgetc(fptr);
+  while (c != EOF)
+  {
+    printf("%c", c);
+    c = fgetc(fptr);
+  }
+
+  fclose(fptr);
+  return 1;
 }
 
 /**
@@ -50,15 +50,18 @@ int print_file(char *file_name)
  * @param data to be posted
  * @return char* File path of response
  */
-char* http_post(char *to, char *data)
+void* http_post(void *toptr, void *dataptr)
 {
+  char *to = (char *)toptr;
+  char *data = (char *)dataptr;
+
   CURL *curl;
   CURLcode res;
-  
+
   char *file_name = "Returnfile.json";
 
   FILE *fp = fopen(file_name, "wb");
- 
+
   curl_global_init(CURL_GLOBAL_ALL);
 
   /* get a curl handle */
@@ -72,7 +75,7 @@ char* http_post(char *to, char *data)
     /* Now specify the POST data */
 
     curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data);
-    
+
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);
     //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
 
@@ -88,7 +91,7 @@ char* http_post(char *to, char *data)
   }
   curl_global_cleanup();
   fclose(fp);
-  return file_name;
+  return (void*)file_name;
 }
 
 /*int main()

@@ -12,6 +12,8 @@
 
 #include "../db_access/connector.h"
 
+#include "../adapter/adapter.h"
+
 int queue_the_request(bmd *b,char *file_path) {
     int success = 1; // 1 => OK, -1 => Error cases
 
@@ -63,7 +65,7 @@ int process_esb_request(char* bmd_file_path) {
     return status;
 }
 
-/*int main () {
+int main () {
     int status = process_esb_request("../bmd_files/bmd3.xml");
     
     if(status != 1) {
@@ -71,4 +73,4 @@ int process_esb_request(char* bmd_file_path) {
         return EXIT_FAILURE;
     }
     return EXIT_SUCCESS;
-}*/
+}
