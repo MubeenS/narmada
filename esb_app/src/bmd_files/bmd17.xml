@@ -3,13 +3,13 @@
 <?xml-stylesheet type="text/css"?>
 <BMD>
 <Envelop>
-<MessageID>M7</MessageID>
+<MessageID>6f45c57e-f65b-11ea-adc1-0242ac120002</MessageID>
 <MessageType>AvlBal</MessageType>
-<Sender>C</Sender>
-<Destination>Y</Destination>
+<Sender>6f45c646-f65b-11ea-adc1-0242ac120002</Sender>
+<Destination>6f45c70e-f65b-11ea-adc1-0242ac120002</Destination>
 <CreationDateTime>2020-08-12T05:18:00+00001</CreationDateTime>
 <Signature>S7</Signature>
-<ReferenceID>R7</ReferenceID>
+<ReferenceID>6f45c948-f65b-11ea-adc1-0242ac120002</ReferenceID>
 <UserProperties>
 <key1>Value15</key1>
 <key2>Value25</key2>
