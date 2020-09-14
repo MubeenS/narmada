@@ -22,17 +22,18 @@
  * @param bmd_file bmd_file to get payload
  * @return char* Path of the file.
  */
-char *payload_to_json(bmd *bmd_file,char *url)
+char *payload_to_json(bmd *bmd_file, char *url)
 {
+    printf("payload to json .....");
 
     char bmd_name[20];
     /*Creates file name of json as per bmd name*/
-    char file[50];
-    /* Appends name of messageID */
-    sprintf(file, "../assets/payload_%s.json", bmd_file->envelop_data->MessageID);
+    char file[50]="../assets/payload_data.json";
+
     /* Get data from destination service 
         that should be sent */
-    char *payload_data = call_destination_service(url,"IFSC.RAZORPAY");
+    char *payload_data = call_destination_service(url,
+                                                  "IFSC.RAZORPAY");
 
     FILE *fp;
     fp = fopen(file, "w");

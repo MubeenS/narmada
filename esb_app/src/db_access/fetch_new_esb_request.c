@@ -260,7 +260,7 @@ task_t *fetch_new_esb_request(void)
             request->message_type = strdup(message_type);
         }
 
-        fprintf(stdout, "   column5 (string)   : ");
+        
         if (is_null[1])
         {
             fprintf(stdout, " NULL\n");

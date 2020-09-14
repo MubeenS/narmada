@@ -42,7 +42,7 @@
 #include <limits.h>
 #include <stdio.h>
 
-//#define PATH_MAX 500
+#define NUM_THREADS 100
 
 extern void *poll_database_for_new_requests(void *);
 
@@ -63,7 +63,7 @@ endpoint_result save_bmd(struct http_request *);
  */
 int esb_endpoint(struct http_request *req)
 {
-	printf("Received the BMD request.\n");
+	printf(">> Received the BMD request.\n");
 	endpoint_result epr = save_bmd(req);
 	if (epr.status < 0)
 	{
@@ -77,13 +77,13 @@ int esb_endpoint(struct http_request *req)
 		if (esb_status >= 0)
 		{
 			//TODO: Take suitable action
-			printf("\nProcessing SQL Queries...\n");
+			printf("\n>> Request successfully inserted.!\n");
 			return (KORE_RESULT_OK);
 		}
 		else
 		{
 			//TODO: Take suitable action
-			printf("ESB failed to process the BMD.\n");
+			printf("##ESB failed to process the BMD.##\n");
 			http_response(req, 400, NULL, 0);
 			return (KORE_RESULT_ERROR);
 		}
@@ -145,11 +145,6 @@ function to the directory name
 static char *create_work_dir_for_request()
 {
 	kore_log(LOG_INFO, "Creating the temporary work folder.");
-	/**
-	 * TODO: Create a temporary folder in the current directory.
-	 * Its name should be unique to each request.
-	 */
-
 	char *temp_path = malloc(PATH_MAX * sizeof(char));
 	time_t now = time(NULL) % 1000;
 	srand(now);
@@ -164,7 +159,7 @@ static char *create_work_dir_for_request()
 		sprintf(temp_path, "%s_%d", temp_path, rand());
 		mkdir_p(temp_path);
 	}
-	printf("Cuurent Working Directory %s \n ", cwd);
+	printf("Current Working Directory %s \n ", cwd);
 
 	//strcpy(temp_path, "./bmd_files/1234");
 	kore_log(LOG_INFO, "Temporary work folder: %s", temp_path);
@@ -259,7 +254,7 @@ save_bmd(struct http_request *req)
 	}
 
 	http_response(req, 200, NULL, 0);
-	kore_log(LOG_INFO, "file '%s' successfully received",
+	kore_log(LOG_INFO, ">> file '%s' successfully received",
 			 file->filename);
 	ep_res.bmd_path = malloc(strlen(bmd_file_path) * sizeof(char) + 1);
 	strcpy(ep_res.bmd_path, bmd_file_path);
