@@ -11,7 +11,7 @@ VALUES
   ('4ac283b6-f658-11ea-adc1-0242ac120002','4ac2860e-f658-11ea-adc1-0242ac120002','CreditReport',b'1'),
   ('4ac28848-f658-11ea-adc1-0242ac120002','4ac28910-f658-11ea-adc1-0242ac120002','CreditReport',b'1'),
   ('4ac28d16-f658-11ea-adc1-0242ac120002','4ac28dde-f658-11ea-adc1-0242ac120002','CreditReport',b'1'),
-  ('4ac29018-f658-11ea-adc1-0242ac120002','4ac290d6-f658-11ea-adc1-0242ac120002','CreditReport',b'1'),
+  ('4ac29018-f658-11ea-adc1-0242ac120002','4ac290d6-f658-11ea-adc1-0242ac120002','AvlBal',b'1'),
   ('4ac29482-f658-11ea-adc1-0242ac120002','4ac29536-f658-11ea-adc1-0242ac120002','AvlBal',b'1'),
   ('4ac298ec-f658-11ea-adc1-0242ac120002','4ac299e6-f658-11ea-adc1-0242ac120002','AvlBal',b'1'),
   ('6f45b4d0-f65b-11ea-adc1-0242ac120002','6f45b728-f65b-11ea-adc1-0242ac120002','AvlBal',b'1'),
