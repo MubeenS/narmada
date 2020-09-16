@@ -30,9 +30,9 @@ payload_to_json_setup(const MunitParameter params[], void *user_data)
   bmd *bmd_file= parse_bmd_xml(file);
   /* Generate HTTP url required to call
            destination service */
-   int route_id = get_active_route_id(bmd_file->sender,
-                                           bmd_file->destination,
-                                           bmd_file->message_type);
+   int route_id = get_active_route_id(bmd_file->envelop_data->Sender,
+                                           bmd_file->envelop_data->Destination,
+                                           bmd_file->envelop_data->MessageType);
   transport_t *transport = fetch_transport_config(route_id);
 
   char url[STRING_SIZE];
@@ -43,8 +43,7 @@ payload_to_json_setup(const MunitParameter params[], void *user_data)
   /** Payload to json contacts destination service
           * Stores the received data in a file and returns
           * the file path.*/
-  to_be_sent = payload_to_json(bmd_file, url);
-  char *file_created = payload_to_json(b, file);
+  char *file_created = payload_to_json(bmd_file, url);
   /* Copy file data into string */
   char *json_data = get_str_data(file_created);
   return strdup(file_created);
