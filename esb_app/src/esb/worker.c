@@ -136,18 +136,21 @@ void *poll_database_for_new_requests(void *vargp)
             printf("Posted via HTTP.\n");
             printf("\n\nFile response from REQ.RES:\n");
             int check = print_file(response);
-            if(check !=0) {
+            if(check ==0) {
                 printf("Printing response failed..\n");
             }
             printf("\n");
             update_esb_request("DONE", request->id);
+            /* Exits the thread */
+            //pthread_exit(NULL);
         }
         sleep:
         printf("Sleeping for 5 seconds.\n");
         sleep(5);
     }
     printf("Worker exited..\n");
-    return NULL;
+   // pthread_exit(NULL);
+    
 }
 
 /*int main()

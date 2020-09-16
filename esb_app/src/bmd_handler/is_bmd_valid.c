@@ -24,6 +24,8 @@
 
 #include "../adapter/transform.h"
 
+#define STRING_SIZE 100
+
 #define VALID 1
 #define INVALID 0
 /* Size definiton for 5MB */
@@ -98,6 +100,7 @@ int is_bmd_complete(bmd *bmd_file)
     return INVALID;
   }
   /*printf("Payload :%s\n",bmd_file->payload);*/
+  printf("BMD is complete. \n");
   return VALID;
 }
 
@@ -129,11 +132,11 @@ long int find_size(char file_name[])
 
 int is_bmd_valid(bmd *bmd_file)
 {
-
+  printf("Validating BMD..\n");
   /* Checks if BMD has all fields */
   if (!is_bmd_complete(bmd_file))
   {
-    printf("Incomplete data");
+    printf("Incomplete data.!\n");
     return INVALID;
   }
   int route_id;
@@ -160,8 +163,19 @@ int is_bmd_valid(bmd *bmd_file)
   }
 
   /* Checks size of payload file created */
+  /* Generate HTTP url required to call
+           destination service */
+  char url[STRING_SIZE];
 
-  char *payload = payload_to_json(bmd_file,"https://ifsc.razorpay.com/SBIN0000882");
+  transport_t *transport = fetch_transport_config(route_id);
+
+  sprintf(url, "%s%s", transport->value, bmd_file->payload);
+  //to_be_sent = (char *)call_function(transport->key, (void *)url,
+  //  (void *)transport->key);
+  /** Payload to json contacts destination service
+          * Stores the received data in a file and returns
+          * the file path.*/
+  char *payload = payload_to_json(bmd_file, url);
   long int size = find_size(payload);
   if (size > MAX_SIZE)
   {

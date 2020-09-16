@@ -2,6 +2,9 @@
 #include "../test/munit.h"
 #include "bmd.h"
 
+#include "../adapter/transport.h"
+
+#define STRING_SIZE 100
 char *get_str_data(char *file)
 {
   long f_size;
@@ -24,8 +27,24 @@ static void *
 payload_to_json_setup(const MunitParameter params[], void *user_data)
 {
   char *file = "../bmd_files/bmd1.xml";
-  bmd *b = parse_bmd_xml(file);
-  char *file_created = payload_to_json(b);
+  bmd *bmd_file= parse_bmd_xml(file);
+  /* Generate HTTP url required to call
+           destination service */
+   int route_id = get_active_route_id(bmd_file->sender,
+                                           bmd_file->destination,
+                                           bmd_file->message_type);
+  transport_t *transport = fetch_transport_config(route_id);
+
+  char url[STRING_SIZE];
+  
+  sprintf(url, "%s%s", transport->value, bmd_file->payload);
+  //to_be_sent = (char *)call_function(transport->key, (void *)url,
+  //  (void *)transport->key);
+  /** Payload to json contacts destination service
+          * Stores the received data in a file and returns
+          * the file path.*/
+  to_be_sent = payload_to_json(bmd_file, url);
+  char *file_created = payload_to_json(b, file);
   /* Copy file data into string */
   char *json_data = get_str_data(file_created);
   return strdup(file_created);
@@ -34,7 +53,7 @@ payload_to_json_setup(const MunitParameter params[], void *user_data)
 /* Test function */
 static MunitResult
 test_payload_to_json(const MunitParameter params[], void *fixture)
-{ 
+{
   char *file_created = (char *)fixture;
   char *json_data = get_str_data(file_created);
 
@@ -47,10 +66,11 @@ test_payload_to_json(const MunitParameter params[], void *fixture)
 
 static void
 payload_to_json_tear_down(void *fixture)
-{ char *file_created = (char *) fixture;
-   int del = remove(file_created);
-   /* Checks if file is deleted */
-   munit_assert(!del);
+{
+  char *file_created = (char *)fixture;
+  int del = remove(file_created);
+  /* Checks if file is deleted */
+  munit_assert(!del);
   free(file_created);
 }
 
@@ -114,19 +134,19 @@ test_parse_bmd_xml(const MunitParameter params[], void *fixture)
   munit_assert_string_equal(test_bmd->envelop_data->Sender,
                             expected_bmd->envelop_data->Sender);
   munit_assert_string_equal(test_bmd->envelop_data->Destination,
-                             expected_bmd->envelop_data->Destination);
+                            expected_bmd->envelop_data->Destination);
   munit_assert_string_equal(test_bmd->envelop_data->MessageType,
                             expected_bmd->envelop_data->MessageType);
   munit_assert_string_equal(test_bmd->envelop_data->CreationDateTime,
-                             expected_bmd->envelop_data->CreationDateTime);
+                            expected_bmd->envelop_data->CreationDateTime);
   munit_assert_string_equal(test_bmd->envelop_data->MessageID,
-                             expected_bmd->envelop_data->MessageID);
+                            expected_bmd->envelop_data->MessageID);
   munit_assert_string_equal(test_bmd->envelop_data->Signature,
-                             expected_bmd->envelop_data->Signature);
+                            expected_bmd->envelop_data->Signature);
   munit_assert_string_equal(test_bmd->envelop_data->ReferenceID,
-                             expected_bmd->envelop_data->ReferenceID);
-  munit_assert_string_equal(test_bmd->payload,expected_bmd->payload);
-  
+                            expected_bmd->envelop_data->ReferenceID);
+  munit_assert_string_equal(test_bmd->payload, expected_bmd->payload);
+
   return MUNIT_OK;
 }
 
@@ -138,7 +158,6 @@ parse_bmd_xml_tear_down(void *fixture)
   free(b->envelop_data);
   free(b->payload);
   free(b);
-
 }
 
 /* Put all unit tests here. */
@@ -162,12 +181,12 @@ MunitTest bmd_tests[] = {
     },
 
     {
-        "/payload_to_json_test",    /* name */
-        test_payload_to_json,       /* test function */
-        payload_to_json_setup,      /* setup function for the test */
-        payload_to_json_tear_down,  /* tear_down */
-        MUNIT_TEST_OPTION_NONE, /* options */
-        NULL                    /* parameters */
+        "/payload_to_json_test",   /* name */
+        test_payload_to_json,      /* test function */
+        payload_to_json_setup,     /* setup function for the test */
+        payload_to_json_tear_down, /* tear_down */
+        MUNIT_TEST_OPTION_NONE,    /* options */
+        NULL                       /* parameters */
     },
     /* Mark the end of the array with an entry where the test
    * function is NULL */

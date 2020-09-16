@@ -26,9 +26,12 @@ char *payload_to_json(bmd *bmd_file, char *url)
 {
     printf("payload to json .....");
 
-    char bmd_name[20];
+    char file[STRING_SIZE]="Payload_";
     /*Creates file name of json as per bmd name*/
-    char file[50]="../assets/payload_data.json";
+    /* Copying first 8 characters to keep the name unique */
+    strncat(file,bmd_file->envelop_data->MessageID,8);
+    //sprintf(file,"../assets/payload_%s.json",bmd_file->envelop_data->MessageID);
+    
 
     /* Get data from destination service 
         that should be sent */
@@ -59,11 +62,10 @@ char *payload_to_json(bmd *bmd_file, char *url)
  */
 char *payload_to_xml(bmd *bmd_file)
 {
-    char bmd_name[20];
     /*Creates file name of xml as per bmd name*/
-    char file[50];
+    char file[STRING_SIZE]="payload_";
     /* Appends name of messageID */
-    sprintf(file, "../assets/payload_%s.xml", bmd_file->envelop_data->MessageID);
+    strncat(file,bmd_file->envelop_data->MessageID,5);
 
     char *payload_data = bmd_file->payload;
     FILE *fp;
