@@ -35,19 +35,20 @@ AND message_type = ? AND destination = ? AND is_active=1"
  
  
 int get_active_route_id(char *sender,char *destination, char *message_type) {
-
+    
+    printf("Getting active route id..\n");
     MYSQL_STMT *stmt; /* store statement */
     MYSQL_BIND input_bind[3]; /* to bind input */
     char input_data[3][STRING_SIZE];
     unsigned long input_length[3];
     MYSQL_BIND bind[1];
-    my_ulonglong affected_rows;
+    //my_ulonglong affected_rows;
     MYSQL_RES *prepare_meta_result;
-    unsigned long length[4];
+    //unsigned long length[4];
     int param_count;
-    char small_data[STRING_SIZE];
+    //char small_data[STRING_SIZE];
     int int_data;
-    bool is_null[3];
+    //bool is_null[3];
 
     MYSQL *con; /*database connection handle*/
     /**
@@ -193,7 +194,7 @@ int get_active_route_id(char *sender,char *destination, char *message_type) {
         
         return route_id;
     }else{
-        printf("No routes found.");
+        printf("No routes found..\n");
     }
 
     /* Free the prepared result metadata */

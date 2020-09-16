@@ -31,16 +31,14 @@ WHERE route_id = ? "
 
 int has_transform_config(int route_id)
 {
-
+    printf("Checking transform configuration..\n");
     MYSQL_STMT *stmt;         /* store statement */
     MYSQL_BIND input_bind[1]; /* to bind input */
     int route_id_data;
     MYSQL_BIND bind[1];
-    my_ulonglong affected_rows;
     MYSQL_RES *prepare_meta_result;
     unsigned long length[2];
     int param_count;
-    char small_data[STRING_SIZE];
     int int_data;
     bool is_null[2];
 

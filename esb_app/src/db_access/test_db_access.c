@@ -8,23 +8,24 @@ static void *
 insert_to_esb_request_setup(const MunitParameter params[], void *user_data)
 {
   char *file = "../bmd_files/bmd1.xml";
-  bmd *b = parse_bmd_xml(file);
 
-  return b;
+  return file;
 }
 
 /* Test function */
 static MunitResult
 test_insert_to_esb_request(const MunitParameter params[], void *fixture)
 {
-  bmd *b = (bmd *)fixture;
+  char *file_path = (char*)fixture;
+  bmd *b = parse_bmd_xml(file_path);
   /* Check the return code */
+
   int rc = insert_to_esb_request(b->envelop_data->Sender,
                                  b->envelop_data->Destination,
                                  b->envelop_data->MessageType,
                                  b->envelop_data->ReferenceID,
                                  b->envelop_data->MessageID,
-                                 "Routes", "RECEIVED",
+                                 file_path, "RECEIVED",
                                  "received successfully",
                                  b->envelop_data->CreationDateTime);
   munit_assert(rc != 0);
@@ -43,7 +44,7 @@ insert_to_esb_request_tear_down(void *fixture)
 
 static MunitResult
 test_has_transform_config(const MunitParameter params[], void *fixture)
-{;
+{
   /* Check the return code */
   int rc = has_transform_config(1);
   munit_assert(rc != 0);
