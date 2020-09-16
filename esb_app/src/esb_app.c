@@ -42,7 +42,7 @@
 #include <limits.h>
 #include <stdio.h>
 
-#define NUM_THREADS 100
+#define NUM_THREADS 5
 
 extern void *poll_database_for_new_requests(void *);
 

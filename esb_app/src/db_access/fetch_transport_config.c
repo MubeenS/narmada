@@ -35,7 +35,7 @@ FROM transport_config WHERE route_id = ? "
 
 transport_t* fetch_transport_config(int route_id)
 {
-    printf("Fetching transport details..");
+    printf(">> Fetching transport details..\n");
 
     MYSQL_STMT *stmt;         /* store statement */
     MYSQL_BIND input_bind[1]; /* to bind input */

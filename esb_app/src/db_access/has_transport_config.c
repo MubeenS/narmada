@@ -31,8 +31,6 @@ WHERE route_id = ? "
 
 int has_transport_config(int route_id)
 {
-    printf("Checking transport configuration..\n");
-
     MYSQL_STMT *stmt;         /* store statement */
     MYSQL_BIND input_bind[1]; /* to bind input */
     int route_id_data;

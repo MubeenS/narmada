@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 /* Contains necessary C functions of mysql */
-#include <mysql.h>
+#include <mysql/mysql.h>
 /**
  * Holds the info to connect to DB and
  * error specifying function for 
@@ -33,15 +33,16 @@ int select_active_routes(char *sender,char *destination, char *message_type) {
     char input_data[3][STRING_SIZE];
     unsigned long input_length[3];
     MYSQL_BIND bind[3];
-    my_ulonglong affected_rows;
+    //my_ulonglong affected_rows;
     MYSQL_RES *prepare_meta_result;
-    MYSQL_TIME ts;
+    //MYSQL_TIME ts;
     unsigned long length[4];
-    int param_count, column_count, row_count;
+    int param_count, column_count;
+    //int row_count;
     char small_data[STRING_SIZE];
     int int_data;
     char str_data[3][STRING_SIZE];
-    bool is_null[3];
+    //bool is_null[3];
 
     MYSQL *con; /*database connection handle*/
     /**
@@ -199,7 +200,7 @@ int select_active_routes(char *sender,char *destination, char *message_type) {
         fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
         exit(0);
     }
-    int num_result_rows = mysql_stmt_num_rows(stmt);
+    //int num_result_rows = mysql_stmt_num_rows(stmt);
     int route_id;
     if(!mysql_stmt_fetch(stmt)) {
             mysql_free_result(prepare_meta_result);

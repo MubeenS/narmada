@@ -1,4 +1,3 @@
-
 /**
  * @file worker.c
  * @author MubeenS
@@ -33,18 +32,20 @@
 #define STRING_SIZE 100
 
 void *poll_database_for_new_requests(void *vargp)
-{
+{   
+    
     int i = 0;
     while (i < 99)
     {
         i++;
-        printf("\n%%%%\nWorker started..\n%%%%\n");
+        printf("\n%%%%%%%%%%");
+        printf("\tWorker started\t");
+        printf("%%%%%%%%%%\n");
         task_t *request = fetch_new_esb_request();
         if (request == NULL)
         {
             printf("No requests available.\n");
             goto sleep;
- 
         }
         else
         { /* Update request is being processed */
@@ -105,8 +106,11 @@ void *poll_database_for_new_requests(void *vargp)
             }
         }
         else
-        {
-            printf("Mail sent.!\n");
+        {   
+            printf("\n.............");
+            printf("Mail sent");
+            printf(".............\n");
+            
         }
 
         char *response;
@@ -133,10 +137,13 @@ void *poll_database_for_new_requests(void *vargp)
         }
         else
         {
-            printf("Posted via HTTP.\n");
-            printf("\n\nFile response from REQ.RES:\n");
+            printf("\n...............");
+            printf("Posted via HTTP.");
+            printf("...............\n");
+            printf("\n↓↓↓↓↓↓ File response from REQ.RES ↓↓↓↓↓↓\n");
             int check = print_file(response);
-            if(check ==0) {
+            if (check == 0)
+            {
                 printf("Printing response failed..\n");
             }
             printf("\n");
@@ -144,13 +151,12 @@ void *poll_database_for_new_requests(void *vargp)
             /* Exits the thread */
             //pthread_exit(NULL);
         }
-        sleep:
+    sleep:
         printf("Sleeping for 5 seconds.\n");
         sleep(5);
     }
     printf("Worker exited..\n");
-   // pthread_exit(NULL);
-    
+    // pthread_exit(NULL);
 }
 
 /*int main()

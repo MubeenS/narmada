@@ -65,7 +65,7 @@ int get_active_route_id(char *sender,char *destination, char *message_type) {
     if (con == NULL) {
 
         fprintf(stderr, "mysql_init() failed\n");
-        exit(1);
+        return -1;
     }
 
     /**

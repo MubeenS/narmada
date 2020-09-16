@@ -12,7 +12,6 @@ struct string
 
 void init_string(struct string *s)
 { 
-  printf("string initialisation\n");
   s->len = 0;
   s->ptr = malloc(s->len + 1);
   if (s->ptr == NULL)
@@ -25,7 +24,6 @@ void init_string(struct string *s)
 
 size_t write_callback(void *ptr, size_t size, size_t nmemb, struct string *s)
 { 
-  printf("Callback is called\n");
   size_t new_len = s->len + size * nmemb;
   s->ptr = realloc(s->ptr, new_len + 1);
   if (s->ptr == NULL)
@@ -56,7 +54,7 @@ void* call_destination_service(void *urlptr,void *apiptr)
 
   if (curl)
   {
-    printf("Contacting destination service %s\n",api);
+    printf(">> Contacting destination service %s\n",api);
     curl_easy_setopt(curl, CURLOPT_URL, url);
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &s);

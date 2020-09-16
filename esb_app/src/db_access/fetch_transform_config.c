@@ -35,7 +35,7 @@ FROM transform_config WHERE route_id = ? "
 
 transform_t* fetch_transform_config(int route_id)
 {  
-    printf("Fetching transform details..");
+    printf(">> Fetching transform details..\n");
 
     MYSQL_STMT *stmt;         /* store statement */
     MYSQL_BIND input_bind[1]; /* to bind input */

@@ -73,7 +73,7 @@ void* send_mail(void *toptr, void *file_path_ptr)
 {   
     char *to = (char*)toptr;
     char *file_path = (char*)file_path_ptr;
-    printf("Sending mail to %s\n", to);
+    printf(">> Sending mail to %s\n", to);
 
     CURL *curl;
     CURLcode res = CURLE_OK;

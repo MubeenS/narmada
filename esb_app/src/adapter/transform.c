@@ -24,7 +24,7 @@
  */
 char *payload_to_json(bmd *bmd_file, char *url)
 {
-    printf("payload to json .....");
+    printf(">> Payload to json..\n");
 
     char file[STRING_SIZE]="Payload_";
     /*Creates file name of json as per bmd name*/

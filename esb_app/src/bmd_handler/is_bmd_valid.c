@@ -23,6 +23,7 @@
 #include "../db_access/connector.h"
 
 #include "../adapter/transform.h"
+int is_bmd_complete(bmd *bmd_file);
 
 #define STRING_SIZE 100
 
@@ -100,7 +101,7 @@ int is_bmd_complete(bmd *bmd_file)
     return INVALID;
   }
   /*printf("Payload :%s\n",bmd_file->payload);*/
-  printf("BMD is complete. \n");
+  printf("BMD is complete ☑\n");
   return VALID;
 }
 
@@ -132,7 +133,7 @@ long int find_size(char file_name[])
 
 int is_bmd_valid(bmd *bmd_file)
 {
-  printf("Validating BMD..\n");
+  printf(">> Validating BMD..\n");
   /* Checks if BMD has all fields */
   if (!is_bmd_complete(bmd_file))
   {
@@ -140,27 +141,37 @@ int is_bmd_valid(bmd *bmd_file)
     return INVALID;
   }
   int route_id;
+  printf("To validate,");
   route_id = get_active_route_id(bmd_file->envelop_data->Sender,
                                  bmd_file->envelop_data->Destination,
                                  bmd_file->envelop_data->MessageType);
   /* Check if active routes are present */
-  if (route_id <= 0)
+  if (route_id == 0)
   {
-    printf("No active routes are present.");
+    printf("No active routes are present.\n");
     return INVALID;
   }
 
+  if(route_id<0) {
+    printf("Route_id fetching failed.\n");
+    return INVALID;
+  }
+
+  printf("Has active route ☑\n");
   /* Checks if route has transform_config info */
   if (has_transform_config(route_id) <= 0)
   {
+    printf("No transform configuration.\n");
     return INVALID;
   }
-
+  printf("Has transform config ☑\n");
   /* Checks if route has transport_config info */
   if (has_transport_config(route_id) <= 0)
   {
+    printf("No transport configuration.\n");
     return INVALID;
   }
+  printf("Has transport config ☑\n");
 
   /* Checks size of payload file created */
   /* Generate HTTP url required to call
@@ -181,6 +192,7 @@ int is_bmd_valid(bmd *bmd_file)
   {
     return INVALID;
   }
+  printf("Size under 5MB ☑\n");
   return VALID;
 }
 
