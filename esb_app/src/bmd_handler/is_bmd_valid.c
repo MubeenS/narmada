@@ -152,7 +152,8 @@ int is_bmd_valid(bmd *bmd_file)
     return INVALID;
   }
 
-  if(route_id<0) {
+  if (route_id < 0)
+  {
     printf("Route_id fetching failed.\n");
     return INVALID;
   }
@@ -188,11 +189,19 @@ int is_bmd_valid(bmd *bmd_file)
           * the file path.*/
   char *payload = payload_to_json(bmd_file, url);
   long int size = find_size(payload);
+  /* Cleanup */
+  int rc = remove(payload);
+  if (rc != 0)
+  {
+    printf("File deletion failed.\n");
+  }
+  printf("Size under 5MB ☑\n");
+  free(transport->key);
+  free(transport->value);
   if (size > MAX_SIZE)
   {
     return INVALID;
   }
-  printf("Size under 5MB ☑\n");
   return VALID;
 }
 

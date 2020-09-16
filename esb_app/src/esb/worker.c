@@ -31,9 +31,48 @@
 
 #define STRING_SIZE 100
 
+void free_bmd(bmd *b)
+{
+    free(b->envelop_data->CreationDateTime);
+    free(b->envelop_data->Destination);
+    free(b->envelop_data->MessageID);
+    free(b->envelop_data->MessageType);
+    free(b->envelop_data->Sender);
+    free(b->envelop_data->Signature);
+    free(b->envelop_data->ReferenceID);
+    free(b->envelop_data->User_properties);
+    free(b->envelop_data);
+    free(b->payload);
+}
+
+char * get_dir_name(const char *s)
+{
+    char t ='/';
+  const char * last = strrchr(s, t);
+  if(last != NULL)
+  {
+    const size_t len = (size_t) (last - s);
+    char * const n = malloc(len + 1);
+    memcpy(n, s, len);
+    n[len] = '\0';
+    return n;
+  }
+  return NULL;
+}
+
+void free_req(task_t *t){
+    remove(t->data_location);
+    rmdir(get_dir_name(t->data_location));
+    free(t->data_location);
+    free(t->message_type);
+    free(t->sender);
+    free(t);
+}
+
+
 void *poll_database_for_new_requests(void *vargp)
-{   
-    
+{
+
     int i = 0;
     while (i < 99)
     {
@@ -106,11 +145,10 @@ void *poll_database_for_new_requests(void *vargp)
             }
         }
         else
-        {   
+        {
             printf("\n.............");
             printf("Mail sent");
             printf(".............\n");
-            
         }
 
         char *response;
@@ -151,6 +189,23 @@ void *poll_database_for_new_requests(void *vargp)
             /* Exits the thread */
             //pthread_exit(NULL);
         }
+        /* Clean up */
+        int c = remove(response);
+        if (!c)
+            printf("Removing response failed.\n");
+        free(rc);
+        c = remove(to_be_sent);
+        if (!c)
+            printf("Removing payload failed.\n");
+        free_bmd(bmd_file);
+        free(transform->key);
+        free(transform->value);
+        free(transform);
+        free(transport->key);
+        free(transport->value);
+        free(transport);
+        free(request);
+
     sleep:
         printf("Sleeping for 5 seconds.\n");
         sleep(5);
