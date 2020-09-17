@@ -4,7 +4,7 @@
 <BMD>
 <Envelop>
 <MessageID>4ac28f5a-f658-11ea-adc1-0242ac120002</MessageID>
-<MessageType>AvlBal</MessageType>
+<MessageType>CURR_EXCHG</MessageType>
 <Sender>4ac29018-f658-11ea-adc1-0242ac120002</Sender>
 <Destination>4ac290d6-f658-11ea-adc1-0242ac120002</Destination>
 <CreationDateTime>2020-08-12T05:18:00+00001</CreationDateTime>
@@ -15,5 +15,5 @@
 <key2>Value25</key2>
 </UserProperties>
 </Envelop>
-<Payload>UTIB0003213</Payload>
+<Payload>USD</Payload>
 </BMD>
