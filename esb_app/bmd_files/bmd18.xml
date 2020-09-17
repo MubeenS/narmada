@@ -4,7 +4,7 @@
 <BMD>
 <Envelop>
 <MessageID>6f45ca10-f65b-11ea-adc1-0242ac120002</MessageID>
-<MessageType>AvlBal</MessageType>
+<MessageType>CURR_EXCHG</MessageType>
 <Sender>6f45cad8-f65b-11ea-adc1-0242ac120002</Sender>
 <Destination>6f45cba0-f65b-11ea-adc1-0242ac120002</Destination>
 <CreationDateTime>2020-08-12T05:18:00+00001</CreationDateTime>
@@ -15,5 +15,5 @@
 <key2>Value25</key2>
 </UserProperties>
 </Envelop>
-<Payload>001-01-123418</Payload>
+<Payload>INR</Payload>
 </BMD>

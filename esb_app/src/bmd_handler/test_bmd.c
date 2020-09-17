@@ -1,24 +1,45 @@
+/**
+ * @file test_bmd.c
+ * @author Nikhil
+ * @brief µnit testing of Bmd validation and Parsing 
+ * of the bmd.xml file.
+ * @version 0.1
+ * @date 2020-09-17
+ * 
+ * @copyright Copyright (c) 2020
+ * 
+ */
+
 #include <stdio.h>
 #include "../test/munit.h"
 #include "bmd.h"
 
+#include "../adapter/transform.h"
 #include "../adapter/transport.h"
+#include "../db_access/connector.h"
+
 
 #define STRING_SIZE 100
-char *get_str_data(char *file)
-{
+
+char *get_str_data(char *file) {
   long f_size;
   char *str_data;
-  size_t file_size, result;
-  FILE *fp = fopen(file, "r");
-  fseek(fp, 0, SEEK_END);
-  /* Reads the size of the file */
-  f_size = ftell(fp);
-  fseek(fp, 0, SEEK_SET);
-  file_size = sizeof(char) * f_size;
-  str_data = malloc(file_size);
-  /* fread returns number of items actually read. */
-  result = fread(str_data, 1, f_size, fp);
+  size_t file_size,result;
+
+  FILE *f;
+  f=fopen(file,"r");
+  //read the size of the file
+
+  fseek(f,0,SEEK_END);
+  f_size=ftell(f);
+
+  fseek(f,0,SEEK_SET);
+
+  file_size=sizeof(char)*f_size;
+  str_data=malloc(file_size);
+
+/* fread returns number of items actually read. */
+  result =fread(str_data,1,f_size,f);
   return strdup(str_data);
 }
 
@@ -43,6 +64,7 @@ payload_to_json_setup(const MunitParameter params[], void *user_data)
   /** Payload to json contacts destination service
           * Stores the received data in a file and returns
           * the file path.*/
+  //to_be_sent = payload_to_json(bmd_file, url);
   char *file_created = payload_to_json(bmd_file, url);
   /* Copy file data into string */
   char *json_data = get_str_data(file_created);
@@ -56,10 +78,11 @@ test_payload_to_json(const MunitParameter params[], void *fixture)
   char *file_created = (char *)fixture;
   char *json_data = get_str_data(file_created);
 
-  char *test_data = get_str_data("payload_test.json");
+  char *test_data = get_str_data("../assets/payload_data.json");
 
   munit_assert_string_equal(json_data, test_data);
-  int size = find_size("payload_test.json");
+  int size = find_size("../assets/payload_data.json");
+  
   return MUNIT_OK;
 }
 
@@ -77,7 +100,7 @@ payload_to_json_tear_down(void *fixture)
 static void *
 is_bmd_valid_setup(const MunitParameter params[], void *user_data)
 {
-  char *file = "../bmd_files/bmd1.xml";
+  char *file = "../bmd_files/bmd2.xml";
   bmd *b = parse_bmd_xml(file);
   return b;
 }
@@ -102,7 +125,7 @@ is_bmd_valid_tear_down(void *fixture)
 static void *
 parse_bmd_xml_setup(const MunitParameter params[], void *user_data)
 {
-  char *file = "../bmd_files/bmd1.xml";
+  char *file = "../bmd_files/bmd2.xml";
   bmd *b = parse_bmd_xml(file);
   return b;
 }
@@ -111,15 +134,15 @@ bmd *get_bmd(void)
 {
   bmd *bmd_file = (bmd *)malloc(sizeof(bmd));
   envelop *envl = (envelop *)malloc(sizeof(envelop));
-  envl->Sender = "A";
-  envl->Destination = "Y";
+  envl->Sender = "4ac26e80-f658-11ea-adc1-0242ac120002";
+  envl->Destination = "4ac271fa-f658-11ea-adc1-0242ac120002";
   envl->CreationDateTime = "2020-08-12T05:18:00+00001";
-  envl->MessageID = "A9ECAEF2-107A-4452-9553-043B6D25386E";
+  envl->MessageID = "4ac26db8-f658-11ea-adc1-0242ac120002";
   envl->MessageType = "CreditReport";
-  envl->ReferenceID = "INV-PROFILE-8897121";
-  envl->Signature = "63f5f61f7a79301f715433f8f3689390d1f5da4f855169023300491c00b8113c1";
+  envl->ReferenceID = "4ac272d6-f658-11ea-adc1-0242ac120002";
+  envl->Signature = "S2";
   bmd_file->envelop_data = envl;
-  bmd_file->payload = "001-01-12341";
+  bmd_file->payload = "SBIN0000847";
 
   return bmd_file;
 }
@@ -159,6 +182,195 @@ parse_bmd_xml_tear_down(void *fixture)
   free(b);
 }
 
+/**
+ * @brief Parameterised testing for bmd.xml files
+ * 
+ * @param params 
+ * @param user_data 
+ * @return MunitResult 
+ */
+
+static MunitResult
+test_bmd_xml(const MunitParameter params[], void* user_data) {
+  const char* correct;
+
+  correct = munit_parameters_get(params, "correct");
+    
+    //printf("%s\n",(char *) correct);
+
+  /*if (strcmp(correct, "../bmd_files/bmd1.xml") == 0 ||
+      strcmp(correct, "../bmd_files/bmd2.xml") == 0 ||
+      strcmp(correct, "../bmd_files/bmd3.xml") == 0)
+      return MUNIT_OK;*/
+
+  bmd *test_bmd= parse_bmd_xml((char*)correct);
+
+  printf("testing for each bmd file\n");
+
+  if(strcmp(correct,"../bmd_files/bmd1.xml")==0)
+  {
+    munit_assert_string_equal(test_bmd->envelop_data->MessageID,"4ac268c2-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->MessageType,"CreditReport");
+    munit_assert_string_equal(test_bmd->envelop_data->Sender,"4ac26b10-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->Destination,"4ac26c14-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->CreationDateTime,"2020-08-12T05:18:00+00001");
+    munit_assert_string_equal(test_bmd->envelop_data->ReferenceID,"4ac26ce6-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->Signature,"S1");
+    munit_assert_string_equal(test_bmd->payload,"SBIN0000882");
+  }  
+
+    if(strcmp(correct,"../bmd_files/bmd2.xml")==0)
+  {
+    munit_assert_string_equal(test_bmd->envelop_data->MessageID,"4ac26db8-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->MessageType,"CreditReport");
+    munit_assert_string_equal(test_bmd->envelop_data->Sender,"4ac26e80-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->Destination,"4ac271fa-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->CreationDateTime,"2020-08-12T05:18:00+00001");
+    munit_assert_string_equal(test_bmd->envelop_data->ReferenceID,"4ac272d6-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->Signature,"S2");
+    munit_assert_string_equal(test_bmd->payload,"SBIN0000847");
+  }    
+
+
+
+    if(strcmp(correct,"../bmd_files/bmd3.xml")==0)
+  {
+    munit_assert_string_equal(test_bmd->envelop_data->MessageID,"4ac2739e-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->MessageType,"CreditReport");
+    munit_assert_string_equal(test_bmd->envelop_data->Sender,"4ac27466-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->Destination,"4ac2752e-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->CreationDateTime,"2020-08-12T05:18:00+00001");
+    munit_assert_string_equal(test_bmd->envelop_data->ReferenceID,"4ac275f6-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->Signature,"S3");
+    munit_assert_string_equal(test_bmd->payload,"BKID0008605");
+  }    
+
+   if(strcmp(correct,"../bmd_files/bmd4.xml")==0)
+  {
+    munit_assert_string_equal(test_bmd->envelop_data->MessageID,"4ac278b2-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->MessageType,"CreditReport");
+    munit_assert_string_equal(test_bmd->envelop_data->Sender,"4ac27984-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->Destination,"4ac27a42-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->CreationDateTime,"2020-08-12T05:18:00+00001");
+    munit_assert_string_equal(test_bmd->envelop_data->ReferenceID,"4ac27af6-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->Signature,"S4");
+    munit_assert_string_equal(test_bmd->payload,"IBKL0000001");
+  }    
+  
+
+  if(strcmp(correct,"../bmd_files/bmd5.xml")==0)
+  {
+    munit_assert_string_equal(test_bmd->envelop_data->MessageID,"4ac27bb4-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->MessageType,"CreditReport");
+    munit_assert_string_equal(test_bmd->envelop_data->Sender,"4ac27c68-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->Destination,"4ac27d26-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->CreationDateTime,"2020-08-12T05:18:00+00001");
+    munit_assert_string_equal(test_bmd->envelop_data->ReferenceID,"4ac27de4-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->Signature,"S5");
+    munit_assert_string_equal(test_bmd->payload,"ICIC0002652");
+  }    
+   
+
+  if(strcmp(correct,"../bmd_files/bmd6.xml")==0)
+  {
+    munit_assert_string_equal(test_bmd->envelop_data->MessageID,"4ac27fe2-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->MessageType,"CreditReport");
+    munit_assert_string_equal(test_bmd->envelop_data->Sender,"4ac280aa-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->Destination,"4ac28172-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->CreationDateTime,"2020-08-12T05:18:00+00001");
+    munit_assert_string_equal(test_bmd->envelop_data->ReferenceID,"4ac2823a-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->Signature,"S6");
+    munit_assert_string_equal(test_bmd->payload,"ICIC0006271");
+  }    
+     
+
+  if(strcmp(correct,"../bmd_files/bmd7.xml")==0)
+  {
+    munit_assert_string_equal(test_bmd->envelop_data->MessageID,"4ac282f8-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->MessageType,"CreditReport");
+    munit_assert_string_equal(test_bmd->envelop_data->Sender,"4ac283b6-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->Destination,"4ac2860e-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->CreationDateTime,"2020-08-12T05:18:00+00001");
+    munit_assert_string_equal(test_bmd->envelop_data->ReferenceID,"4ac286cc-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->Signature,"S7");
+    munit_assert_string_equal(test_bmd->payload,"ICIC0003239");
+  }  
+
+  if(strcmp(correct,"../bmd_files/bmd8.xml")==0)
+  {
+    munit_assert_string_equal(test_bmd->envelop_data->MessageID,"4ac2878a-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->MessageType,"CreditReport");
+    munit_assert_string_equal(test_bmd->envelop_data->Sender,"4ac28848-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->Destination,"4ac28910-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->CreationDateTime,"2020-08-12T05:18:00+00001");
+    munit_assert_string_equal(test_bmd->envelop_data->ReferenceID,"4ac289ce-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->Signature,"S7");
+    munit_assert_string_equal(test_bmd->payload,"UTIB0000051");
+  }  
+ 
+
+  if(strcmp(correct,"../bmd_files/bmd9.xml")==0)
+  {
+    munit_assert_string_equal(test_bmd->envelop_data->MessageID,"4ac28c58-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->MessageType,"CreditReport");
+    munit_assert_string_equal(test_bmd->envelop_data->Sender,"4ac28d16-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->Destination,"4ac28dde-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->CreationDateTime,"2020-08-12T05:18:00+00001");
+    munit_assert_string_equal(test_bmd->envelop_data->ReferenceID,"4ac28e9c-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->Signature,"S7");
+    munit_assert_string_equal(test_bmd->payload,"UTIB0001648");
+  }  
+
+  if(strcmp(correct,"../bmd_files/bmd9.xml")==0)
+  {
+    munit_assert_string_equal(test_bmd->envelop_data->MessageID,"4ac28c58-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->MessageType,"CreditReport");
+    munit_assert_string_equal(test_bmd->envelop_data->Sender,"4ac28d16-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->Destination,"4ac28dde-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->CreationDateTime,"2020-08-12T05:18:00+00001");
+    munit_assert_string_equal(test_bmd->envelop_data->ReferenceID,"4ac28e9c-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->Signature,"S7");
+    munit_assert_string_equal(test_bmd->payload,"UTIB0001648");
+  }
+
+  if(strcmp(correct,"../bmd_files/bmd10.xml")==0)
+  {
+    munit_assert_string_equal(test_bmd->envelop_data->MessageID,"4ac28f5a-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->MessageType,"AvlBal");
+    munit_assert_string_equal(test_bmd->envelop_data->Sender,"4ac29018-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->Destination,"4ac290d6-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->CreationDateTime,"2020-08-12T05:18:00+00001");
+    munit_assert_string_equal(test_bmd->envelop_data->ReferenceID,"4ac292fc-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->Signature,"S7");
+    munit_assert_string_equal(test_bmd->payload,"UTIB0003213");
+  }
+
+  
+  return MUNIT_OK;
+}
+
+
+
+static char* correct_params[] = {
+ (char*) "../bmd_files/bmd1.xml" ,
+ (char*) "../bmd_files/bmd2.xml" ,
+ (char*) "../bmd_files/bmd3.xml" ,
+ (char*) "../bmd_files/bmd4.xml" ,
+ (char*) "../bmd_files/bmd5.xml" ,
+ (char*) "../bmd_files/bmd6.xml" ,
+ (char*) "../bmd_files/bmd7.xml" ,
+ (char*) "../bmd_files/bmd8.xml" ,
+ (char*) "../bmd_files/bmd9.xml" ,
+ (char*) "../bmd_files/bmd10.xml",
+  NULL
+};
+
+
+static MunitParameterEnum test_params[] = {
+  { (char*) "correct", correct_params }
+};
+
+
 /* Put all unit tests here. */
 MunitTest bmd_tests[] = {
     {
@@ -187,6 +399,14 @@ MunitTest bmd_tests[] = {
         MUNIT_TEST_OPTION_NONE,    /* options */
         NULL                       /* parameters */
     },
+    {
+        "/test_bmd_files" ,
+        test_bmd_xml, 
+        NULL,
+        NULL,
+        MUNIT_TEST_OPTION_NONE,
+        test_params 
+    },
     /* Mark the end of the array with an entry where the test
    * function is NULL */
     {NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}};
@@ -201,7 +421,7 @@ static const MunitSuite suite = {
 };
 
 /* Run the the test suite */
-/*int main(int argc, const char *argv[])
+int main(int argc, const char *argv[])
 {
   return munit_suite_main(&suite, NULL, argc, NULL);
-}*/
+}
