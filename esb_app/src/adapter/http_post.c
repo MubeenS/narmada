@@ -13,6 +13,9 @@
 #include <stdio.h>
 
 #include <curl/curl.h>
+
+#include "adapter.h"
+
 #define STRING_SIZE 100
 
 int print_file(char *file_name)

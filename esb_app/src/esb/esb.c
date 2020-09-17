@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
-//#include "email.h"
-
+#include <unistd.h>
+#include <string.h>
 /** Include Module that has bmd handling 
  * functions and  bmd structure declaration 
  * 
@@ -13,6 +13,8 @@
 #include "../db_access/connector.h"
 
 #include "../adapter/adapter.h"
+#include "esb.h"
+
 
 int queue_the_request(bmd *b, char *file_path)
 {
@@ -35,12 +37,12 @@ int queue_the_request(bmd *b, char *file_path)
                                    file_path, "RECEIVED",
                                    "received successfully",
                                    b->envelop_data->CreationDateTime);
-    if (rc == 1)
+    if (rc >= 1)
     {
         return success;
     }
 
-    return 0;
+    return -1;
 }
 
 /**
@@ -54,23 +56,30 @@ int process_esb_request(char *bmd_file_path)
     //int status = 1; // 1 => OK, -ve => Errors
     printf(">> Processing the BMD %s\n", bmd_file_path);
 
-    // Step 1:
+    /* Parse to extract bmd */
     bmd *b = parse_bmd_xml(bmd_file_path);
-    /** defined in bmd_assets module*/
 
-    // Step 2:
-    /** defined in bmd_assets module*/
+    /* Check if bmd is valid */
     if (is_bmd_valid(b) != 1)
     {
         //TODO: Process the error case
-        printf("BMD is invalid!\n");
+        printf("BMD is invalid! Try again with proper BMD\n");
         status = -2;
+        clean_dir(bmd_file_path);
     }
     else
     {
         // Step 3:
         status = queue_the_request(b, bmd_file_path);
-        printf("Queued..!");
+        if (status >= 0)
+        {
+            printf("Queued..!");
+        }
+        else
+        {   
+            printf("Request not inserted.\n");
+            clean_dir(bmd_file_path);
+        }
     }
 
     return status;

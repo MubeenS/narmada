@@ -30,6 +30,7 @@ const static struct
     {"API_URL", call_destination_service},
     {"EMAIL", send_mail},
     {"HTTP_POST", http_post},
+    {"SFTP", sftp_upload},
     {"Credit service transport", transport_bmd_Credit_svc}};
 
 /* Function to dynamically invoke transport and transform services */

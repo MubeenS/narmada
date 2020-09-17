@@ -8,15 +8,13 @@
 #define CONNECTOR_H
 
 #include <stdio.h>
-#include <mysql.h>
+#include <mysql/mysql.h>
 
 #include "../bmd_handler/bmd.h"
 
 #include "../esb/esb.h"
 
-#include "../adapter/transform.h"
-
-#include "../adapter/transport.h"
+#include "../adapter/adapter.h"
 
 
 #define HOST "localhost"   /*hostname*/

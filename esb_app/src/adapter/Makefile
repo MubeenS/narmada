@@ -1,2 +1,2 @@
-http_post: http_post.c
-	gcc http_post.c -lcurl -o post
+sftp_upload: sftp_upload.c
+	gcc sftp_upload.c -lcurl -o up

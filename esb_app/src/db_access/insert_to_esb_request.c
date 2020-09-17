@@ -19,7 +19,8 @@
 #include <string.h>
 #include <stdbool.h>
 /* Contains necessary C functions of mysql */
-#include <mysql.h>
+#include <mysql/mysql.h>
+
 #ifndef INSERT_REQUEST
 #define INSERT_REQUEST
 /* C standard macro and library for handling datetime*/

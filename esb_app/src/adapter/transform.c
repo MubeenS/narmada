@@ -10,8 +10,7 @@
 /* BMD structure */
 #include "../bmd_handler/bmd.h"
 
-#include "transform.h"
-#include "transport.h"
+#include "adapter.h"
 
 #define STRING_SIZE 100
 /**

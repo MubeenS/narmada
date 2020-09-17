@@ -18,7 +18,7 @@
 
 #include <curl/curl.h>
 
-#include "transport.h"
+#include "adapter.h"
 
 #define FROM "testmailtm02@gmail.com"
 //#define TO "testmailtm02@gmail.com"
