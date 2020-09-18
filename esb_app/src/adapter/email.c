@@ -87,7 +87,7 @@ void* send_mail(void *toptr, void *file_path_ptr)
     {
         /* Set username and password */
         curl_easy_setopt(curl, CURLOPT_USERNAME, "testmailtm02");
-        curl_easy_setopt(curl, CURLOPT_PASSWORD, "great1.2");
+        curl_easy_setopt(curl, CURLOPT_PASSWORD, "narmada@123");
 
         /* URL for mail server */
         curl_easy_setopt(curl, CURLOPT_URL, "smtp://smtp.gmail.com:587/");

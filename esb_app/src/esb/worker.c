@@ -19,9 +19,9 @@
 
 #include "esb.h"
 
-#include "../db_access/connector.h"
+#include "db_access/connector.h"
 
-#include "../adapter/adapter.h"
+#include "adapter/adapter.h"
 
 #include <pthread.h>
 
@@ -35,7 +35,7 @@ void *poll_database_for_new_requests(void *vargp)
         printf("\tWorker started\t");
         printf("%%%%%%%%%%\n");
 
-        //pthread_mutex_lock(&lock); 
+        pthread_mutex_lock(&lock); 
 
         task_t *request = fetch_new_esb_request();
         if (request == NULL)
@@ -47,9 +47,10 @@ void *poll_database_for_new_requests(void *vargp)
         else
         { /* Update request is being processed */
             update_esb_request("PROCESSING", request->id);
+            pthread_mutex_unlock(&lock);
         }
 
-        pthread_mutex_unlock(&lock); 
+         
 
         /* Get the route_id to handle the request */
         int route_id = get_active_route_id(request->sender,

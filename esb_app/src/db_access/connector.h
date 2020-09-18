@@ -10,11 +10,11 @@
 #include <stdio.h>
 #include <mysql/mysql.h>
 
-#include "../bmd_handler/bmd.h"
+#include "bmd_handler/bmd.h"
 
-#include "../esb/esb.h"
+#include "esb/esb.h"
 
-#include "../adapter/adapter.h"
+#include "adapter/adapter.h"
 
 
 #define HOST "localhost"   /*hostname*/

@@ -1,4 +1,4 @@
-#include "../bmd_handler/bmd.h"
+#include "bmd_handler/bmd.h"
 #ifndef ADAPTER_H
 #define ADAPTER_H
 /* Function that dynamically calls required transport and transform*/

@@ -8,7 +8,7 @@
 #include <string.h>
 
 /* BMD structure */
-#include "../bmd_handler/bmd.h"
+#include "bmd_handler/bmd.h"
 
 #include "adapter.h"
 

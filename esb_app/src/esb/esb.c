@@ -6,13 +6,13 @@
  * functions and  bmd structure declaration 
  * 
  */
-#include "../bmd_handler/bmd.h"
+#include "bmd_handler/bmd.h"
 
 /** Module that has mysql C API functions */
 
-#include "../db_access/connector.h"
+#include "db_access/connector.h"
 
-#include "../adapter/adapter.h"
+#include "adapter/adapter.h"
 #include "esb.h"
 
 

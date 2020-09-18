@@ -27,7 +27,7 @@
 
 /** Contains transform_config structure */
 
-#include "../adapter/adapter.h"
+#include "adapter/adapter.h"
 
 #define STRING_SIZE 100
 #define SELECT_QUERY "SELECT config_key,config_value   \

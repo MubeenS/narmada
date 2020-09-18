@@ -20,9 +20,9 @@
 /* BMD structure */
 #include "bmd.h"
 /* DB access function declarations */
-#include "../db_access/connector.h"
+#include "db_access/connector.h"
 
-#include "../adapter/adapter.h"
+#include "adapter/adapter.h"
 int is_bmd_complete(bmd *bmd_file);
 
 #define STRING_SIZE 100

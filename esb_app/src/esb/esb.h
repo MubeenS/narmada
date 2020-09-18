@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include "../adapter/adapter.h"
-#include "../bmd_handler/bmd.h"
+#include "adapter/adapter.h"
+#include "bmd_handler/bmd.h"
 
 #ifndef ESB_H
 #define ESB_H

@@ -3,7 +3,7 @@
 #include <unistd.h>
 
 #include "esb.h"
-#include "../adapter/adapter.h"
+#include "adapter/adapter.h"
 
 void free_bmd(bmd *b)
 {

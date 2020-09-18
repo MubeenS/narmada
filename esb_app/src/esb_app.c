@@ -35,7 +35,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/time.h>
-#include "esb.h"
+#include "esb/esb.h"
 #include <time.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -44,10 +44,8 @@
 
 #define NUM_THREADS 5
 
-extern void *poll_database_for_new_requests(void *);
-
 /**
- * Define a suitable struct for holding the endpoint request handling result.
+ * A suitable struct for holding the endpoint request handling result.
  */
 typedef struct
 {
@@ -75,14 +73,12 @@ int esb_endpoint(struct http_request *req)
 		/* Invoke the ESB's main processing logic. */
 		int esb_status = process_esb_request(epr.bmd_path);
 		if (esb_status >= 0)
-		{
-			//TODO: Take suitable action
+		{   
 			printf("\n>> Request successfully inserted.!\n");
 			return (KORE_RESULT_OK);
 		}
 		else
 		{
-			//TODO: Take suitable action
 			printf("##ESB failed to process the BMD.##\n");
 			http_response(req, 400, NULL, 0);
 			return (KORE_RESULT_ERROR);
@@ -159,12 +155,10 @@ static char *create_work_dir_for_request(void)
 		char random[50];
 		sprintf(random, "_%d", rand() % 100);
 		strcat(temp_path, random);
-		//sprintf(temp_path, "%s_%d", temp_path, rand());
 		mkdir_p(temp_path);
 	}
 	printf("Current Working Directory %s \n ", cwd);
 
-	//strcpy(temp_path, "./bmd_files/1234");
 	kore_log(LOG_INFO, "Temporary work folder: %s", temp_path);
 	return temp_path;
 }
@@ -174,6 +168,7 @@ save_bmd(struct http_request *req)
 {
 	endpoint_result ep_res;
 	/* Default to OK. 1 => OK, -ve => Errors */
+
 	ep_res.status = 1;
 
 	int fd;
@@ -276,8 +271,6 @@ cleanup:
 	return ep_res;
 }
 
-//Needed to terminate the polling thread.
-
 pthread_t thread_id;
 void kore_parent_configure(int argc, char *argv[])
 {
@@ -288,10 +281,6 @@ void kore_parent_configure(int argc, char *argv[])
 void kore_parent_teardown(void)
 {
 	printf(">>>> kore_parent_teardown\n");
-	/**
-	 * TODO: Terminate the task polling thread.
-	 * Instead of killing it, ask the thread to terminate itself.
-	 */
 	pthread_cancel(thread_id);
 }
 
@@ -309,19 +298,11 @@ void kore_parent_teardown(void)
 // 				   strerror(error));
 // 	}
 
-// 	for (int i = 0; i < NUM_THREADS; i++)
-// 	{
-// 		pthread_join(thread_id[i], NULL);
-// 	}
 // }
 
 // void kore_parent_teardown(void)
 // {
 // 	printf(">>>> kore_parent_teardown\n");
-// 	/**
-// 	 * TODO: Terminate the task polling thread.
-// 	 * Instead of killing it, ask the thread to terminate itself.
-// 	 */
 // 	for (int i = 0; i < NUM_THREADS; i++)
 // 	{
 // 		pthread_cancel(thread_id[i]);

@@ -24,9 +24,9 @@
  */
 #include "connector.h"
 
-#include "../bmd_handler/bmd.h"
+#include "bmd_handler/bmd.h"
 
-#include "../esb/esb.h"
+#include "esb/esb.h"
 
 #define STRING_SIZE 100
 

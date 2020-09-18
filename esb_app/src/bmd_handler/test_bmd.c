@@ -14,9 +14,9 @@
 #include "../test/munit.h"
 #include "bmd.h"
 
-#include "../adapter/adapter.h"
+#include "adapter/adapter.h"
 
-#include "../db_access/connector.h"
+#include "db_access/connector.h"
 
 
 #define STRING_SIZE 100
