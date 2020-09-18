@@ -35,7 +35,7 @@ Default USER: narmadasftp
 
 Default PASS: narmada1
 
-To be able to send upload over SFTP with default settings, you should create the above user with the given password at the localhost.
+To be able to upload over SFTP with default settings, you should create the above user with the given password at the localhost.
 ```
 $ sudo useradd -m narmadasftp -g sftp
 $ sudo passwd sftpuser
