@@ -104,13 +104,13 @@ Run the following command sends the requests.
 
 `curl --insecure -F "bmd_file=@bmd1.xml" https://localhost:8888/bmd`
 
-narmada/esb_app/src/bmd_files/ has bmd[1-18].xml
+Check the logs in the first shell; the log shows how BMD is received and being processed.
+
+The directory narmada/esb_app/src/bmd_files/  has bmd files marked 1 to 18.
 
 1 to 9 files contain  payload of IFSC code of Indian banks. 
 
 10 to 18 files contain payload details of country code for currency.
 
-
-Check the logs in the first shell; the log shows how BMD is received and being processed.
 
 
