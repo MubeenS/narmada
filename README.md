@@ -23,12 +23,18 @@ The app uses the default setup. Feel free to customize them to your convenience.
 ##### 1. MYSQL
 
  Default USER: root
+ 
  Default PASS:
+ 
  (No password set for convenience. You can either remove the password in your machine or change source.)
+ 
  To change password and other configurations goto `narmada/esb_app/src/db_access/connection.h`
 #### 2.SFTP
+
 Default USER: narmadasftp
+
 Default PASS: narmada1
+
 To be able to send upload over SFTP with default settings, you should create the above user with the given password at the localhost.
 ```
 $ sudo useradd -m narmadasftp -g sftp
