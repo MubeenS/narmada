@@ -116,6 +116,6 @@ The same directory also has a shell script to give multiple files as input.
  You can run it by `./input.sh`
 
 If there is an empty reply (curl(52)), retry with the same command.
-If such problem's still persist, please re-run kodev.
+If such problems still persist, please re-run kodev.
 
 
