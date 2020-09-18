@@ -14,87 +14,12 @@
 #include "../test/munit.h"
 #include "bmd.h"
 
-#include "adapter/adapter.h"
+#include "../adapter/adapter.h"
 
-#include "db_access/connector.h"
+#include "../db_access/connector.h"
 
 
 #define STRING_SIZE 100
-
-char *get_str_data(char *file) {
-  long f_size;
-  char *str_data;
-  size_t file_size,result;
-
-  FILE *f;
-  f=fopen(file,"r");
-  //read the size of the file
-
-  fseek(f,0,SEEK_END);
-  f_size=ftell(f);
-
-  fseek(f,0,SEEK_SET);
-
-  file_size=sizeof(char)*f_size;
-  str_data=malloc(file_size);
-
-/* fread returns number of items actually read. */
-  result =fread(str_data,1,f_size,f);
-  return strdup(str_data);
-}
-
-/* Test setup function */
-static void *
-payload_to_json_setup(const MunitParameter params[], void *user_data)
-{
-  char *file = "../bmd_files/bmd1.xml";
-  bmd *bmd_file= parse_bmd_xml(file);
-  /* Generate HTTP url required to call
-           destination service */
-   int route_id = get_active_route_id(bmd_file->envelop_data->Sender,
-                                           bmd_file->envelop_data->Destination,
-                                           bmd_file->envelop_data->MessageType);
-  transport_t *transport = fetch_transport_config(route_id);
-
-  char url[STRING_SIZE];
-  
-  sprintf(url, "%s%s", transport->value, bmd_file->payload);
-  //to_be_sent = (char *)call_function(transport->key, (void *)url,
-  //  (void *)transport->key);
-  /** Payload to json contacts destination service
-          * Stores the received data in a file and returns
-          * the file path.*/
-  //to_be_sent = payload_to_json(bmd_file, url);
-  char *file_created = payload_to_json(bmd_file, url);
-  /* Copy file data into string */
-  char *json_data = get_str_data(file_created);
-  return strdup(file_created);
-}
-
-/* Test function */
-static MunitResult
-test_payload_to_json(const MunitParameter params[], void *fixture)
-{
-  char *file_created = (char *)fixture;
-  char *json_data = get_str_data(file_created);
-
-  char *test_data = get_str_data("../assets/payload_data.json");
-
-  munit_assert_string_equal(json_data, test_data);
-  int size = find_size("../assets/payload_data.json");
-  
-  return MUNIT_OK;
-}
-
-static void
-payload_to_json_tear_down(void *fixture)
-{
-  char *file_created = (char *)fixture;
-  int del = remove(file_created);
-  /* Checks if file is deleted */
-  munit_assert(!del);
-  free(file_created);
-}
 
 /* Test setup function creates bmd and returns it */
 static void *
@@ -336,13 +261,13 @@ test_bmd_xml(const MunitParameter params[], void* user_data) {
   if(strcmp(correct,"../bmd_files/bmd10.xml")==0)
   {
     munit_assert_string_equal(test_bmd->envelop_data->MessageID,"4ac28f5a-f658-11ea-adc1-0242ac120002");
-    munit_assert_string_equal(test_bmd->envelop_data->MessageType,"AvlBal");
+    munit_assert_string_equal(test_bmd->envelop_data->MessageType,"CURR_EXCHG");
     munit_assert_string_equal(test_bmd->envelop_data->Sender,"4ac29018-f658-11ea-adc1-0242ac120002");
     munit_assert_string_equal(test_bmd->envelop_data->Destination,"4ac290d6-f658-11ea-adc1-0242ac120002");
     munit_assert_string_equal(test_bmd->envelop_data->CreationDateTime,"2020-08-12T05:18:00+00001");
     munit_assert_string_equal(test_bmd->envelop_data->ReferenceID,"4ac292fc-f658-11ea-adc1-0242ac120002");
     munit_assert_string_equal(test_bmd->envelop_data->Signature,"S7");
-    munit_assert_string_equal(test_bmd->payload,"UTIB0003213");
+    munit_assert_string_equal(test_bmd->payload,"USD");
   }
 
   
@@ -390,15 +315,6 @@ MunitTest bmd_tests[] = {
         MUNIT_TEST_OPTION_NONE, /* options */
         NULL                    /* parameters */
     },
-
-    {
-        "/payload_to_json_test",   /* name */
-        test_payload_to_json,      /* test function */
-        payload_to_json_setup,     /* setup function for the test */
-        payload_to_json_tear_down, /* tear_down */
-        MUNIT_TEST_OPTION_NONE,    /* options */
-        NULL                       /* parameters */
-    },
     {
         "/test_bmd_files" ,
         test_bmd_xml, 
@@ -421,7 +337,8 @@ static const MunitSuite suite = {
 };
 
 /* Run the the test suite */
-// int main(int argc, const char *argv[])
-// {
-//   return munit_suite_main(&suite, NULL, argc, NULL);
-// }
+ int main(int argc, const char *argv[])
+ {
+  return munit_suite_main(&suite, NULL, argc, NULL);
+ }
+

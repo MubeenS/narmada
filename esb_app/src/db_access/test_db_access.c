@@ -13,7 +13,6 @@
 #include "../test/munit.h"
 #include "connector.h"
 #include "../bmd_handler/bmd.h"
-
 #include "../adapter/adapter.h"
 #include "../esb/esb.h"
 
@@ -63,8 +62,8 @@ insert_to_esb_request_tear_down(void *fixture)
 }
 
 /**
- * @brief Checks if Function returns id of a route if exists by performing
- * sql query:SELECT id FROM transform_config 
+ * @brief Checks if Function returns id of a route if exists by 
+ * performing sql query:SELECT id FROM transform_config 
  * WHERE route_id = 1;
  * 
  * @param params 
@@ -81,6 +80,8 @@ test_has_transform_config(const MunitParameter params[], void *fixture)
   return MUNIT_OK;
 }
 
+
+
 /**
  * @brief Checks ifFunction returns id of a route if exists by performing
  * sql query:SELECT id FROM transport_config 
@@ -90,6 +91,7 @@ test_has_transform_config(const MunitParameter params[], void *fixture)
  * @param fixture 
  * @return MunitResult 
  */
+
 static MunitResult
 test_has_transport_config(const MunitParameter params[], void *fixture)
 {
@@ -99,16 +101,7 @@ test_has_transport_config(const MunitParameter params[], void *fixture)
   return MUNIT_OK;
 }
 
-static MunitResult
-test_select_all_transport_config(const MunitParameter params[], void *fixture)
-{
-  /* Check the return code */
-  transport_t* rc =(transport_t*)select_all_transport_config(1);
-   munit_assert_string_equal(rc->key,"https://ifsc.razorpay.com/");
- 
-  
- 
-}
+
 /**
  * @brief Checks if Function returns route_id of a route if exists by performing
  * the query 
@@ -146,42 +139,6 @@ get_active_route_id_tear_down(void *fixture)
   free(b);
 }
 
-/**
- * @brief checks select_active_routes()
- * 
- * @param params 
- * @param user_data 
- * @return void* 
- */
-
-static void *
-select_active_routes_setup(const MunitParameter params[], void *user_data)
-{
-  char *file = "../bmd_files/bmd1.xml";
-  bmd *b = parse_bmd_xml(file);
-  return b;
-}
-
-static MunitResult
-test_select_active_routes(const MunitParameter params[], void *fixture)
-{
-  bmd *b = (bmd *)fixture;
-  /* Check the return code */
-  int rc = select_active_routes(b->envelop_data->Sender,
-                              b->envelop_data->Destination,
-                              b->envelop_data->MessageType);
-  munit_assert(rc != 0);
-  return MUNIT_OK;
-}
-
-static void
-select_active_routes_tear_down(void *fixture)
-{
-  bmd *b = (bmd *)fixture;
-  free(b->envelop_data);
-  free(b->payload);
-  free(b);
-}
 
 /**
  * @brief checks update_esb_request()
@@ -200,6 +157,7 @@ test_update_esb_request(const MunitParameter params[], void *fixture)
   return MUNIT_OK;
 }
 
+
 /**
  * @brief checks fetch_transport_config() 
  * 
@@ -208,15 +166,39 @@ test_update_esb_request(const MunitParameter params[], void *fixture)
  * @return MunitResult 
  */
 
+static void *
+fetch_transport_config_setup(const MunitParameter params[], void *user_data)
+{
+
+  transport_t* tf= fetch_transport_config(1);
+  return tf;
+}
+
+
+/* Test function for update_esb_request */
 static MunitResult
 test_fetch_transport_config(const MunitParameter params[], void *fixture)
-{;
-  /* Check the return code */
-  transport_t *rc = fetch_transport_config(1);
-  munit_assert_ptr_not_equal(rc,0);
+{
+  transport_t * tf = (transport_t *)fixture;
+
+  munit_assert_string_equal(tf->key,"API_URL");
+  munit_assert_string_equal(tf->value,"https://ifsc.razorpay.com/");
 
   return MUNIT_OK;
 }
+
+
+/* free of allocated memory*/
+static void
+fetch_transport_config_tear_down(void *fixture)
+{
+  transport_t * tf = (transport_t *)fixture;
+
+  free(tf->key);
+  free(tf->value);
+  free(tf);
+}
+
 
 /**
  * @brief checks fetch_transform_config()
@@ -226,15 +208,39 @@ test_fetch_transport_config(const MunitParameter params[], void *fixture)
  * @return MunitResult 
  */
 
+static void *
+fetch_transform_config_setup(const MunitParameter params[], void *user_data)
+{
+
+  transform_t* tf= fetch_transform_config(1);
+  return tf;
+}
+
+
+/* Test function for update_esb_request */
 static MunitResult
 test_fetch_transform_config(const MunitParameter params[], void *fixture)
-{;
-  /* Check the return code */
-  transform_t *rc = fetch_transform_config(1);
-  munit_assert_ptr_not_equal(rc,0);
+{
+  transform_t * tf = (transform_t *)fixture;
+
+  munit_assert_string_equal(tf->key,"IFSC");
+  munit_assert_string_equal(tf->value,"No Transform");
 
   return MUNIT_OK;
 }
+
+
+/* free of allocated memory*/
+static void
+fetch_transform_config_tear_down(void *fixture)
+{
+  transform_t * tf = (transform_t *)fixture;
+
+  free(tf->key);
+  free(tf->value);
+  free(tf);
+}
+
 
 /**
  * @brief Checks if the function Selects a new request from 
@@ -321,8 +327,6 @@ test_bmd_xml(const MunitParameter params[], void* user_data) {
     munit_assert_string_equal(test_bmd->payload,"SBIN0000847");
   }    
 
-
-
     if(strcmp(correct,"../bmd_files/bmd3.xml")==0)
   {
     munit_assert_string_equal(test_bmd->envelop_data->MessageID,"4ac2739e-f658-11ea-adc1-0242ac120002");
@@ -347,7 +351,6 @@ test_bmd_xml(const MunitParameter params[], void* user_data) {
     munit_assert_string_equal(test_bmd->payload,"IBKL0000001");
   }    
   
-
   if(strcmp(correct,"../bmd_files/bmd5.xml")==0)
   {
     munit_assert_string_equal(test_bmd->envelop_data->MessageID,"4ac27bb4-f658-11ea-adc1-0242ac120002");
@@ -360,7 +363,6 @@ test_bmd_xml(const MunitParameter params[], void* user_data) {
     munit_assert_string_equal(test_bmd->payload,"ICIC0002652");
   }    
    
-
   if(strcmp(correct,"../bmd_files/bmd6.xml")==0)
   {
     munit_assert_string_equal(test_bmd->envelop_data->MessageID,"4ac27fe2-f658-11ea-adc1-0242ac120002");
@@ -373,7 +375,6 @@ test_bmd_xml(const MunitParameter params[], void* user_data) {
     munit_assert_string_equal(test_bmd->payload,"ICIC0006271");
   }    
      
-
   if(strcmp(correct,"../bmd_files/bmd7.xml")==0)
   {
     munit_assert_string_equal(test_bmd->envelop_data->MessageID,"4ac282f8-f658-11ea-adc1-0242ac120002");
@@ -413,8 +414,7 @@ test_bmd_xml(const MunitParameter params[], void* user_data) {
 
   if(strcmp(correct,"../bmd_files/bmd9.xml")==0)
   {
-    munit_assert_string_equal(test_bmd->envelop_data->MessageID,
-                              "4ac28c58-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->MessageID,"4ac28c58-f658-11ea-adc1-0242ac120002");
     munit_assert_string_equal(test_bmd->envelop_data->MessageType,"CreditReport");
     munit_assert_string_equal(test_bmd->envelop_data->Sender,"4ac28d16-f658-11ea-adc1-0242ac120002");
     munit_assert_string_equal(test_bmd->envelop_data->Destination,"4ac28dde-f658-11ea-adc1-0242ac120002");
@@ -427,17 +427,18 @@ test_bmd_xml(const MunitParameter params[], void* user_data) {
   if(strcmp(correct,"../bmd_files/bmd10.xml")==0)
   {
     munit_assert_string_equal(test_bmd->envelop_data->MessageID,"4ac28f5a-f658-11ea-adc1-0242ac120002");
-    munit_assert_string_equal(test_bmd->envelop_data->MessageType,"AvlBal");
+    munit_assert_string_equal(test_bmd->envelop_data->MessageType,"CURR_EXCHG");
     munit_assert_string_equal(test_bmd->envelop_data->Sender,"4ac29018-f658-11ea-adc1-0242ac120002");
     munit_assert_string_equal(test_bmd->envelop_data->Destination,"4ac290d6-f658-11ea-adc1-0242ac120002");
     munit_assert_string_equal(test_bmd->envelop_data->CreationDateTime,"2020-08-12T05:18:00+00001");
     munit_assert_string_equal(test_bmd->envelop_data->ReferenceID,"4ac292fc-f658-11ea-adc1-0242ac120002");
     munit_assert_string_equal(test_bmd->envelop_data->Signature,"S7");
-    munit_assert_string_equal(test_bmd->payload,"UTIB0003213");
+    munit_assert_string_equal(test_bmd->payload,"USD");
   }
 
-  
   return MUNIT_OK;
+
+
 }
 
 
@@ -499,22 +500,6 @@ MunitTest db_access_tests[] = {
         NULL                             /* parameters */
     },
     {
-        "/select_active_routes",        /* name */
-        test_select_active_routes,      /* test function */
-        select_active_routes_setup,     /* setup function for the test */
-        select_active_routes_tear_down, /* tear_down */
-        MUNIT_TEST_OPTION_NONE,        /* options */
-        NULL                           /* parameters */
-    },
-    {
-        "/select_all_transport_config",        /* name */
-        test_select_all_transport_config,      /* test function */
-        NULL,                                  /* setup function for the test */
-        NULL,                                  /* tear_down */
-        MUNIT_TEST_OPTION_NONE,                /* options */
-        NULL                                   /* parameters */
-    },
-    {
         "/update_esb_request",        /* name */
         test_update_esb_request,      /* test function */
         NULL,                           /* setup function for the test */
@@ -525,18 +510,18 @@ MunitTest db_access_tests[] = {
     {
         "/fetch_transport_config",        /* name */
         test_fetch_transport_config,      /* test function */
-        NULL,                           /* setup function for the test */
-        NULL,                           /* tear_down */
-        MUNIT_TEST_OPTION_NONE,         /* options */
-        NULL                            /* parameters */
+        fetch_transport_config_setup,     /* setup function for the test */
+        fetch_transport_config_tear_down, /* tear_down */
+        MUNIT_TEST_OPTION_NONE,           /* options */
+        NULL                              /* parameters */
     },
     {
         "/fetch_transform_config",        /* name */
-        test_has_transform_config,      /* test function */
-        NULL,                           /* setup function for the test */
-        NULL,                           /* tear_down */
-        MUNIT_TEST_OPTION_NONE,         /* options */
-        NULL                            /* parameters */
+        test_fetch_transform_config,      /* test function */
+        fetch_transform_config_setup,     /* setup function for the test */
+        fetch_transform_config_tear_down, /* tear_down */
+        MUNIT_TEST_OPTION_NONE,           /* options */
+        NULL                              /* parameters */
     },
     {
         "/fetch_new_esb_request",        /* name */
@@ -554,6 +539,7 @@ MunitTest db_access_tests[] = {
         MUNIT_TEST_OPTION_NONE,
         test_params 
     },
+   
     /* Mark the end of the array with an entry where the test
    * function is NULL */
     {NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}};
@@ -568,7 +554,7 @@ static const MunitSuite suite = {
 };
 
 /* Run the the test suite */
-// int main(int argc, const char *argv[])
-// {
-//   return munit_suite_main(&suite, NULL, argc, NULL);
-// }
+/*int main(int argc, const char *argv[])
+{
+  return munit_suite_main(&suite, NULL, argc, NULL);
+}*/
