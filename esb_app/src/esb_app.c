@@ -271,40 +271,40 @@ cleanup:
 	return ep_res;
 }
 
-pthread_t thread_id;
-void kore_parent_configure(int argc, char *argv[])
-{
-	printf("\n%%%%%%%%%% kore_parent_configure\n");
-	pthread_create(&thread_id, NULL, poll_database_for_new_requests, NULL);
-}
-
-void kore_parent_teardown(void)
-{
-	printf(">>>> kore_parent_teardown\n");
-	pthread_cancel(thread_id);
-}
-
-// pthread_t thread_id[NUM_THREADS];
+// pthread_t thread_id;
 // void kore_parent_configure(int argc, char *argv[])
 // {
-// 	int error;
 // 	printf("\n%%%%%%%%%% kore_parent_configure\n");
-// 	for (int i = 0; i < NUM_THREADS; i++)
-// 	{
-// 		error = pthread_create(&(thread_id[i]), NULL,
-// 							   poll_database_for_new_requests, NULL);
-// 		if (error != 0)
-// 			printf("\nThread can't be created :[%s]",
-// 				   strerror(error));
-// 	}
-
+// 	pthread_create(&thread_id, NULL, poll_database_for_new_requests, NULL);
 // }
 
 // void kore_parent_teardown(void)
 // {
 // 	printf(">>>> kore_parent_teardown\n");
-// 	for (int i = 0; i < NUM_THREADS; i++)
-// 	{
-// 		pthread_cancel(thread_id[i]);
-// 	}
+// 	pthread_cancel(thread_id);
 // }
+
+pthread_t thread_id[NUM_THREADS];
+void kore_parent_configure(int argc, char *argv[])
+{
+	int error;
+	printf("\n%%%%%%%%%% kore_parent_configure\n");
+	for (int i = 0; i < NUM_THREADS; i++)
+	{
+		error = pthread_create(&(thread_id[i]), NULL,
+							   poll_database_for_new_requests, NULL);
+		if (error != 0)
+			printf("\nThread can't be created :[%s]",
+				   strerror(error));
+	}
+
+}
+
+void kore_parent_teardown(void)
+{
+	printf(">>>> kore_parent_teardown\n");
+	for (int i = 0; i < NUM_THREADS; i++)
+	{
+		pthread_cancel(thread_id[i]);
+	}
+}

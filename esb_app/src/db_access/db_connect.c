@@ -33,6 +33,7 @@ int connect_to_db(void)
                          PORT, UNIX_SOCKET, FLAG) == NULL)
   {
     printf("Connetion failed.Please try again..!\n");
+    finish_with_error(con);
     return -1;
   }
   return 1;
