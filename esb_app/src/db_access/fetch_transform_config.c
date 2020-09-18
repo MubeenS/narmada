@@ -27,7 +27,7 @@
 
 /** Contains transform_config structure */
 
-#include "../adapter/transform.h"
+#include "../adapter/adapter.h"
 
 #define STRING_SIZE 100
 #define SELECT_QUERY "SELECT config_key,config_value   \
@@ -65,7 +65,7 @@ transform_t* fetch_transform_config(int route_id)
     {
 
         fprintf(stderr, "mysql_init() failed\n");
-        exit(1);
+       return NULL;
     }
 
     /**
@@ -83,14 +83,14 @@ transform_t* fetch_transform_config(int route_id)
     if (!stmt)
     {
         fprintf(stderr, " mysql_stmt_init(), out of memory\n");
-        exit(0);
+       return NULL;
     }
 
     if (mysql_stmt_prepare(stmt, SELECT_QUERY, strlen(SELECT_QUERY)))
     {
         fprintf(stderr, " mysql_stmt_prepare(), SELECT failed\n");
         fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
-        exit(0);
+       return NULL;
     }
 
     /* Get the parameter count from the statement */
@@ -100,7 +100,7 @@ transform_t* fetch_transform_config(int route_id)
     if (param_count != 1)
     {
         fprintf(stderr, " invalid parameter count returned by MySQL\n");
-        exit(0);
+       return NULL;
     }
 
     /* Fetch result set meta information */
@@ -110,7 +110,7 @@ transform_t* fetch_transform_config(int route_id)
         fprintf(stderr, "mysql_stmt_result_metadata(),           \
         returned no meta information\n");
         fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
-        exit(0);
+       return NULL;
     }
     	/* Get total columns in the query */
 	column_count= mysql_num_fields(prepare_meta_result);
@@ -134,7 +134,7 @@ transform_t* fetch_transform_config(int route_id)
     {
         fprintf(stderr, " mysql_stmt_bind_param() failed\n");
         fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
-        exit(0);
+       return NULL;
     }
 
     /* Copy input data from function parameters */
@@ -144,7 +144,7 @@ transform_t* fetch_transform_config(int route_id)
     {
         fprintf(stderr, " mysql_stmt_execute, 2 failed\n");
         fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
-        exit(0);
+       return NULL;
     }
 
     /* Bind the result buffers for all 4 columns before fetching them */
@@ -173,7 +173,7 @@ transform_t* fetch_transform_config(int route_id)
     {
         fprintf(stderr, " mysql_stmt_bind_result() failed\n");
         fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
-        exit(0);
+       return NULL;
     }
 
     /* Now buffer all results to client */
@@ -181,7 +181,7 @@ transform_t* fetch_transform_config(int route_id)
     {
         fprintf(stderr, " mysql_stmt_store_result() failed\n");
         fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
-        exit(0);
+       return NULL;
     }
     
     /* allocating config structure to return */
@@ -200,7 +200,7 @@ transform_t* fetch_transform_config(int route_id)
         {
             fprintf(stderr, " failed while closing the statement\n");
             fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
-            exit(0);
+           return NULL;
         }
         /*closes the database connection*/
         mysql_close(con);
@@ -220,7 +220,7 @@ transform_t* fetch_transform_config(int route_id)
     {
         fprintf(stderr, " failed while closing the statement\n");
         fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
-        exit(0);
+       return NULL;
     }
 
     /*closes the database connection*/

@@ -13,8 +13,8 @@
 #include "../test/munit.h"
 #include "connector.h"
 #include "../bmd_handler/bmd.h"
-#include "../adapter/transform.h"
-#include "../adapter/transport.h"
+
+#include "../adapter/adapter.h"
 #include "../esb/esb.h"
 
 /**
@@ -413,7 +413,8 @@ test_bmd_xml(const MunitParameter params[], void* user_data) {
 
   if(strcmp(correct,"../bmd_files/bmd9.xml")==0)
   {
-    munit_assert_string_equal(test_bmd->envelop_data->MessageID,"4ac28c58-f658-11ea-adc1-0242ac120002");
+    munit_assert_string_equal(test_bmd->envelop_data->MessageID,
+                              "4ac28c58-f658-11ea-adc1-0242ac120002");
     munit_assert_string_equal(test_bmd->envelop_data->MessageType,"CreditReport");
     munit_assert_string_equal(test_bmd->envelop_data->Sender,"4ac28d16-f658-11ea-adc1-0242ac120002");
     munit_assert_string_equal(test_bmd->envelop_data->Destination,"4ac28dde-f658-11ea-adc1-0242ac120002");
@@ -567,7 +568,7 @@ static const MunitSuite suite = {
 };
 
 /* Run the the test suite */
-/*int main(int argc, const char *argv[])
-{
-  return munit_suite_main(&suite, NULL, argc, NULL);
-}*/
+// int main(int argc, const char *argv[])
+// {
+//   return munit_suite_main(&suite, NULL, argc, NULL);
+// }

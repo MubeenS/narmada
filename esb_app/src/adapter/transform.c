@@ -42,7 +42,7 @@ char *payload_to_json(bmd *bmd_file, char *url)
     if (fp == NULL)
     {
         printf("file opening failed");
-        exit(0);
+        return NULL;
     }
     /* Writes into json file */
     fprintf(fp, "\n%s\n", payload_data);
@@ -72,7 +72,7 @@ char *payload_to_xml(bmd *bmd_file)
     if (fp == NULL)
     {
         printf("file opening failed");
-        exit(0);
+        return "FAIL";
     }
     /* Writes into xml file */
     char *version = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";

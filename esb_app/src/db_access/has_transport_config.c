@@ -57,7 +57,7 @@ int has_transport_config(int route_id)
     {
 
         fprintf(stderr, "mysql_init() failed\n");
-        exit(1);
+        return -1;
     }
 
     /**
@@ -75,14 +75,14 @@ int has_transport_config(int route_id)
     if (!stmt)
     {
         fprintf(stderr, " mysql_stmt_init(), out of memory\n");
-        exit(0);
+        return -1;
     }
 
     if (mysql_stmt_prepare(stmt, SELECT_QUERY, strlen(SELECT_QUERY)))
     {
         fprintf(stderr, " mysql_stmt_prepare(), SELECT failed\n");
         fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
-        exit(0);
+        return -1;
     }
 
     /* Get the parameter count from the statement */
@@ -92,7 +92,7 @@ int has_transport_config(int route_id)
     if (param_count != 1)
     {
         fprintf(stderr, " invalid parameter count returned by MySQL\n");
-        exit(0);
+        return -1;
     }
 
     /* Fetch result set meta information */
@@ -102,7 +102,7 @@ int has_transport_config(int route_id)
         fprintf(stderr, "mysql_stmt_result_metadata(),           \
         returned no meta information\n");
         fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
-        exit(0);
+        return -1;
     }
 
     memset(input_bind, 0, sizeof(input_bind));
@@ -118,7 +118,7 @@ int has_transport_config(int route_id)
     {
         fprintf(stderr, " mysql_stmt_bind_param() failed\n");
         fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
-        exit(0);
+        return -1;
     }
 
     /* Copy input data from function parameters */
@@ -128,7 +128,7 @@ int has_transport_config(int route_id)
     {
         fprintf(stderr, " mysql_stmt_execute, 2 failed\n");
         fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
-        exit(0);
+        return -1;
     }
 
     /* Bind the result buffers for all 4 columns before fetching them */
@@ -146,7 +146,7 @@ int has_transport_config(int route_id)
     {
         fprintf(stderr, " mysql_stmt_bind_result() failed\n");
         fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
-        exit(0);
+        return -1;
     }
 
     /* Now buffer all results to client */
@@ -154,7 +154,7 @@ int has_transport_config(int route_id)
     {
         fprintf(stderr, " mysql_stmt_store_result() failed\n");
         fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
-        exit(0);
+        return -1;
     }
     int id = 0;
 
@@ -171,7 +171,7 @@ int has_transport_config(int route_id)
         {
             fprintf(stderr, " failed while closing the statement\n");
             fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
-            exit(0);
+            return -1;
         }
         /*closes the database connection*/
         mysql_close(con);
@@ -191,7 +191,7 @@ int has_transport_config(int route_id)
     {
         fprintf(stderr, " failed while closing the statement\n");
         fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
-        exit(0);
+        return -1;
     }
 
     /*closes the database connection*/

@@ -17,7 +17,6 @@
 #include "../adapter/adapter.h"
 
 #include "../db_access/connector.h"
-#include "../adapter/adapter.h"
 
 
 #define STRING_SIZE 100
@@ -422,7 +421,7 @@ static const MunitSuite suite = {
 };
 
 /* Run the the test suite */
-/*int main(int argc, const char *argv[])
-{
-  return munit_suite_main(&suite, NULL, argc, NULL);
-}*/
+// int main(int argc, const char *argv[])
+// {
+//   return munit_suite_main(&suite, NULL, argc, NULL);
+// }

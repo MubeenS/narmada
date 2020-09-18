@@ -28,14 +28,6 @@
 
 #define STRING_SIZE 100
 
-/*void finish_with_error(MYSQL *con) {
-
-  fprintf(stderr, "Error [%d]: %s \n",mysql_errno(con),mysql_error(con));
-  mysql_close(con);
-
-  exit(1);        
-}*/
-
 #define UPDATE_QUERY "UPDATE esb_request SET status = ? WHERE id = ? "
 
 int update_esb_request(char *status, int id)
@@ -68,7 +60,7 @@ int update_esb_request(char *status, int id)
   {
 
     fprintf(stderr, "mysql_init() failed\n");
-    exit(1);
+    return -1;
   }
 
   /**
@@ -86,14 +78,14 @@ int update_esb_request(char *status, int id)
   if (!stmt)
   {
     fprintf(stderr, " mysql_stmt_init(), out of memory\n");
-    exit(0);
+    return -1;
   }
 
   if (mysql_stmt_prepare(stmt, UPDATE_QUERY, strlen(UPDATE_QUERY)))
   {
     fprintf(stderr, " mysql_stmt_prepare(), UPDATE failed\n");
     fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
-    exit(0);
+    return -1;
   }
   //fprintf(stdout, "prepare, UPDATE successful\n");
 
@@ -105,7 +97,7 @@ int update_esb_request(char *status, int id)
   if (param_count != 2)
   {
     fprintf(stderr, " invalid parameter count returned by MySQL\n");
-    exit(0);
+    return -1;
   }
 
   /* Bind the data for 2 parameters */
@@ -129,7 +121,7 @@ int update_esb_request(char *status, int id)
   {
     fprintf(stderr, " mysql_stmt_bind_param() failed\n");
     fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
-    exit(0);
+    return -1;
   }
 
   id_data = id;
@@ -142,7 +134,7 @@ int update_esb_request(char *status, int id)
     fprintf(stderr, " mysql_stmt_execute, failed\n");
     fprintf(stderr, " [%d]%s\n", mysql_stmt_errno(stmt),
             mysql_stmt_error(stmt));
-    exit(0);
+    return -1;
   }
 
   /* Get the total rows affected */
@@ -153,7 +145,7 @@ int update_esb_request(char *status, int id)
   /* validate affected rows */
   /*if (affected_rows != 1) {
   fprintf(stderr, " invalid affected rows by MySQL\n");
-  exit(0);
+  return -1;
    }*/
 
   /* Close the statement */
@@ -161,7 +153,7 @@ int update_esb_request(char *status, int id)
   {
     fprintf(stderr, " failed while closing the statement\n");
     fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
-    exit(0);
+    return -1;
   }
   //printf("connection id: %ld\n", mysql_thread_id(con));
 

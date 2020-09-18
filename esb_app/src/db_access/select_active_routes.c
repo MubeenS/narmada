@@ -22,7 +22,7 @@ AND message_type = ? AND destination = ? AND is_active=1"
   fprintf(stderr, "Error [%d]: %s \n",mysql_errno(con),mysql_error(con));
   mysql_close(con);
 
-  exit(1);        
+  return -1;        
 }*/
  
  
@@ -59,7 +59,7 @@ int select_active_routes(char *sender,char *destination, char *message_type) {
     if (con == NULL) {
 
         fprintf(stderr, "mysql_init() failed\n");
-        exit(1);
+        return -1;
     }
 
     /**
@@ -77,13 +77,13 @@ int select_active_routes(char *sender,char *destination, char *message_type) {
     if (!stmt)
     {
         fprintf(stderr, " mysql_stmt_init(), out of memory\n");
-        exit(0);
+        return -1;
     }
     if (mysql_stmt_prepare(stmt, SELECT_QUERY, strlen(SELECT_QUERY)))
     {
         fprintf(stderr, " mysql_stmt_prepare(), SELECT failed\n");
         fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
-        exit(0);
+        return -1;
     }
 
     /* Get the parameter count from the statement */
@@ -93,7 +93,7 @@ int select_active_routes(char *sender,char *destination, char *message_type) {
     if (param_count != 3)
     {
         fprintf(stderr, " invalid parameter count returned by MySQL\n");
-        exit(0);
+        return -1;
     }
 
     /* Fetch result set meta information */
@@ -103,7 +103,7 @@ int select_active_routes(char *sender,char *destination, char *message_type) {
         fprintf(stderr,"mysql_stmt_result_metadata(),           \
         returned no meta information\n");
         fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
-        exit(0);
+        return -1;
     }
 
     /* Get total columns in the query */
@@ -112,7 +112,7 @@ int select_active_routes(char *sender,char *destination, char *message_type) {
     if (column_count != 3)
     {
         fprintf(stderr, " invalid column count returned by MySQL\n");
-        exit(0);
+        return -1;
     }
 
     memset(input_bind, 0, sizeof(input_bind));
@@ -143,7 +143,7 @@ int select_active_routes(char *sender,char *destination, char *message_type) {
     {
         fprintf(stderr, " mysql_stmt_bind_param() failed\n");
         fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
-        exit(0);
+        return -1;
     }
 
     strncpy(input_data[0], sender, STRING_SIZE);
@@ -157,7 +157,7 @@ int select_active_routes(char *sender,char *destination, char *message_type) {
     {
         fprintf(stderr, " mysql_stmt_execute, 2 failed\n");
         fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
-        exit(0);
+        return -1;
     }
 
     /* Bind the result buffers for all 4 columns before fetching them */
@@ -190,7 +190,7 @@ int select_active_routes(char *sender,char *destination, char *message_type) {
     {
         fprintf(stderr, " mysql_stmt_bind_result() failed\n");
         fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
-        exit(0);
+        return -1;
     }
 
     /* Now buffer all results to client */
@@ -198,7 +198,7 @@ int select_active_routes(char *sender,char *destination, char *message_type) {
     {
         fprintf(stderr, " mysql_stmt_store_result() failed\n");
         fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
-        exit(0);
+        return -1;
     }
     //int num_result_rows = mysql_stmt_num_rows(stmt);
     int route_id;
@@ -210,7 +210,7 @@ int select_active_routes(char *sender,char *destination, char *message_type) {
     {
         fprintf(stderr, " failed while closing the statement\n");
         fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
-        exit(0);
+        return -1;
     }
 
     /*closes the database connection*/
@@ -267,7 +267,7 @@ int select_active_routes(char *sender,char *destination, char *message_type) {
     if (row_count != 1)
     {
         fprintf(stderr, " MySQL failed to return all rows\n");
-        exit(0);
+        return -1;
     }*/
     #endif
 
@@ -279,7 +279,7 @@ int select_active_routes(char *sender,char *destination, char *message_type) {
     {
         fprintf(stderr, " failed while closing the statement\n");
         fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
-        exit(0);
+        return -1;
     }
 
     /*closes the database connection*/

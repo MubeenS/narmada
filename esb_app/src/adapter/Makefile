@@ -1,2 +1,3 @@
-sftp_upload: sftp_upload.c
-	gcc sftp_upload.c -lcurl -o up
+ADAPTER = ./email.c ./http_post.c 
+test_adapter: test_adapter.c	
+	gcc ${ADAPTER} test_adapter.c -lcurl -o test_adapter ../test/munit.c

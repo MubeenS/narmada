@@ -10,14 +10,14 @@ struct string
   size_t len;
 };
 
-void init_string(struct string *s)
+int init_string(struct string *s)
 {
   s->len = 0;
   s->ptr = malloc(s->len + 1);
   if (s->ptr == NULL)
   {
     fprintf(stderr, "malloc() failed\n");
-    exit(EXIT_FAILURE);
+    return -1;
   }
   s->ptr[0] = '\0';
 }
@@ -29,7 +29,7 @@ size_t write_callback(void *ptr, size_t size, size_t nmemb, struct string *s)
   if (s->ptr == NULL)
   {
     fprintf(stderr, "realloc() failed\n");
-    exit(EXIT_FAILURE);
+    return -1;
   }
   memcpy(s->ptr + s->len, ptr, size * nmemb);
   s->ptr[new_len] = '\0';
@@ -47,7 +47,10 @@ void *call_destination_service(void *urlptr, void *apiptr)
 
   curl = curl_easy_init();
   struct string s;
-  init_string(&s);
+  int rc = init_string(&s);
+  if(rc==-1) {
+    printf("String init failed.\n");
+  }
   /* Checks if curl is initialised properly and 
    * performs required operations */
 

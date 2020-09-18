@@ -33,13 +33,6 @@
 #define SELECT_QUERY "SELECT id,sender_id, dest_id, message_type,   \
                        data_location FROM esb_request               \
                        WHERE status = 'RECEIVED' "
-
-/*void finish_with_error(MYSQL *con) {
-  fprintf(stderr, "Error [%d]: %s \n",mysql_errno(con),mysql_error(con));
-  mysql_close(con);
-  exit(1);        
-}*/
-
 task_t *fetch_new_esb_request(void)
 {
 
@@ -59,7 +52,7 @@ task_t *fetch_new_esb_request(void)
     {
 
         fprintf(stderr, "mysql_init() failed\n");
-        exit(1);
+        return NULL;
     }
 
     /**
@@ -92,13 +85,14 @@ task_t *fetch_new_esb_request(void)
     if (!stmt)
     {
         fprintf(stderr, " mysql_stmt_init(), out of memory\n");
-        exit(0);
+        return NULL;
     }
     if (mysql_stmt_prepare(stmt, SELECT_QUERY, strlen(SELECT_QUERY)))
     {
         fprintf(stderr, " mysql_stmt_prepare(), SELECT failed\n");
         fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
-        exit(0);
+        return NULL;
+
     }
     //fprintf(stdout, " prepare, SELECT successful\n");
 
@@ -109,7 +103,8 @@ task_t *fetch_new_esb_request(void)
     if (param_count != 0) /* validate parameter count */
     {
         fprintf(stderr, " invalid parameter count returned by MySQL\n");
-        exit(0);
+        return NULL;
+
     }
 
     /* Execute the SELECT query */
@@ -117,7 +112,8 @@ task_t *fetch_new_esb_request(void)
     {
         fprintf(stderr, " mysql_stmt_execute(), failed\n");
         fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
-        exit(0);
+        return NULL;
+
     }
 
     /* Fetch result set meta information */
@@ -128,7 +124,8 @@ task_t *fetch_new_esb_request(void)
                 " mysql_stmt_result_metadata(), \
            returned no meta information\n");
         fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
-        exit(0);
+        return NULL;
+
     }
 
     /* Get total columns in the query */
@@ -140,7 +137,8 @@ task_t *fetch_new_esb_request(void)
     if (column_count != 5) /* validate column count */
     {
         fprintf(stderr, " invalid column count returned by MySQL\n");
-        exit(0);
+        return NULL;
+
     }
 
     /* Bind the result buffers for all 4 columns before fetching them */
@@ -191,7 +189,8 @@ task_t *fetch_new_esb_request(void)
     {
         fprintf(stderr, " mysql_stmt_bind_result() failed\n");
         fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
-        exit(0);
+        return NULL;
+
     }
 
     /* Now buffer all results to client (optional step) */
@@ -199,7 +198,8 @@ task_t *fetch_new_esb_request(void)
     {
         fprintf(stderr, " mysql_stmt_store_result() failed\n");
         fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
-        exit(0);
+        return NULL;
+
     }
     task_t *request = (task_t *)malloc(sizeof(task_t));
     /* Fetch all rows */
@@ -280,7 +280,8 @@ task_t *fetch_new_esb_request(void)
     /*if (row_count= 2)
     {
         fprintf(stderr, " MySQL failed to return all rows\n");
-        exit(0);
+        return NULL;
+
     }*/
 
     /* Free the prepared result metadata */
@@ -293,7 +294,8 @@ task_t *fetch_new_esb_request(void)
         /* mysql_error(mysql) rather than mysql_stmt_error(stmt) */
         fprintf(stderr, " failed while closing the statement\n");
         fprintf(stderr, " %s\n", mysql_error(con));
-        exit(0);
+        return NULL;
+
     }
 
     /*closes the database connection*/

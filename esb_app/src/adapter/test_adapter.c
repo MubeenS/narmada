@@ -10,8 +10,7 @@
  */
 #include<stdio.h>
 #include "../test/munit.h"
-#include "transform.h"
-#include "transport.h"
+
 #include "adapter.h"
 
 static MunitResult
@@ -58,7 +57,7 @@ static const MunitSuite suite = {
 };
 
 /* Run the the test suite */
-int main(int argc, const char *argv[])
-{
-  return munit_suite_main(&suite, NULL, argc, NULL);
-}
+// int main(int argc, const char *argv[])
+// {
+//   return munit_suite_main(&suite, NULL, argc, NULL);
+// }
