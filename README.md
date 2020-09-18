@@ -43,6 +43,8 @@ New password:
 Retype new password: 
 passwd: password updated successfully
 ```
+For detailed instructions, [visit here](https://linuxconfig.org/how-to-setup-sftp-server-on-ubuntu-20-04-focal-fossa-linux).
+
 To change the change configurations, please goto `narmada/esb_app/src/adapter/sftp_upload.c` and edit as required.
 
 ## Creating a workspace with the sample code
@@ -70,6 +72,24 @@ cd /path/to/where/you/want/to/work
 
 # Fetch the code from this repository
 git clone https://github.com/nho2020/narmada.git
+cd narmada/esb_app/src/db_access
+mysql -u root -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 162
+Server version: 8.0.21-0ubuntu0.20.04.4 (Ubuntu)
+
+Copyright (c) 2000, 2020, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> source insert_test.sql;
+
+#insert_test contains database schema creation and populating tables.
 
 # Build and run the kodev application
 cd narmada/esb_app
