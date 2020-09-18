@@ -14,8 +14,8 @@
 #include "../test/munit.h"
 #include "bmd.h"
 
-#include "../adapter/transform.h"
-#include "../adapter/transport.h"
+#include "../adapter/adapter.h"
+
 #include "../db_access/connector.h"
 
 

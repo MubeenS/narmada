@@ -11,7 +11,7 @@ struct string
 };
 
 void init_string(struct string *s)
-{ 
+{
   s->len = 0;
   s->ptr = malloc(s->len + 1);
   if (s->ptr == NULL)
@@ -23,7 +23,7 @@ void init_string(struct string *s)
 }
 
 size_t write_callback(void *ptr, size_t size, size_t nmemb, struct string *s)
-{ 
+{
   size_t new_len = s->len + size * nmemb;
   s->ptr = realloc(s->ptr, new_len + 1);
   if (s->ptr == NULL)
@@ -37,14 +37,13 @@ size_t write_callback(void *ptr, size_t size, size_t nmemb, struct string *s)
   return size * nmemb;
 }
 
-void* call_destination_service(void *urlptr,void *apiptr)
+void *call_destination_service(void *urlptr, void *apiptr)
 {
   /* Converting URL to string */
-  char *url = (char*) urlptr;
-  char *api = (char*) apiptr;
+  char *url = (char *)urlptr;
+  char *api = (char *)apiptr;
   CURL *curl;
   CURLcode res;
-
 
   curl = curl_easy_init();
   struct string s;
@@ -54,7 +53,7 @@ void* call_destination_service(void *urlptr,void *apiptr)
 
   if (curl)
   {
-    printf(">> Contacting destination service %s\n",api);
+    printf(">> Contacting destination service %s\n", api);
     curl_easy_setopt(curl, CURLOPT_URL, url);
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &s);
@@ -64,8 +63,9 @@ void* call_destination_service(void *urlptr,void *apiptr)
 
     if (res != CURLE_OK)
     {
-      fprintf(stderr, "Connection failed.");
-      exit(0);
+      fprintf(stderr, "Contacting destination service failed.\n  \
+                               Please try again..!\n");
+      return (void *)res;
     }
 
     /* always cleanup */
@@ -73,7 +73,7 @@ void* call_destination_service(void *urlptr,void *apiptr)
   }
   curl_global_cleanup();
 
-  return (void*)s.ptr;
+  return (void *)s.ptr;
 }
 
 /*int main()

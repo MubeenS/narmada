@@ -98,7 +98,7 @@ void *sftp_upload(void *asptr, void *fileptr)
 
         curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
         curl_easy_setopt(curl, CURLOPT_USERPWD, "narmadasftp:narmada1");
-        curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+        //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
         /* Now run off and do what you've been told! */
         res = curl_easy_perform(curl);
         /* Check for errors */

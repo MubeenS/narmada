@@ -148,16 +148,17 @@ static char *create_work_dir_for_request(void)
 	char *temp_path = malloc(PATH_MAX * sizeof(char));
 	time_t now = time(NULL) % 1000;
 	srand(now);
-	int t = rand()%100;
+	int t = rand() % 100;
 	char cwd[100];
 	getcwd(cwd, sizeof(cwd));
 	sprintf(temp_path, "%s/bmd_files/%ld_%d", cwd, now, t);
 
 	int ret = mkdir_p(temp_path);
 	if (ret != 0 && errno == EEXIST)
-	{   char random[50];
-	    sprintf(random,"_%d",rand()%100);
-		strcat(temp_path,random);
+	{
+		char random[50];
+		sprintf(random, "_%d", rand() % 100);
+		strcat(temp_path, random);
 		//sprintf(temp_path, "%s_%d", temp_path, rand());
 		mkdir_p(temp_path);
 	}
@@ -293,3 +294,36 @@ void kore_parent_teardown(void)
 	 */
 	pthread_cancel(thread_id);
 }
+
+// pthread_t thread_id[NUM_THREADS];
+// void kore_parent_configure(int argc, char *argv[])
+// {
+// 	int error;
+// 	printf("\n%%%%%%%%%% kore_parent_configure\n");
+// 	for (int i = 0; i < NUM_THREADS; i++)
+// 	{
+// 		error = pthread_create(&(thread_id[i]), NULL,
+// 							   poll_database_for_new_requests, NULL);
+// 		if (error != 0)
+// 			printf("\nThread can't be created :[%s]",
+// 				   strerror(error));
+// 	}
+
+// 	for (int i = 0; i < NUM_THREADS; i++)
+// 	{
+// 		pthread_join(thread_id[i], NULL);
+// 	}
+// }
+
+// void kore_parent_teardown(void)
+// {
+// 	printf(">>>> kore_parent_teardown\n");
+// 	/**
+// 	 * TODO: Terminate the task polling thread.
+// 	 * Instead of killing it, ask the thread to terminate itself.
+// 	 */
+// 	for (int i = 0; i < NUM_THREADS; i++)
+// 	{
+// 		pthread_cancel(thread_id[i]);
+// 	}
+// }

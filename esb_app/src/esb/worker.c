@@ -26,27 +26,30 @@
 #include <pthread.h>
 
 #define STRING_SIZE 100
-
+pthread_mutex_t lock;
 void *poll_database_for_new_requests(void *vargp)
 {
-
-    int i = 0;
-    while (i < 99)
+    while (true)
     {
-        i++;
         printf("\n%%%%%%%%%%");
         printf("\tWorker started\t");
         printf("%%%%%%%%%%\n");
+
+        //pthread_mutex_lock(&lock); 
+
         task_t *request = fetch_new_esb_request();
         if (request == NULL)
         {
             printf("No requests available.\n");
+            pthread_mutex_unlock(&lock); 
             goto sleep;
         }
         else
         { /* Update request is being processed */
             update_esb_request("PROCESSING", request->id);
         }
+
+        pthread_mutex_unlock(&lock); 
 
         /* Get the route_id to handle the request */
         int route_id = get_active_route_id(request->sender,
@@ -57,29 +60,26 @@ void *poll_database_for_new_requests(void *vargp)
         transform_t *transform = fetch_transform_config(route_id);
         transport_t *transport = fetch_transport_config(route_id);
 
-        /**
-          * TODO: If there is any transformation required,
-          * we need to invoke those function's accordingly.
-          * 
-          */
+
         if (!(strcmp(transform->value, "No Transform")))
         {
             /** TODO: Invoke transform function.
-              * For IFSC no transform is needed.
+              * For IFSC and EXCHNG rate no transform is needed.
               */
         }
+
         /* Parse xml file to get a bmd */
         bmd *bmd_file = parse_bmd_xml(request->data_location);
-        /* String to store path of file to be sent */
 
+        /* String to store path of file to be sent */
         char *to_be_sent;
+
         /* Generate HTTP url required to call
            destination service */
         char url[STRING_SIZE];
 
         sprintf(url, "%s%s", transport->value, bmd_file->payload);
-        //to_be_sent = (char *)call_function(transport->key, (void *)url,
-        //  (void *)transport->key);
+
         /** Payload to json contacts destination service
           * Stores the received data in a file and returns
           * the file path.*/
@@ -87,7 +87,7 @@ void *poll_database_for_new_requests(void *vargp)
 
         if (to_be_sent == NULL)
         {
-            printf("Json creation failed.");
+            printf("Json creation failed.\n");
         }
 
         char *rc = call_function("EMAIL", "testmailtm02@gmail.com",
@@ -146,17 +146,20 @@ void *poll_database_for_new_requests(void *vargp)
             /* Exits the thread */
             //pthread_exit(NULL);
         }
-        char *stat = sftp_upload(transport->key, to_be_sent);
+        char *stat = sftp_upload(transform->key, to_be_sent);
+
         if (stat != NULL)
         {
             printf("SFTP upload failed ..\n");
         }
+
         else
         {
             printf("\n...............");
             printf("Uploaded via SFTP.");
-            printf("...............\n");
+            printf("...............\n\n");
         }
+
         /* Clean up */
         free(stat);
         int c = remove(response);
